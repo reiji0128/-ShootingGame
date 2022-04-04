@@ -123,13 +123,14 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\Library\Effekseer\Dev\Cpp\Effekseer\;$(SolutionDir)..\Library\Effekseer\Dev\Cpp\EffekseerRendererGL\;$(SolutionDir)..\Library\Effekseer\Dev\Cpp\Utils;$(SolutionDir)..\Library\Effekseer\build\ThirdParty\Install\zlib\include;$(SolutionDir)..\Library\Effekseer\build\ThirdParty\Install\libpng\include;$(SolutionDir)..\Library\Effekseer\build\ThirdParty\Install\libgd\include;$(SolutionDir)..\Library\Effekseer\build\ThirdParty\Install\glew\include;$(SolutionDir)..\Library\Effekseer\build\ThirdParty\Install\glfw\include;$(SolutionDir)..\Library\Effekseer\Downloads\OpenSoundMixer\src;$(SolutionDir)..\Library\glew\include\;$(SolutionDir)..\Library\SDL\include\;$(SolutionDir)..\Library\rapidjson\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\Libraries\Effekseer\Dev\Cpp\Effekseer\;$(SolutionDir)..\Libraries\Effekseer\Dev\Cpp\EffekseerRendererGL\;$(SolutionDir)..\Libraries\Effekseer\Dev\Cpp\Utils;$(SolutionDir)..\Libraries\Effekseer\build\ThirdParty\Install\zlib\include;$(SolutionDir)..\Libraries\Effekseer\build\ThirdParty\Install\libpng\include;$(SolutionDir)..\Libraries\Effekseer\build\ThirdParty\Install\libgd\include;$(SolutionDir)..\Libraries\Effekseer\build\ThirdParty\Install\glew\include;$(SolutionDir)..\Libraries\Effekseer\build\ThirdParty\Install\glfw\include;$(SolutionDir)..\Libraries\Effekseer\Downloads\OpenSoundMixer\src;$(SolutionDir)..\Libraries\glew\include\;$(SolutionDir)..\Libraries\SDL\include\;$(SolutionDir)..\Libraries\rapidjson\include\</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)../Library\SDL\lib\x64\;$(SolutionDir)../Library\GLEW\lib\x64;$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/zlib/lib;$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/zlib/lib/$(Configuration);$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/libpng/lib;$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/libpng/lib/$(Configuration);$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/libgd/lib;$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/libgd/lib/$(Configuration);$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/glew/lib;$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/glew/lib/$(Configuration);$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/OpenSoundMixer/lib;$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/OpenSoundMixer/lib/$(Configuration);$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/glfw/lib;$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/glfw/lib/$(Configuration)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_mixer.lib;SDL2_image.lib;SDL2test.lib;glew32.lib;glfw3.lib;$(SolutionDir)..\Library\Effekseer\build\Dev\Cpp\Effekseer\Debug\Effekseer.lib;$(SolutionDir)..\Library\Effekseer\build\Dev\Cpp\EffekseerRendererGL\Debug\EffekseerRendererGL.lib;$(SolutionDir)..\Library\Effekseer\build\Dev\Cpp\Utils\Debug\Example_Utils.lib;libpng16_static.lib;zlibstatic.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\Libraries\SDL\lib\win\x64\;$(SolutionDir)..\Libraries\GLEW\lib\x64;$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/zlib/lib;$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/zlib/lib/$(Configuration);$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/libpng/lib;$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/libpng/lib/$(Configuration);$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/libgd/lib;$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/libgd/lib/$(Configuration);$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/glew/lib;$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/glew/lib/$(Configuration);$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/OpenSoundMixer/lib;$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/OpenSoundMixer/lib/$(Configuration);$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/glfw/lib;$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/glfw/lib/$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_mixer.lib;SDL2_image.lib;glew32.lib;glfw3.lib;$(SolutionDir)..\Libraries\Effekseer\build\Dev\Cpp\Effekseer\Debug\Effekseer.lib;$(SolutionDir)..\Libraries\Effekseer\build\Dev\Cpp\EffekseerRendererGL\Debug\EffekseerRendererGL.lib;$(SolutionDir)..\Libraries\Effekseer\build\Dev\Cpp\Utils\Debug\Example_Utils.lib;libpng16_static.lib;zlibstatic.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
@@ -142,16 +143,17 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\Library\Effekseer\Dev\Cpp\Effekseer\;$(SolutionDir)..\Library\Effekseer\Dev\Cpp\EffekseerRendererGL\;$(SolutionDir)..\Library\Effekseer\Dev\Cpp\Utils;$(SolutionDir)..\Library\Effekseer\build\ThirdParty\Install\zlib\include;$(SolutionDir)..\Library\Effekseer\build\ThirdParty\Install\libpng\include;$(SolutionDir)..\Library\Effekseer\build\ThirdParty\Install\libgd\include;$(SolutionDir)..\Library\Effekseer\build\ThirdParty\Install\glew\include;$(SolutionDir)..\Library\Effekseer\build\ThirdParty\Install\glfw\include;$(SolutionDir)..\Library\Effekseer\Downloads\OpenSoundMixer\src;$(SolutionDir)..\Library\glew\include\;$(SolutionDir)..\Library\SDL\include\;$(SolutionDir)..\Library\rapidjson\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\Libraries\Effekseer\Dev\Cpp\Effekseer\;$(SolutionDir)..\Libraries\Effekseer\Dev\Cpp\EffekseerRendererGL\;$(SolutionDir)..\Libraries\Effekseer\Dev\Cpp\Utils;$(SolutionDir)..\Libraries\Effekseer\build\ThirdParty\Install\zlib\include;$(SolutionDir)..\Libraries\Effekseer\build\ThirdParty\Install\libpng\include;$(SolutionDir)..\Libraries\Effekseer\build\ThirdParty\Install\libgd\include;$(SolutionDir)..\Libraries\Effekseer\build\ThirdParty\Install\glew\include;$(SolutionDir)..\Libraries\Effekseer\build\ThirdParty\Install\glfw\include;$(SolutionDir)..\Libraries\Effekseer\Downloads\OpenSoundMixer\src;$(SolutionDir)..\Libraries\glew\include\;$(SolutionDir)..\Libraries\SDL\include\;$(SolutionDir)..\Libraries\rapidjson\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_mixer.lib;SDL2_image.lib;SDL2test.lib;glew32.lib;glfw3.lib;$(SolutionDir)..\Libraries\Effekseer\build\Dev\Cpp\Effekseer\Release\Effekseer.lib;$(SolutionDir)..\Libraries\Effekseer\build\Dev\Cpp\EffekseerRendererGL\Release\EffekseerRendererGL.lib;$(SolutionDir)..\Libraries\Effekseer\build\Dev\Cpp\Utils\Release\Example_Utils.lib;libpng16_static.lib;zlibstatic.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)../Library\SDL\lib\x64\;$(SolutionDir)../Library\GLEW\lib\x64;$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/zlib/lib;$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/zlib/lib/$(Configuration);$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/libpng/lib;$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/libpng/lib/$(Configuration);$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/libgd/lib;$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/libgd/lib/$(Configuration);$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/glew/lib;$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/glew/lib/$(Configuration);$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/OpenSoundMixer/lib;$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/OpenSoundMixer/lib/$(Configuration);$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/glfw/lib;$(SolutionDir)../Library/Effekseer/build/ThirdParty/Install/glfw/lib/$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_mixer.lib;SDL2_image.lib;glew32.lib;glfw3.lib;$(SolutionDir)..\Libraries\Effekseer\build\Dev\Cpp\Effekseer\Release\Effekseer.lib;$(SolutionDir)..\Libraries\Effekseer\build\Dev\Cpp\EffekseerRendererGL\Release\EffekseerRendererGL.lib;$(SolutionDir)..\Libraries\Effekseer\build\Dev\Cpp\Utils\Release\Example_Utils.lib;libpng16_static.lib;zlibstatic.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\Libraries\SDL\lib\win\x64\;$(SolutionDir)..\Libraries\GLEW\lib\x64;$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/zlib/lib;$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/zlib/lib/$(Configuration);$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/libpng/lib;$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/libpng/lib/$(Configuration);$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/libgd/lib;$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/libgd/lib/$(Configuration);$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/glew/lib;$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/glew/lib/$(Configuration);$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/OpenSoundMixer/lib;$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/OpenSoundMixer/lib/$(Configuration);$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/glfw/lib;$(SolutionDir)../Libraries/Effekseer/build/ThirdParty/Install/glfw/lib/$(Configuration)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -175,6 +177,7 @@
     <ClCompile Include="EffekseerEffect.cpp" />
     <ClCompile Include="FPSCamera.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="InputController.cpp" />
     <ClCompile Include="LineCollider.cpp" />
@@ -246,6 +249,19 @@
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="VertexArray.h" />
     <ClInclude Include="WallCollider.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\BasicMesh.frag" />
+    <None Include="Shaders\BasicMesh.vert" />
+    <None Include="Shaders\Line.frag" />
+    <None Include="Shaders\Line.vert" />
+    <None Include="Shaders\LineWorld.vert" />
+    <None Include="Shaders\Phong.frag" />
+    <None Include="Shaders\Phong.vert" />
+    <None Include="Shaders\Skinned.vert" />
+    <None Include="Shaders\Sprite.frag" />
+    <None Include="Shaders\Sprite.vert" />
+    <None Include="Shaders\tilemap.frag" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

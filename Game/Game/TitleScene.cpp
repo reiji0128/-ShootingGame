@@ -14,7 +14,7 @@ TitleScene::TitleScene()
 {
     //フォントの初期化
     mFont = new BitmapText;
-    mFont->SetFontImage(16, 6, "assets/font.png");
+    mFont->SetFontImage(16, 6, "Assets/Font/font.png");
     mFont->ReMapText(" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\tabcdefghijklmnopqrstuvwxyz{|}~\\");
 }
 
@@ -33,7 +33,7 @@ SceneBase* TitleScene::Update()
 {
     if (INPUT_INSTANCE.IsKeyPushdown(KEY_START))
     {
-        return new GameScene;
+        return new TitleScene;
     }
     return this;
 }
