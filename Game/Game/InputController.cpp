@@ -21,7 +21,7 @@ InputController::InputController()
 bool InputController::Initialize(void)
 {
 	// パッドの設定ファイル gamecontrollerdb.txt の読み込みと問題が無いかのチェック
-	int iNumOfControllers = SDL_GameControllerAddMappingsFromFile("assets/gamecontrollerdb.txt");
+	int iNumOfControllers = SDL_GameControllerAddMappingsFromFile("Assets/PadSetting/gamecontrollerdb.txt");
 	if (iNumOfControllers == -1)
 	{
 		SDL_LogWarn(SDL_LOG_CATEGORY_INPUT, "Error loading database [%s]", SDL_GetError());
@@ -72,13 +72,18 @@ void InputController::Update(void)
 		mAxisValues[a] = SDL_GameControllerGetAxis(mpGameController, (SDL_GameControllerAxis)a);
 	}
 
-	// LPAD入力をベクトル化する
+	// L Stick入力をベクトル化
 	const float maxInput = 32767.0f;
 	mLAxis.x = (float)mAxisValues[SDL_CONTROLLER_AXIS_LEFTX];
 	mLAxis.y = (float)mAxisValues[SDL_CONTROLLER_AXIS_LEFTY];
-
 	mLAxis.x = (fabs(mLAxis.x) < (float)XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) ? 0.0f : mLAxis.x / maxInput;
 	mLAxis.y = (fabs(mLAxis.y) < (float)XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) ? 0.0f : mLAxis.y / maxInput;
+
+	// R Stick入力をベクトル化
+	mRAxis.x = (float)mAxisValues[SDL_CONTROLLER_AXIS_RIGHTX];
+	mRAxis.y = (float)mAxisValues[SDL_CONTROLLER_AXIS_RIGHTY];
+	mRAxis.x = (fabs(mRAxis.x) < (float)XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) ? 0.0f : mRAxis.x / maxInput;
+	mRAxis.y = (fabs(mRAxis.y) < (float)XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) ? 0.0f : mRAxis.y / maxInput;
 
 	// ボタンを解釈する
 	for (unsigned int i = 0; i < SDL_CONTROLLER_BUTTON_MAX; i++)

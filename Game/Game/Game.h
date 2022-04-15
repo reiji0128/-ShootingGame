@@ -9,6 +9,7 @@
 #include "SceneBase.h"
 #include "math.h"
 #include "Tag.h"
+#include "CameraActor.h"
 
 class Game
 {
@@ -87,6 +88,10 @@ public:
 	/// <param name="pScene">SceneBaseのポインタ</param>
 	void                             setFirstScene(SceneBase* pScene) { mNowScene = pScene; }
 	
+	void SetCameraActor(CameraActor* camera);
+
+	void SetInActiveCameraActor(CameraActor* camera);
+
 	/// <summary>
 	/// ゲームをシャットダウン
 	/// </summary>
@@ -142,7 +147,8 @@ public:
 	/// <returns>最初のアクターのポインタ</returns>
 	class Actor* GetFirstActor(Tag type);
 
-
+	const Vector3& GetViewTarget();
+	const Vector3& GetViewPos();
 
 	/// <summary>
 	/// アクターの追加
@@ -182,6 +188,9 @@ public:
 private:
 	// Rendererのポインタ
 	class Renderer* mRenderer;
+
+	// CameraActorのポインタ
+	class CameraActor* mActiveCamera;
 
 	// SceneBaseのポインタ
 	class SceneBase* mNowScene;

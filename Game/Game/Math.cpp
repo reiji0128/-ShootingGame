@@ -237,3 +237,44 @@ Matrix4 Matrix4::CreateFromQuaternion(const class Quaternion& q)
 
 	return Matrix4(mat);
 }
+
+// 2つのベクトルはほぼ同じ角度か
+bool isNearAngle(const Vector3& v1, const Vector3& v2)
+{
+	float dot = Vector3::Dot(v1, v2);
+	if (dot > 0.99f)
+	{
+		return true;
+	}
+	return false;
+}
+
+// nowVecからdirVecの最短の回転方向を調べる（Z軸回転を想定)
+// 時計回り方向の時は+1.0 反時計回り方向の時は -1.0を返す
+float calcRotateZDirection(const Vector3& nowVec, const Vector3& dirVec)
+{
+	Vector3 axis;
+	axis = Vector3::Cross(nowVec, dirVec);
+	if (axis.z < 0.0f)
+	{
+		return -1.0f;
+	}
+	return 1.0f;
+}
+
+// nowVecから aimVecに向かってdegreeVerociyの速度でZ回転する。
+Vector3 zRotateToAimVec(const Vector3& nowVec, const Vector3& aimVec, float degreeVerocity)
+{
+	// 角速度（度数）をラジアン角に変換、右回りか左回りかを調べる
+	float rotRadian = Math::ToRadians(degreeVerocity);
+	rotRadian *= calcRotateZDirection(nowVec, aimVec);
+
+	// Z軸回転行列を作成する
+	Matrix4 zrotMat = Matrix4::CreateRotationZ(rotRadian);
+
+	// Z軸回転する
+	Vector3 rotVec;
+	rotVec = Vector3::Transform(nowVec, zrotMat);
+
+	return rotVec;
+}

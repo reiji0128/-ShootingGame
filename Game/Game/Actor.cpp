@@ -111,10 +111,6 @@ void Actor::ProcessInput()
 	}
 }
 
-void Actor::ActorInput(const uint8_t* keyState)
-{
-}
-
 /// <summary>
 /// 衝突処理
 /// </summary>

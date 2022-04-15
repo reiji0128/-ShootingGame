@@ -1031,3 +1031,14 @@ namespace Color
 	static const Vector3 LightPink(1.0f, 0.71f, 0.76f);
 	static const Vector3 LightGreen(0.56f, 0.93f, 0.56f);
 }
+
+// 2つのベクトルはほぼ同じ角度か
+bool isNearAngle(const Vector3& v1, const Vector3& v2);
+
+// nowVecからdirVecの最短の回転方向を調べる（Z軸回転を想定)
+// 時計回り方向の時は+1.0 反時計回り方向の時は -1.0を返す
+float calcRotateZDirection(const Vector3& nowVec, const Vector3& dirVec);
+
+// nowVecから aimVecに向かってdegreeVerociyの速度でZ回転する。
+Vector3 zRotateToAimVec(const Vector3& nowVec, const Vector3& aimVec, float degreeVerocity);
+

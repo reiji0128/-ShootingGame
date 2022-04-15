@@ -4,6 +4,7 @@
 #include "Actor.h"
 #include "Game.h"
 #include "Renderer.h"
+#include "Math.h"
 #include "Mesh.h"
 #include "Texture.h"
 #include "VertexArray.h"
@@ -84,7 +85,13 @@ void AttachMeshComponent::SetOffsetPosition(const Vector3& pos)
 /// <param name="rot"></param>
 void AttachMeshComponent::SetOffsetRotation(const Vector3& rot)
 {
-	mRotationMat = Matrix4::CreateRotationX(rot.x)*
-				   Matrix4::CreateRotationY(rot.y)*
-				   Matrix4::CreateRotationZ(rot.z);
+	Vector3 radian;
+	radian.x = rot.x * (Math::Pi / 180);
+	radian.y = rot.y * (Math::Pi / 180);
+	radian.z = rot.z * (Math::Pi / 180);
+
+
+	mRotationMat = Matrix4::CreateRotationX(radian.x)*
+				   Matrix4::CreateRotationY(radian.y)*
+				   Matrix4::CreateRotationZ(radian.z);
 }

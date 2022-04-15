@@ -7,16 +7,18 @@
 // プレイヤーの状態
 enum class PlayerState
 {
-	STATE_IDLE,
-	STATE_RUN,
-	STATE_DAMAGE,
+	STATE_IDLE,     // 待機
+	STATE_RUN,      // 走っている
+	STATE_SHOT,     // 射撃
+	STATE_DAMAGE,    
 	STATE_DEATH,
 
-	STATE_NUM
+	STATE_NUM       // 総アニメーション数
 };
 
 class PlayerActor :public Actor
 {
+public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -37,8 +39,6 @@ class PlayerActor :public Actor
 	/// <param name="deltaTime">1フレームの経過時間</param>
 	void UpdateActor(float deltaTime)override;
 
-	void ActorInput(const uint8_t* keys)override;
-
 	/// <summary>
 	/// 衝突処理
 	/// </summary>
@@ -48,12 +48,20 @@ class PlayerActor :public Actor
 
 // セッター //
 	/// <summary>
-	/// 移動スピードのセット
+	/// 接地フラグのセット
 	/// </summary>
-	/// <param name="velosity">移動スピード</param>
-	void SetVelosity(const Vector3& velosity) { mVelocity = velosity; }
+	/// <param name="IsOnGround">false : 接地していない
+	///                          true  : 接地している
+	/// </param>
+	bool SetIsGround(bool IsOnGround) { mIsOnGround = IsOnGround; }
 
 // ゲッター //
+	/// <summary>
+	/// 接地フラグのゲッター
+	/// </summary>
+	/// <returns>接地フラグ</returns>
+	bool GetIsOnGround() { return mIsOnGround; }
+
 	/// <summary>
 	/// スケルタルメッシュの取得
 	/// </summary>
@@ -83,6 +91,10 @@ private:
 	// プレイヤーの次の状態
 	PlayerState mNextState;
 
+
+	// 接地しているか
+	bool mIsOnGround;
+
 	// アニメーション可変長コンテナ
 	std::vector<const class Animation*> mAnimations;
 
@@ -97,7 +109,5 @@ private:
 
 	// ラインコライダーのポインタ
 	class LineCollider* mLineCollider;
-	
-	// MoveComponentクラスのポインタ
-	class MoveComponent* mMoveComp;
+
 };

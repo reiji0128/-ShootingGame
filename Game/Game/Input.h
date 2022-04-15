@@ -90,6 +90,30 @@ public:
 	InputController* GetControllerInstance();      // コントローラインスタンス
 	bool ControllerInit();
 
+	/// <summary>
+	/// Lスティックの移動量の取得
+	/// </summary>
+	/// <returns>Lスティックの移動量</returns>
+	Vector2& GetLStick() { return mLStick; }
+
+	/// <summary>
+	/// Rスティックの移動量の取得
+	/// </summary>
+	/// <returns>Rスティックの移動量</returns>
+	Vector2& GetRStick() { return mRStick; }
+
+	/// <summary>
+	/// Lスティックが動かされたか
+	/// </summary>
+	/// <returns></returns>
+	bool IsLStickMove() { return mIsLStickMove; }
+
+	/// <summary>
+	/// Rスティックが動かされたか
+	/// </summary>
+	/// <returns></returns>
+	bool IsRStickMove() { return mIsRStickMove; }
+
 private:
 	KEY_STATE_ENUM mKey[256];                      // 全キー状態取得用
 	char mKeyState[2][256];                        // キー状態 [現在/過去フレーム][全キーコード]
@@ -100,6 +124,16 @@ private:
 
 	int  mNowKey, mPrevKey;                        // 現フレーム、過去フレームのインデックス
 	InputController* mController;                 // コントローラクラス
+
+	// アナログコントローラーのLスティック
+	Vector2 mLStick;
+
+	// アナログコントローラーのRスティック
+	Vector2 mRStick;
+
+	bool mIsLStickMove;
+
+	bool mIsRStickMove;
 };
 
 #define INPUT_INSTANCE Input::InputInstance()

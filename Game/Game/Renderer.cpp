@@ -268,7 +268,7 @@ Texture* Renderer::GetTexture(const std::string& fileName)
 			tex = nullptr;
 		}
 	}
-	printf("Load Texture Success : %s \n", fileName.c_str());
+	printf(" Load Texture Success : %s \n", fileName.c_str());
 	return tex;
 }
 
@@ -294,7 +294,7 @@ Mesh* Renderer::GetMesh(const std::string& fileName)
 			m = nullptr;
 		}
 	}
-	printf("Load Mesh Success : %s\n", fileName.c_str());
+	printf(" Load Mesh Success : %s\n", fileName.c_str());
 	return m;
 }
 

@@ -166,6 +166,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ヘッダー ファイル\PlayerActor\State">
+      <UniqueIdentifier>{c95b3e84-35ac-4d97-b7d4-5eb580492e8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\PlayerActor\State">
+      <UniqueIdentifier>{3c77ee08-a64c-4959-8334-276be98def25}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp">
@@ -297,8 +303,23 @@
     <ClCompile Include="FPSCamera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="GameScene.cpp">
+    <ClCompile Include="FollowCamera.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerStateIdle.cpp">
+      <Filter>ソース ファイル\PlayerActor\State</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerStateRun.cpp">
+      <Filter>ソース ファイル\PlayerActor\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Gun.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdPersonCameraActor.cpp">
+      <Filter>ソース ファイル\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -436,6 +457,24 @@
     </ClInclude>
     <ClInclude Include="FPSCamera.h">
       <Filter>ヘッダー ファイル\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="FollowCamera.h">
+      <Filter>ヘッダー ファイル\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStateBase.h">
+      <Filter>ヘッダー ファイル\PlayerActor\State</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStateIdle.h">
+      <Filter>ヘッダー ファイル\PlayerActor\State</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStateRun.h">
+      <Filter>ヘッダー ファイル\PlayerActor\State</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdPersonCameraActor.h">
+      <Filter>ヘッダー ファイル\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Gun.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

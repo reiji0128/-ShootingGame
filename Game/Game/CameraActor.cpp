@@ -1,49 +1,51 @@
 ﻿#include "CameraActor.h"
-#include "MoveComponent.h"
-#include <SDL_scancode.h>
-#include "Renderer.h"
 #include "Game.h"
 
-CameraActor::CameraActor(Game* game)
+CameraActor::CameraActor(Actor* targetActor)
 	:Actor(Tag::Camera)
+	,mTargetActor(targetActor)
 {
-	mMoveComp = new MoveComponent(this);
+	mPosition = Vector3(0, 100, 100);
+
+	// デフォルトカメラ値セット
+	mViewMatrix = Matrix4::CreateLookAt(Vector3(-100, 0, 100),
+		                                Vector3(0, 0, 0),
+		                                Vector3(0, 0, 1));
+
+	// ゲームシステム側にアクティブを通知
+	SetActive();
 }
 
-void CameraActor::UpdateActor(float deltaTime)
+CameraActor::~CameraActor()
 {
-	Actor::UpdateActor(deltaTime);
-
-	Vector3 cameraPos = GetPosition();
-	Vector3 target = GetPosition() + GetForward() * 100.0f;
-	Vector3 up = Vector3::UnitZ;
-
-	Matrix4 view = Matrix4::CreateLookAt(cameraPos, target, up);
-	GAMEINSTANCE.GetRenderer()->SetViewMatrix(view);
+	// ゲームシステム側に非アクティブを通知
+	GAMEINSTANCE.SetInActiveCameraActor(this);
 }
 
-void CameraActor::ActorInput(const uint8_t* keys)
+void CameraActor::Update(float deltaTime)
 {
-	float forwardSpeed = 0.0f;
-	float angularSpeed = 0.0f;
+	UpdateActor(deltaTime);
 
-	if (keys[SDL_SCANCODE_W])
-	{
-		forwardSpeed += 300.0f;
-	}
-	if (keys[SDL_SCANCODE_S])
-	{
-		forwardSpeed -= 300.0f;
-	}
-	if (keys[SDL_SCANCODE_D])
-	{
-		angularSpeed += Math::TwoPi;
-	}
-	if (keys[SDL_SCANCODE_A])
-	{
-		angularSpeed -= Math::TwoPi;
-	}
+	// カメラ視線ベクトル,カメラ行列作成
+	mViewVector = mViewTarget - mPosition;
+	mViewMatrix = Matrix4::CreateLookAt(mPosition, 
+		                                mViewTarget, 
+		                                Vector3(0, 0, 1));
+}
 
-	mMoveComp->SetForwardSpeed(forwardSpeed);
-	mMoveComp->SetAngularSpeed(angularSpeed);
+void CameraActor::SetActive()
+{
+	// ゲームシステム側にアクティブを通知
+	GAMEINSTANCE.SetCameraActor(this);
+}
+
+void CameraActor::Init(const Vector3& cameraPos, const Vector3& targetPos, const Vector3& upVec)
+{
+	mPosition = cameraPos;
+	mViewTarget = targetPos;
+	mViewVector = targetPos - cameraPos;
+
+	mViewMatrix = Matrix4::CreateLookAt(cameraPos,
+		                                targetPos,
+		                                upVec);
 }

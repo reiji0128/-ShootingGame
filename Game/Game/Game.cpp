@@ -351,6 +351,25 @@ bool Game::Initialize(int screenWidth, int screenHeight, bool fullScreen)
 	return true;
 }
 
+void Game::SetCameraActor(CameraActor* camera)
+{
+	printf("SetCamera [%p]\n", camera);
+	mActiveCamera = camera;
+}
+
+void Game::SetInActiveCameraActor(CameraActor* camera)
+{
+	if (camera == mActiveCamera)
+	{
+		printf("Camera is inActive. change to default view.\n");
+		mActiveCamera = nullptr;
+	}
+
+	mViewMatrix = Matrix4::CreateLookAt(Vector3(0, 0, 100),
+			                            Vector3(0, 0, 0),
+			                            Vector3(0, 0, 1));
+}
+
 	
 /// <summary>
 /// 2DのSDLレンダラーの取得
@@ -460,6 +479,24 @@ Actor* Game::GetFirstActor(Tag type)
 	}
 
 	return nullptr;
+}
+
+const Vector3& Game::GetViewTarget()
+{
+	if (mActiveCamera == nullptr)
+	{
+		printf("Camera is inActive. return IllegalVec\n");
+	}
+	return mActiveCamera->GetViewTarget();
+}
+
+const Vector3& Game::GetViewPos()
+{
+	if (mActiveCamera == nullptr)
+	{
+		printf("Camera is inActive. return IllegalVec\n");
+	}
+	return mActiveCamera->GetViewPos();
 }
 
 /// <summary>

@@ -27,18 +27,12 @@ public:
 	/// </summary>
 	void	   Draw();
 
-	/// <summary>
 	/// ビットマップテキストのポインタ
-	/// </summary>
 	class BitmapText* mFont;
 
-	/// <summary>
 	/// テクスチャクラスのポインタ
-	/// </summary>
 	class Texture* mTex;
 
-	/// <summary>
 	/// デバッググリッドクラスのポインタ
-	/// </summary>
 	class DebugGrid* mGrid;
 };

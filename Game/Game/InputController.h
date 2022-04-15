@@ -26,6 +26,7 @@ public:
 	/// 現在の軸の値を取得
 	float GetAxisValue(SDL_GameControllerAxis iAxis) const;
 	Vector2& GetLAxisVec() { return mLAxis; }
+	Vector2& GetRAxisVec() { return mRAxis; }
 
 	enum KEY_STATE_ENUM GetInput(SDL_GameControllerButton key);
 
@@ -42,4 +43,5 @@ private:
 	float mAxisValues[SDL_CONTROLLER_AXIS_MAX];
 
 	Vector2 mLAxis;
+	Vector2 mRAxis;
 };

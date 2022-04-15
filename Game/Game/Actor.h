@@ -52,11 +52,6 @@ public:
 	/// </summary>
 	void              ProcessInput();
 
-	/// <summary>
-	/// アクター固有の入力処理(オーバーライド)
-	/// </summary>
-	/// <param name="keyState"></param>
-	virtual void ActorInput(const uint8_t* keyState);
 
 	/// <summary>
 	/// 衝突処理

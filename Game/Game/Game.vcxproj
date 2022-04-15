@@ -175,9 +175,11 @@
     <ClCompile Include="DebugGrid.cpp" />
     <ClCompile Include="EffectComponent.cpp" />
     <ClCompile Include="EffekseerEffect.cpp" />
+    <ClCompile Include="FollowCamera.cpp" />
     <ClCompile Include="FPSCamera.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="Gun.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="InputController.cpp" />
     <ClCompile Include="LineCollider.cpp" />
@@ -189,6 +191,8 @@
     <ClCompile Include="Music.cpp" />
     <ClCompile Include="PhysicsWorld.cpp" />
     <ClCompile Include="PlayerActor.cpp" />
+    <ClCompile Include="PlayerStateIdle.cpp" />
+    <ClCompile Include="PlayerStateRun.cpp" />
     <ClCompile Include="RapidJsonHelper.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -199,6 +203,7 @@
     <ClCompile Include="StaticBGActor.cpp" />
     <ClCompile Include="Tag.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="ThirdPersonCameraActor.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="VertexArray.cpp" />
     <ClCompile Include="WallCollider.cpp" />
@@ -221,9 +226,11 @@
     <ClInclude Include="DebugGrid.h" />
     <ClInclude Include="EffectComponent.h" />
     <ClInclude Include="EffekseerEffect.h" />
+    <ClInclude Include="FollowCamera.h" />
     <ClInclude Include="FPSCamera.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene.h" />
+    <ClInclude Include="Gun.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="InputController.h" />
     <ClInclude Include="LineCollider.h" />
@@ -235,6 +242,9 @@
     <ClInclude Include="Music.h" />
     <ClInclude Include="PhysicsWorld.h" />
     <ClInclude Include="PlayerActor.h" />
+    <ClInclude Include="PlayerStateBase.h" />
+    <ClInclude Include="PlayerStateIdle.h" />
+    <ClInclude Include="PlayerStateRun.h" />
     <ClInclude Include="RapidJsonHelper.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="SceneBase.h" />
@@ -246,6 +256,7 @@
     <ClInclude Include="StaticBGActor.h" />
     <ClInclude Include="Tag.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="ThirdPersonCameraActor.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="VertexArray.h" />
     <ClInclude Include="WallCollider.h" />

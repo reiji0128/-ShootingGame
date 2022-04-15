@@ -12,6 +12,7 @@
 /// </summary>
 TitleScene::TitleScene()
 {
+    printf("-----------------TitleScene-----------------\n");
     //フォントの初期化
     mFont = new BitmapText;
     mFont->SetFontImage(16, 6, "Assets/Font/font.png");
@@ -33,7 +34,7 @@ SceneBase* TitleScene::Update()
 {
     if (INPUT_INSTANCE.IsKeyPushdown(KEY_START))
     {
-        return new TitleScene;
+        return new GameScene;
     }
     return this;
 }

@@ -1,6 +1,8 @@
 ﻿#include "Input.h"
 #include "InputController.h"
 
+const float stickTrigThreshold = 0.01f;
+
 Input::Input()
 	: mNowKey(0)
 	, mPrevKey(1)
@@ -25,10 +27,10 @@ Input::Input()
 	mKeyConfig[BUTTON_Y] = SDL_SCANCODE_V;
 	mKeyConfig[KEY_L] = SDL_SCANCODE_Q;
 	mKeyConfig[KEY_R] = SDL_SCANCODE_E;
-	mKeyConfig[KEY_UP] = SDL_SCANCODE_W;
-	mKeyConfig[KEY_DOWN] = SDL_SCANCODE_S;
-	mKeyConfig[KEY_LEFT] = SDL_SCANCODE_A;
-	mKeyConfig[KEY_RIGHT] = SDL_SCANCODE_D;
+	mKeyConfig[KEY_UP] = SDL_SCANCODE_UP;
+	mKeyConfig[KEY_DOWN] = SDL_SCANCODE_DOWN;
+	mKeyConfig[KEY_LEFT] = SDL_SCANCODE_LEFT;
+	mKeyConfig[KEY_RIGHT] = SDL_SCANCODE_RIGHT;
 
 	mKeyConfig[KEY_W] = SDL_SCANCODE_W;
 	mKeyConfig[KEY_S] = SDL_SCANCODE_S;
@@ -44,7 +46,7 @@ Input::Input()
 	mPadConfig[BUTTON_X] = SDL_CONTROLLER_BUTTON_X;
 	mPadConfig[BUTTON_Y] = SDL_CONTROLLER_BUTTON_Y;
 	mPadConfig[KEY_L] = SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
-	mPadConfig[KEY_R] = SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
+	mPadConfig[KEY_R] = SDL_CONTROLLER_BUTTON_RIGHTSHOULDER;
 	mPadConfig[KEY_UP] = SDL_CONTROLLER_BUTTON_DPAD_UP;
 	mPadConfig[KEY_DOWN] = SDL_CONTROLLER_BUTTON_DPAD_DOWN;
 	mPadConfig[KEY_LEFT] = SDL_CONTROLLER_BUTTON_DPAD_LEFT;
@@ -93,6 +95,17 @@ void Input::Update()
 	}
 	// コントローラアップデート
 	mController->Update();
+	mLStick = mController->GetLAxisVec();
+	mRStick = mController->GetRAxisVec();
+
+	// コントローラのスティックがたおされているか
+	float stickMoveLen2;
+	stickMoveLen2 = Vector2::Dot(mLStick, mLStick);
+	mIsLStickMove = stickTrigThreshold < stickMoveLen2;
+
+	stickMoveLen2 = Vector2::Dot(mRStick, mRStick);
+	mIsRStickMove = stickTrigThreshold < stickMoveLen2;
+
 
 	// キーコンフィグ状態
 	for (unsigned int i = 0; i < KEY_TYPE_ENUM_MAX; i++)

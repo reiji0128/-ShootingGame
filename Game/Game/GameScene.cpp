@@ -11,6 +11,9 @@
 #include "Texture.h"
 #include "StaticBGActor.h"
 #include "BGCollisionSetter.h"
+#include "PlayerActor.h"
+#include "ThirdPersonCameraActor.h";
+#include "Gun.h"
 
 
 GameScene::GameScene()
@@ -18,9 +21,10 @@ GameScene::GameScene()
 	,mTex (nullptr)
 	,mGrid(nullptr)
 {
+	printf("-----------------GameScene-----------------\n");
 	// フォント初期化
 	mFont = new BitmapText;
-	mFont->SetFontImage(16, 6, "assets/font.png");
+	mFont->SetFontImage(16, 6, "Assets/Font/font.png");
 	mFont->ReMapText(" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\tabcdefghijklmnopqrstuvwxyz{|}~\\");
 
 	// 行列初期化
@@ -39,11 +43,37 @@ GameScene::GameScene()
 	dir.mDiffuseColor = Vector3(0.78f, 0.88f, 1.0f);
 	dir.mSpecColor = Vector3(0.8f, 0.8f, 0.8f);
 
+
+	// プレイヤーの生成
+	PlayerActor* player = new PlayerActor
+	                          (Vector3(-3070.0, 2450.0, 20.0),        // 座標
+		                       1.0f,                                  // スケール
+		                       "Assets/Player/SpecialForces.gpmesh",  // gpMeshのファイルパス
+		                       "Assets/Player/SpecialForces.gpskel"); // gpSkelのファイルパス
+	
+	// 銃の生成
+	Gun* gun = new Gun(Vector3(90, -40, 140), Vector3(-15, 130, 0),
+		               "Assets/Gun/SK_KA47.gpmesh",
+		                player->GetSkeltalMeshComp(),
+		               "LeftHandIndex4");
+
+    // カメラの生成
+	ThirdPersonCameraActor* camera = new ThirdPersonCameraActor(player);
+	camera->SetCameraLength(800.0f);
+
 	// バックグラウンドの生成
 	new StaticBGActor(Vector3(-3070.0, 2450.0, 20.0), "Assets/BackGround/LowPolyMap.gpmesh");
 	
 	// バックグラウンドの当たり判定の生成
 	new BGCollisionSetter("Assets/BackGround/CollisionBox.json");
+
+	
+	// ゲームシステムに当たり判定リストを登録する
+	GAMEINSTANCE.GetPhysics()->SetOneSideReactionCollisionPair(Tag::Enemy, Tag::Player);
+	GAMEINSTANCE.GetPhysics()->SetOneSideReactionCollisionPair(Tag::BackGround, Tag::Player);
+	GAMEINSTANCE.GetPhysics()->SetOneSideReactionCollisionPair(Tag::BackGround, Tag::Enemy);
+	GAMEINSTANCE.GetPhysics()->SetOneSideReactionCollisionPair(Tag::PlayerBullet, Tag::Enemy);
+	GAMEINSTANCE.GetPhysics()->SetOneSideReactionCollisionPair(Tag::EnemyBullet, Tag::Player);
 }
 
 GameScene::~GameScene()

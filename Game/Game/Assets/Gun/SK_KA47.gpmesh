@@ -3,7 +3,7 @@
 	"vertexformat":"PosNormSkinTex",
 	"shader":"Skinned",
 	"textures":[
-		"Assets/SK_KA47.png"
+		"Assets/Gun/SK_KA47.png"
 	],
 	"specularPower":100.0,
 	"vertices":[
