@@ -7,7 +7,6 @@
 #include "Animation.h"
 #include "LineCollider.h"
 #include "Input.h"
-#include "MoveComponent.h"
 #include "ThirdPersonCameraActor.h"
 
 #include "PlayerStateIdle.h"

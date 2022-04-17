@@ -22,9 +22,16 @@ public:
 	/// </summary>
 	~Gun();
 
+	void UpdateActor(float deltaTime)override;
+
+// ゲッター //
+	bool GetFireFlag() { return mFireFlag; }
 private:
 	// アタッチ先のボーン名
 	const char* mBoneName;
+
+	// 射撃フラグ
+	bool mFireFlag;
 
 	// SkeletalMeshComponentクラスのポインタ
 	class SkeletalMeshComponent* mSkelComp;

@@ -1,5 +1,6 @@
 #include "PlayerStateRun.h"
 #include "Input.h"
+#include "Bullet.h"
 
 /// <summary>
 /// コンストラクタ
@@ -43,7 +44,7 @@ PlayerState PlayerStateRun::Update(PlayerActor* owner, float deltaTime)
 	// 移動処理
 	MoveCalc(owner,deltaTime);
 
-	
+	Fire(owner, deltaTime);
 
 	return PlayerState::STATE_RUN;
 }
@@ -191,5 +192,21 @@ void PlayerStateRun::RotateActor()
 			mRotateNow = false;
 		}
 		mCharaForwardVec = calcVec;
+	}
+}
+
+void PlayerStateRun::Fire(class PlayerActor* owner, float deltaTime)
+{
+	// 弾を発射
+	if (INPUT_INSTANCE.GetInput(KEY_SPACE) == KEY_STATE_PUSHDOWN)
+	{
+		//発射位置を計算
+		Vector3 firePos;
+		firePos = owner->GetDirection() * 100.0f;
+		firePos.z = 100.0f;
+
+		//プレイヤー弾を生成するときに Tag::PlayerBulletを指定したい。どうしたらいいだろう？
+		BulletActor* ba = new BulletActor(firePos + owner->GetPosition(), owner->GetDirection(),
+			Tag::PlayerBullet, 1000.0f, 10000.0f);
 	}
 }

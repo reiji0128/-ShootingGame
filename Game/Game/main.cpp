@@ -3,7 +3,7 @@
 
 int main(int argc, char** argv)
 {
-	if (!GAMEINSTANCE.Initialize(1280,768,false))
+	if (!GAMEINSTANCE.Initialize(1920,1080,true))
 	{
 		return -1;
 	}

@@ -35,4 +35,6 @@ public:
 
 	/// デバッググリッドクラスのポインタ
 	class DebugGrid* mGrid;
+
+	class Texture* mUI;
 };

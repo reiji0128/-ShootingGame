@@ -159,6 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="Altar.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AttachMeshComponent.cpp" />
     <ClCompile Include="AttackObj.cpp" />
@@ -167,16 +168,21 @@
     <ClCompile Include="BitmapText.cpp" />
     <ClCompile Include="BoneTransform.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="CameraActor.cpp" />
-    <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="ColliderComponent.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DebugGrid.cpp" />
     <ClCompile Include="EffectComponent.cpp" />
     <ClCompile Include="EffekseerEffect.cpp" />
-    <ClCompile Include="FollowCamera.cpp" />
-    <ClCompile Include="FPSCamera.cpp" />
+    <ClCompile Include="EnemyActor.cpp" />
+    <ClCompile Include="EnemyStateAttach.cpp" />
+    <ClCompile Include="EnemyStateDeath.cpp" />
+    <ClCompile Include="EnemyStateHit.cpp" />
+    <ClCompile Include="EnemyStateIdle.cpp" />
+    <ClCompile Include="EnemyStatePatrol.cpp" />
+    <ClCompile Include="EnemyStateRun.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Gun.cpp" />
@@ -187,7 +193,6 @@
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshComponent.cpp" />
-    <ClCompile Include="MoveComponent.cpp" />
     <ClCompile Include="Music.cpp" />
     <ClCompile Include="PhysicsWorld.cpp" />
     <ClCompile Include="PlayerActor.cpp" />
@@ -210,6 +215,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="Altar.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AttachMeshComponent.h" />
     <ClInclude Include="AttackObj.h" />
@@ -218,16 +224,22 @@
     <ClInclude Include="BitmapText.h" />
     <ClInclude Include="BoneTransform.h" />
     <ClInclude Include="BoxCollider.h" />
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="CameraActor.h" />
-    <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="ColliderComponent.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="DebugGrid.h" />
     <ClInclude Include="EffectComponent.h" />
     <ClInclude Include="EffekseerEffect.h" />
-    <ClInclude Include="FollowCamera.h" />
-    <ClInclude Include="FPSCamera.h" />
+    <ClInclude Include="EnemyActor.h" />
+    <ClInclude Include="EnemyStateAttach.h" />
+    <ClInclude Include="EnemyStateBase.h" />
+    <ClInclude Include="EnemyStateDeath.h" />
+    <ClInclude Include="EnemyStateHit.h" />
+    <ClInclude Include="EnemyStateIdle.h" />
+    <ClInclude Include="EnemyStatePatrol.h" />
+    <ClInclude Include="EnemyStateRun.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Gun.h" />
@@ -238,7 +250,6 @@
     <ClInclude Include="MatrixPalette.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshComponent.h" />
-    <ClInclude Include="MoveComponent.h" />
     <ClInclude Include="Music.h" />
     <ClInclude Include="PhysicsWorld.h" />
     <ClInclude Include="PlayerActor.h" />

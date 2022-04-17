@@ -43,6 +43,8 @@ private:
 	/// </summary>
 	void RotateActor();
 
+	void Fire(class PlayerActor* owner, float deltaTime);
+
 	// プレイヤーの前方ベクトル
 	Vector3 mCharaForwardVec;
 

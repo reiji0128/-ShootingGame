@@ -5,6 +5,7 @@
 #include "AudioManager.h"
 #include "BitmapText.h"
 #include "Input.h"
+#include "Texture.h"
 
 
 /// <summary>
@@ -17,6 +18,9 @@ TitleScene::TitleScene()
     mFont = new BitmapText;
     mFont->SetFontImage(16, 6, "Assets/Font/font.png");
     mFont->ReMapText(" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\tabcdefghijklmnopqrstuvwxyz{|}~\\");
+
+    mTitle = new Texture;
+    mTitle = RENDERER->GetTexture("Assets/Scene/Title.png");
 }
 
 /// <summary>
@@ -59,6 +63,7 @@ void TitleScene::Draw()
     // 2DSpriteやフォントをここに書く
     mFont->TextDraw(500, 400, "Title Scene.");
     mFont->TextDraw(500, 500, "START ENTER");
+    RENDERER->DrawTexture(mTitle, Vector2(960, 540), 1.0f, 1.0f);
 
     // 2D描画の終了処理
     RENDERER->SpriteDrawEnd();

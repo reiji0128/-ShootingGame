@@ -14,6 +14,7 @@ public:
 	enum State
 	{
 		EActive,
+		EInactive,
 		EPaused,
 		EDead
 	};

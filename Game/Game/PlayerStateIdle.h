@@ -30,5 +30,7 @@ public:
 	void Enter(class PlayerActor* owner, float deltaTime) override;
 
 private:
+	void Fire(class PlayerActor* owner, float deltaTime);
+
 	SkeletalMeshComponent* mSkelComp;
 };

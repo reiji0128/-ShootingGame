@@ -172,6 +172,18 @@
     <Filter Include="ソース ファイル\PlayerActor\State">
       <UniqueIdentifier>{3c77ee08-a64c-4959-8334-276be98def25}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Gun">
+      <UniqueIdentifier>{45e7ec0f-6add-4db6-ba7e-586db32840f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Gun">
+      <UniqueIdentifier>{04e3c119-34a2-4db9-b5be-8df58ca96ebb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Gun\Bullet">
+      <UniqueIdentifier>{fb799cdc-41c0-4d51-8a41-209d444dea19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Gun\Bullet">
+      <UniqueIdentifier>{b2a9fdeb-7b57-4fb5-9910-96d70aeb9b70}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp">
@@ -208,9 +220,6 @@
       <Filter>ソース ファイル\Component</Filter>
     </ClCompile>
     <ClCompile Include="MeshComponent.cpp">
-      <Filter>ソース ファイル\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="MoveComponent.cpp">
       <Filter>ソース ファイル\Component</Filter>
     </ClCompile>
     <ClCompile Include="SkeletalMeshComponent.cpp">
@@ -297,15 +306,6 @@
     <ClCompile Include="PlayerActor.cpp">
       <Filter>ソース ファイル\PlayerActor</Filter>
     </ClCompile>
-    <ClCompile Include="CameraComponent.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="FPSCamera.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="FollowCamera.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="GameScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
@@ -315,11 +315,38 @@
     <ClCompile Include="PlayerStateRun.cpp">
       <Filter>ソース ファイル\PlayerActor\State</Filter>
     </ClCompile>
-    <ClCompile Include="Gun.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="ThirdPersonCameraActor.cpp">
       <Filter>ソース ファイル\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Gun.cpp">
+      <Filter>ソース ファイル\Gun</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>ソース ファイル\Gun\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyActor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyStateIdle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyStatePatrol.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyStateRun.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyStateHit.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyStateDeath.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyStateAttach.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Altar.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -348,9 +375,6 @@
       <Filter>ヘッダー ファイル\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Component.h">
-      <Filter>ヘッダー ファイル\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="MoveComponent.h">
       <Filter>ヘッダー ファイル\Component</Filter>
     </ClInclude>
     <ClInclude Include="SpriteComponent.h">
@@ -452,15 +476,6 @@
     <ClInclude Include="PlayerActor.h">
       <Filter>ヘッダー ファイル\PlayerActor</Filter>
     </ClInclude>
-    <ClInclude Include="CameraComponent.h">
-      <Filter>ヘッダー ファイル\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="FPSCamera.h">
-      <Filter>ヘッダー ファイル\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="FollowCamera.h">
-      <Filter>ヘッダー ファイル\Camera</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerStateBase.h">
       <Filter>ヘッダー ファイル\PlayerActor\State</Filter>
     </ClInclude>
@@ -474,7 +489,37 @@
       <Filter>ヘッダー ファイル\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Gun.h">
+      <Filter>ヘッダー ファイル\Gun</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>ヘッダー ファイル\Gun\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStateBase.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStateIdle.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStatePatrol.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStateRun.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStateHit.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStateDeath.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyActor.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStateAttach.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Altar.h">
+      <Filter>ヘッダー ファイル\BackGround</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

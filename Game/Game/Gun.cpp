@@ -1,6 +1,7 @@
 #include "Gun.h"
 #include "Game.h"
 #include "Renderer.h"
+#include "Input.h"
 #include "Mesh.h"
 #include "AttachMeshComponent.h"
 
@@ -25,4 +26,12 @@ Gun::Gun(const Vector3& pos, const Vector3& rot,
 
 Gun::~Gun()
 {
+}
+
+void Gun::UpdateActor(float deltaTime)
+{
+	/*if (INPUT_INSTANCE.IsKeyPressed(KEY_SPACE))
+	{
+		mFireFlag = true;
+	}*/
 }

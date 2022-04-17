@@ -249,7 +249,7 @@ void Game::Run()
 	// レンダラーが初期化されていなかったら初期化
 	if (!mRenderer)
 	{
-		Initialize(1024, 768);
+		Initialize(1920, 1080,true);
 	}
 	// 開始シーンが定義されていなかったら終了
 	if (!mNowScene)

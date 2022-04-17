@@ -4,6 +4,7 @@
 #include "Input.h"
 
 const float cameraLength = 1000.0f;
+const float cameraHight  = 350.0f;
 const float rotateAngle  = -Math::Pi;
 const float upAngle      = Math::PiOver2 * 0.5f;
 const float rotateSpeed  = 40.0f;

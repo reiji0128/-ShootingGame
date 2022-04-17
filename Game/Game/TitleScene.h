@@ -31,4 +31,6 @@ public:
 	/// ビットマップテキストのポインタ
 	/// </summary>
 	class BitmapText* mFont;
+
+	class Texture* mTitle;
 };
