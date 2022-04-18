@@ -15,6 +15,7 @@ enum class Tag : unsigned char
 	Enemy,
 	EnemyBullet,
 	BackGround,
+	Altar,
 	Camera,
 	Effect,
 	Weapon,

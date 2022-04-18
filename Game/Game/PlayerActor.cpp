@@ -58,7 +58,7 @@ PlayerActor::PlayerActor(const Vector3& pos, const float& scale, const char* gpm
 
 	// 当たり判定のセット
 	AABB box = mesh->GetCollisionBox();
-	box.Scaling(1.0f);
+	box.Scaling(1.0f,1.0f,1.0f);
 	mBoxCollider = new BoxCollider(this);
 	mBoxCollider->SetObjectBox(box);
 
@@ -107,4 +107,80 @@ void PlayerActor::UpdateActor(float deltaTime)
 /// <param name="otherCollider"></param>
 void PlayerActor::OnCollisionEnter(ColliderComponent* ownCollider, ColliderComponent* otherCollider)
 {
+	Tag colliderTag = otherCollider->GetTag();
+
+	//衝突情報
+	CollisionInfo info;
+
+	// 背景と衝突した?
+	if (colliderTag == Tag::BackGround)
+	{
+		// 衝突背景はBox?
+		if (otherCollider->GetColliderType() == ColliderTypeEnum::Box)
+		{
+			// 背景Boxに衝突したのはLine?
+			if (ownCollider == mLineCollider)
+			{
+				//落下しているときのみ判定
+				if (mVelocity.z < 0.0f)
+				{
+					info = ownCollider->GetCollisionInfo();
+					mPosition = info.mCollisionPoint;
+					mIsOnGround = true;
+				}
+			}
+
+			// 足元コライダー
+			if (ownCollider == mLineCollider)
+			{
+				info = ownCollider->GetCollisionInfo();
+				mPosition = info.mCollisionPoint;
+				mIsOnGround = true;
+				ComputeWorldTransform();
+			}
+
+			// 背景Boxに衝突したのもBox？
+			if (ownCollider->GetColliderType() == ColliderTypeEnum::Box)
+			{
+				//ヒットボックス？
+				if (ownCollider == mHitBox)
+				{
+					info = ownCollider->GetCollisionInfo();
+
+					mPosition += info.mFixVec;
+					ComputeWorldTransform();
+				}
+			}
+		}
+	}
+
+	// エネミーとぶつかったか
+	if (colliderTag == Tag::Enemy)
+	{
+		if (ownCollider == mHitBox)
+		{
+			info = ownCollider->GetCollisionInfo();
+			mPosition += info.mFixVec;
+			ComputeWorldTransform();
+		}
+	}
+
+	if (colliderTag == Tag::Altar)
+	{
+		if (ownCollider == mHitBox)
+		{
+			info = ownCollider->GetCollisionInfo();
+			mPosition += info.mFixVec;
+			ComputeWorldTransform();
+		}
+	}
+
+	//// プレイヤーの攻撃とぶつかった?
+	//if (colliderTag == Tag::EnemyBullet)
+	//{
+	//	if (ownCollider == mHitBox)
+	//	{
+	//		mIsHitTrig = true;
+	//	}
+	//}
 }

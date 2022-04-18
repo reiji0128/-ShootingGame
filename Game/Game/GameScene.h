@@ -27,6 +27,9 @@ public:
 	/// </summary>
 	void	   Draw();
 
+private:
+	float mHealthScaleX;
+
 	/// ビットマップテキストのポインタ
 	class BitmapText* mFont;
 
@@ -36,5 +39,7 @@ public:
 	/// デバッググリッドクラスのポインタ
 	class DebugGrid* mGrid;
 
-	class Texture* mUI;
+	//class Texture* mUI;
+
+	class Altar* mAltar;
 };

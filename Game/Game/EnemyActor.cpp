@@ -8,7 +8,7 @@
 #include "EnemyStateIdle.h"
 #include "EnemyStatePatrol.h"
 #include "EnemyStateRun.h"
-#include "EnemyStateAttach.h"
+#include "EnemyStateAttack.h"
 #include "EnemyStateHit.h"
 #include "EnemyStateDeath.h"
 
@@ -63,7 +63,7 @@ EnemyActor::EnemyActor(const Vector3& pos, const Vector3& dir)
 
 	// “–‚½‚è”»’è‚ÌƒZƒbƒg
 	AABB box = mesh->GetCollisionBox();
-	box.Scaling(0.4f, 0.8f, 0.8f);
+	box.Scaling(1.0f, 1.0f, 1.0f);
 	box.mMin.z = 30.0f;
 	box.mIsRotatable = true;
 	mHitBox = new BoxCollider(this);

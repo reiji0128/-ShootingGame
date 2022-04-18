@@ -5,9 +5,10 @@
 #include "Renderer.h"
 #include "BoxCollider.h"
 #include "LineCollider.h"
+#include "Health.h"
 
 Altar::Altar(const Vector3& pos, const char* gpmeshFileName)
-	:Actor(Tag::BackGround)
+	:Actor(Tag::Altar)
 	, mBoxCollider(nullptr)
 	, mLineCollider(nullptr)
 {
@@ -26,6 +27,8 @@ Altar::Altar(const Vector3& pos, const char* gpmeshFileName)
 	mLineCollider = new LineCollider(this);
 	Line line(Vector3(0, 0, 50.0f), Vector3(0, 0, -20.0f));
 	mLineCollider->SetLine(line);
+
+	mHitPoint = new Health(100, 0, 100);
 }
 
 Altar::~Altar()
@@ -38,4 +41,21 @@ void Altar::UpdateActor(float deltaTime)
 
 void Altar::OnCollisionEnter(ColliderComponent* ownCollider, ColliderComponent* otherCollider)
 {
+	Tag colliderTag = otherCollider->GetTag();
+
+	//Õ“Ëî•ñ
+	CollisionInfo info;
+
+	if (colliderTag == Tag::EnemyBullet)
+	{
+		if (ownCollider == mBoxCollider)
+		{
+			mHitPoint->GetPre() - 20;
+		}
+	}
+}
+
+float Altar::GetHealth()
+{
+	return mHitPoint->GetPre();
 }

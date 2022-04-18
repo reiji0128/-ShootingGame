@@ -41,3 +41,26 @@ void BulletActor::UpdateActor(float deltaTime)
 
 	mRecomputeWorldTransform = true;
 }
+
+void BulletActor::OnCollisionEnter(ColliderComponent* ownCollider, ColliderComponent* otherCollider)
+{
+	Tag colliderTag = otherCollider->GetTag();
+
+	// Õ“Ëî•ñ
+	CollisionInfo info;
+
+	// ”wŒi‚ÆÕ“Ë‚µ‚½‚©
+	if (colliderTag == Tag::BackGround)
+	{
+		// ”wŒiBox‚ÉÕ“Ë‚µ‚½‚Ì‚àBoxH
+		if (ownCollider->GetColliderType() == ColliderTypeEnum::Box
+			|| colliderTag == Tag::Enemy)
+		{
+			//ƒqƒbƒgƒ{ƒbƒNƒXH
+			if (ownCollider == mHitBox)
+			{
+				mState = State::EDead;
+			}
+		}
+	}
+}

@@ -177,7 +177,7 @@
     <ClCompile Include="EffectComponent.cpp" />
     <ClCompile Include="EffekseerEffect.cpp" />
     <ClCompile Include="EnemyActor.cpp" />
-    <ClCompile Include="EnemyStateAttach.cpp" />
+    <ClCompile Include="EnemyStateAttack.cpp" />
     <ClCompile Include="EnemyStateDeath.cpp" />
     <ClCompile Include="EnemyStateHit.cpp" />
     <ClCompile Include="EnemyStateIdle.cpp" />
@@ -186,6 +186,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="Health.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="InputController.cpp" />
     <ClCompile Include="LineCollider.cpp" />
@@ -233,7 +234,7 @@
     <ClInclude Include="EffectComponent.h" />
     <ClInclude Include="EffekseerEffect.h" />
     <ClInclude Include="EnemyActor.h" />
-    <ClInclude Include="EnemyStateAttach.h" />
+    <ClInclude Include="EnemyStateAttack.h" />
     <ClInclude Include="EnemyStateBase.h" />
     <ClInclude Include="EnemyStateDeath.h" />
     <ClInclude Include="EnemyStateHit.h" />
@@ -243,6 +244,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Gun.h" />
+    <ClInclude Include="Health.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="InputController.h" />
     <ClInclude Include="LineCollider.h" />

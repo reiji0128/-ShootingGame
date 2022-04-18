@@ -184,6 +184,24 @@
     <Filter Include="ソース ファイル\Gun\Bullet">
       <UniqueIdentifier>{b2a9fdeb-7b57-4fb5-9910-96d70aeb9b70}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Enemy">
+      <UniqueIdentifier>{f5a3eadc-9877-496e-be5a-0507c90bfabb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Enemy\State">
+      <UniqueIdentifier>{028d1e6a-c7ee-43e1-b2a7-cd22335bb3b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Enemy">
+      <UniqueIdentifier>{3829a955-9b8f-4917-9a79-7c075e220db6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Enemy\State">
+      <UniqueIdentifier>{22959f36-3e5e-45fa-8167-e4d712fab898}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Health">
+      <UniqueIdentifier>{92c01922-ad5f-458f-b48d-65b19631641c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Health">
+      <UniqueIdentifier>{11f2f1de-1c77-41ef-96e4-3cb7b21a9e9d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp">
@@ -325,28 +343,31 @@
       <Filter>ソース ファイル\Gun\Bullet</Filter>
     </ClCompile>
     <ClCompile Include="EnemyActor.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyStateIdle.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyStatePatrol.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyStateRun.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyStateHit.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="EnemyStateAttack.cpp">
+      <Filter>ソース ファイル\Enemy\State</Filter>
     </ClCompile>
     <ClCompile Include="EnemyStateDeath.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Enemy\State</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyStateAttach.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="EnemyStateHit.cpp">
+      <Filter>ソース ファイル\Enemy\State</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyStateIdle.cpp">
+      <Filter>ソース ファイル\Enemy\State</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyStatePatrol.cpp">
+      <Filter>ソース ファイル\Enemy\State</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyStateRun.cpp">
+      <Filter>ソース ファイル\Enemy\State</Filter>
     </ClCompile>
     <ClCompile Include="Altar.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="Health.cpp">
+      <Filter>ソース ファイル\Health</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -494,32 +515,35 @@
     <ClInclude Include="Bullet.h">
       <Filter>ヘッダー ファイル\Gun\Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyStateBase.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyStateIdle.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyStatePatrol.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyStateRun.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyStateHit.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyStateDeath.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyActor.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyStateAttach.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Altar.h">
       <Filter>ヘッダー ファイル\BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyActor.h">
+      <Filter>ヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStateAttack.h">
+      <Filter>ヘッダー ファイル\Enemy\State</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStateBase.h">
+      <Filter>ヘッダー ファイル\Enemy\State</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStateDeath.h">
+      <Filter>ヘッダー ファイル\Enemy\State</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStateHit.h">
+      <Filter>ヘッダー ファイル\Enemy\State</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStateIdle.h">
+      <Filter>ヘッダー ファイル\Enemy\State</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStatePatrol.h">
+      <Filter>ヘッダー ファイル\Enemy\State</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStateRun.h">
+      <Filter>ヘッダー ファイル\Enemy\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Health.h">
+      <Filter>ヘッダー ファイル\Health</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

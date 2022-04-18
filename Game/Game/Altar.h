@@ -10,10 +10,14 @@ public:
 	void UpdateActor(float deltaTime)override;
 	void OnCollisionEnter(class ColliderComponent* ownCollider, class ColliderComponent* otherCollider)override;
 
+// ゲッター //
+	float GetHealth();
 private:
 	// ボックスコライダーのポインタ
 	class BoxCollider* mBoxCollider;
 
 	// ラインコライダーのポインタ
 	class LineCollider* mLineCollider;
+
+	class Health* mHitPoint;
 };

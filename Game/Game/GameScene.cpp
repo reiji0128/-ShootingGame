@@ -80,7 +80,7 @@ GameScene::GameScene()
 	// バックグラウンドの生成
 	new StaticBGActor(Vector3(1040.0, 740.0, 30.0), "Assets/BackGround/StaticMesh.gpmesh");
 	
-	new Altar(Vector3(1000.0, 740.0, 30.0), "Assets/BackGround/Altar.gpmesh");
+	mAltar = new Altar(Vector3(1000.0, 740.0, 30.0), "Assets/BackGround/Altar.gpmesh");
 
 	// バックグラウンドの当たり判定の生成
 	new BGCollisionSetter("Assets/BackGround/CollisionBox.json");
@@ -92,6 +92,7 @@ GameScene::GameScene()
 	GAMEINSTANCE.GetPhysics()->SetOneSideReactionCollisionPair(Tag::BackGround, Tag::Enemy);
 	GAMEINSTANCE.GetPhysics()->SetOneSideReactionCollisionPair(Tag::PlayerBullet, Tag::Enemy);
 	GAMEINSTANCE.GetPhysics()->SetOneSideReactionCollisionPair(Tag::EnemyBullet, Tag::Player);
+	GAMEINSTANCE.GetPhysics()->SetOneSideReactionCollisionPair(Tag::EnemyBullet, Tag::Altar);
 }
 
 GameScene::~GameScene()
@@ -127,6 +128,7 @@ void GameScene::Draw()
 	RENDERER->SpriteDrawBegin();
 
 	// 体力ゲージ描画
+	mHealthScaleX = mAltar->GetHealth() * 0.3f;
 	RENDERER->DrawHelthGauge(mTex, Vector2(10, 50), 0.3f, 0.03f, 1.0f);
 	//RENDERER->DrawHelthGauge(mUI, Vector2(1500, 540),1.0f ,1.0f, 1.0f);
 

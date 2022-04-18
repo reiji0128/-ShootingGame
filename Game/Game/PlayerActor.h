@@ -105,7 +105,7 @@ private:
 	class SkeletalMeshComponent* mSkeltalMeshComp;
 
 	// ボックスコライダーのポインタ
-	class BoxCollider* mBoxCollider;
+	class BoxCollider* mHitBox;
 
 	// ラインコライダーのポインタ
 	class LineCollider* mLineCollider;

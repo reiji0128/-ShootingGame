@@ -205,7 +205,7 @@ void PlayerStateRun::Fire(class PlayerActor* owner, float deltaTime)
 		firePos = owner->GetDirection() * 100.0f;
 		firePos.z = 100.0f;
 
-		//プレイヤー弾を生成するときに Tag::PlayerBulletを指定したい。どうしたらいいだろう？
+		//プレイヤー弾を生成
 		BulletActor* ba = new BulletActor(firePos + owner->GetPosition(), owner->GetDirection(),
 			Tag::PlayerBullet, 1000.0f, 10000.0f);
 	}
