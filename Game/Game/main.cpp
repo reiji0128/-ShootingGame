@@ -1,5 +1,6 @@
 ﻿#include "Game.h"
 #include "TitleScene.h"
+#include "GameScene.h"
 
 int main(int argc, char** argv)
 {
@@ -7,7 +8,7 @@ int main(int argc, char** argv)
 	{
 		return -1;
 	}
-	GAMEINSTANCE.setFirstScene(new TitleScene);
+	GAMEINSTANCE.setFirstScene(new GameScene);
 	GAMEINSTANCE.GetRenderer()->SetWindowTitle("Game");
 	GAMEINSTANCE.Run();
 	GAMEINSTANCE.Shutdown();

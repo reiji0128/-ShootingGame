@@ -19,7 +19,7 @@ Altar::Altar(const Vector3& pos, const char* gpmeshFileName)
 
 	// “–‚½‚è”»’è‚ÌƒZƒbƒg
 	AABB box = mesh->GetCollisionBox();
-	box.Scaling(1.0f);
+	box.Scaling(2.0f,2.0f,2.0f);
 	mBoxCollider = new BoxCollider(this);
 	mBoxCollider->SetObjectBox(box);
 
@@ -50,7 +50,7 @@ void Altar::OnCollisionEnter(ColliderComponent* ownCollider, ColliderComponent* 
 	{
 		if (ownCollider == mBoxCollider)
 		{
-			mHitPoint->GetPre() - 20;
+			 mHitPoint->SetPre(mHitPoint->GetPre() - 1);
 		}
 	}
 }

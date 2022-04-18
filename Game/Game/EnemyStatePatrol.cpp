@@ -34,7 +34,7 @@ EnemyState EnemyStatePatrol::Update(EnemyActor* owner, float deltaTime)
 	}
 
 	// “GƒLƒƒƒ‰‚ÌŽ‹ŠE&”ÍˆÍ‚É“ü‚Á‚½‚ç’Ç”öƒ‚[ƒh‚Ö
-	Vector3 playerPos = GAMEINSTANCE.GetPlayerActor()->GetPosition();
+	Vector3 playerPos = GAMEINSTANCE.GetFirstActor(Tag::Altar)->GetPosition();
 	enemyToPlayerVec = playerPos - owner->GetPosition();
 	float dot = Vector3::Dot(enemyToPlayerVec, dir);
 

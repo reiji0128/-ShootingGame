@@ -64,7 +64,6 @@ void TitleScene::Draw()
     mFont->TextDraw(500, 400, "Title Scene.");
     mFont->TextDraw(500, 500, "START ENTER");
     RENDERER->DrawTexture(mTitle, Vector2(960, 540), 1.0f, 1.0f);
-
     // 2D描画の終了処理
     RENDERER->SpriteDrawEnd();
 

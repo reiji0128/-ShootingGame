@@ -22,6 +22,7 @@ GameScene::GameScene()
 	:mFont(nullptr)
 	,mTex (nullptr)
 	,mGrid(nullptr)
+	,mHealthScaleX(0.3f)
 {
 	printf("-----------------GameScene-----------------\n");
 	// フォント初期化
@@ -65,13 +66,13 @@ GameScene::GameScene()
 		               "LeftHandIndex4");                             // アタッチ先のボーン名
 
 	// 敵の生成
-	new EnemyActor(Vector3(2260.0, -117.0, 30.0), Vector3(1, 0, 0));
-	new EnemyActor(Vector3(1095.0, -452.0, 30.0), Vector3(1, 0, 0));
-	new EnemyActor(Vector3(13.0, -13.0, 30.0), Vector3(1, 0, 0));
+	new EnemyActor(Vector3(960.0, 740.0, 30.0), Vector3(0, 1, 0));
+	new EnemyActor(Vector3(1095.0, -452.0, 30.0), Vector3(1, 1, 0));
+	new EnemyActor(Vector3(13.0, -13.0, 30.0), Vector3(1, -1, 0));
 	new EnemyActor(Vector3(99.0, 1468.0, 30.0), Vector3(1, 0, 0));
-	new EnemyActor(Vector3(1110.0, 1644.0, 30.0), Vector3(1, 0, 0));
+	new EnemyActor(Vector3(1110.0, 1644.0, 30.0), Vector3(-1, 1, 0));
 	new EnemyActor(Vector3(2011.0, 1735.0, 30.0), Vector3(1, 0, 0));
-	new EnemyActor(Vector3(2002.0, 415.0, 30.0), Vector3(1, 0, 0));
+	new EnemyActor(Vector3(2002.0, 415.0, 30.0), Vector3(1, 1, 0));
 
     // カメラの生成
 	ThirdPersonCameraActor* camera = new ThirdPersonCameraActor(player);
@@ -128,8 +129,12 @@ void GameScene::Draw()
 	RENDERER->SpriteDrawBegin();
 
 	// 体力ゲージ描画
-	mHealthScaleX = mAltar->GetHealth() * 0.3f;
-	RENDERER->DrawHelthGauge(mTex, Vector2(10, 50), 0.3f, 0.03f, 1.0f);
+	mHealthScaleX = mAltar->GetHealth() / 1000 * 3.5f;
+	if (mHealthScaleX <= 0.001)
+	{
+		mHealthScaleX = 0;
+	}
+	RENDERER->DrawHelthGauge(mTex, Vector2(10, 50), mHealthScaleX, 0.03f, 1.0f);
 	//RENDERER->DrawHelthGauge(mUI, Vector2(1500, 540),1.0f ,1.0f, 1.0f);
 
 	// 2D描画の終了処理

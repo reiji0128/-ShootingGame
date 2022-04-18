@@ -143,7 +143,7 @@ void PlayerActor::OnCollisionEnter(ColliderComponent* ownCollider, ColliderCompo
 			if (ownCollider->GetColliderType() == ColliderTypeEnum::Box)
 			{
 				//ヒットボックス？
-				if (ownCollider == mHitBox)
+				if (ownCollider == mBoxCollider)
 				{
 					info = ownCollider->GetCollisionInfo();
 
@@ -157,7 +157,7 @@ void PlayerActor::OnCollisionEnter(ColliderComponent* ownCollider, ColliderCompo
 	// エネミーとぶつかったか
 	if (colliderTag == Tag::Enemy)
 	{
-		if (ownCollider == mHitBox)
+		if (ownCollider == mBoxCollider)
 		{
 			info = ownCollider->GetCollisionInfo();
 			mPosition += info.mFixVec;
@@ -167,7 +167,7 @@ void PlayerActor::OnCollisionEnter(ColliderComponent* ownCollider, ColliderCompo
 
 	if (colliderTag == Tag::Altar)
 	{
-		if (ownCollider == mHitBox)
+		if (ownCollider == mBoxCollider)
 		{
 			info = ownCollider->GetCollisionInfo();
 			mPosition += info.mFixVec;

@@ -72,6 +72,10 @@ void AABB::UpdateMinMax(const Vector3& point)
     mMin.y = Math::Min(mMin.y, point.y);
     mMin.z = Math::Min(mMin.y, point.z);
 
+    mMax.x = Math::Max(mMax.x, point.x);
+    mMax.y = Math::Max(mMax.y, point.y);
+    mMax.z = Math::Max(mMax.z, point.z);
+
     CalcVertex();
 }
 

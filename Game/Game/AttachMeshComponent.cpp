@@ -41,8 +41,6 @@ AttachMeshComponent::~AttachMeshComponent()
 /// <param name="shader">シェーダーのポインタ</param>
 void AttachMeshComponent::Draw(Shader* shader)
 {
-
-
 	if (mMesh)
 	{
 		Matrix4 AnimMatrix, resultMatrix;

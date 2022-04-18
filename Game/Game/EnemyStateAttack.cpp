@@ -59,7 +59,7 @@ void EnemyStateAttack::Attack(EnemyActor* owner, float deltaTime)
 	//攻撃可能時間になったら攻撃
 	if (mStateTimer < 0.0f)
 	{
-		new AttackObj(Tag::EnemyBullet, owner->GetPosition(), owner->GetDirection(), 100.0f, 0.3f);
+		new AttackObj(Tag::EnemyBullet, owner->GetPosition(), owner->GetDirection(), 150.0f, 0.3f);
 		mStateTimer = FLT_MAX;		// タイマーを無限大にリセットして攻撃を繰り返さないようにする
 	}
 }

@@ -14,7 +14,7 @@ EnemyState EnemyStateIdle::Update(EnemyActor* owner, float deltaTime)
 	mStateTimer -= deltaTime;
 
 	// プレイヤー位置情報
-	Vector3 playerPos = GAMEINSTANCE.GetPlayerActor()->GetPosition();
+	Vector3 playerPos = GAMEINSTANCE.GetFirstActor(Tag::Altar)->GetPosition();
 	Vector3 mPosition = owner->GetPosition();
 	Vector3 enemyToPlayerVec = playerPos - mPosition;
 
