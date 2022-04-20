@@ -175,7 +175,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DebugGrid.cpp" />
     <ClCompile Include="DepthMap.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="EffectComponent.cpp" />
     <ClCompile Include="EffekseerEffect.cpp" />
@@ -237,7 +237,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="DebugGrid.h" />
     <ClInclude Include="DepthMap.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="EffectComponent.h" />
     <ClInclude Include="EffekseerEffect.h" />
@@ -287,11 +287,15 @@
   <ItemGroup>
     <None Include="Shaders\BasicMesh.frag" />
     <None Include="Shaders\BasicMesh.vert" />
+    <None Include="Shaders\DepthMap.frag" />
+    <None Include="Shaders\DepthMap.vert" />
     <None Include="Shaders\Line.frag" />
     <None Include="Shaders\Line.vert" />
     <None Include="Shaders\LineWorld.vert" />
     <None Include="Shaders\Phong.frag" />
     <None Include="Shaders\Phong.vert" />
+    <None Include="Shaders\Shadowmap.frag" />
+    <None Include="Shaders\Shadowmap.vert" />
     <None Include="Shaders\Skinned.vert" />
     <None Include="Shaders\Sprite.frag" />
     <None Include="Shaders\Sprite.vert" />

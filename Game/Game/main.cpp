@@ -4,7 +4,7 @@
 
 int main(int argc, char** argv)
 {
-	if (!GAMEINSTANCE.Initialize(1920,1080,true))
+	if (!GAMEINSTANCE.Initialize(1280, 768, false))//1280, 768, false
 	{
 		return -1;
 	}

@@ -1,9 +1,11 @@
 #include "DepthMap.h"
-#include "Shader.h"
+#include "Game.h"
+#include "Renderer.h"
 
 DepthMap::DepthMap()
 {
 	mDepthShader = new Shader;
+	mDepthShader->Load("Shaders/DepthMap.vert", "Shaders/DepthMap.frag");
 }
 
 DepthMap::~DepthMap()
@@ -19,6 +21,15 @@ void DepthMap::DepthRenderingBegin()
 	mDepthShader->SetActive();
 	mDepthShader->SetMatrixUniform("lightSpaceMatrix", mLightSpaceMatrix);
 	
+}
+
+void DepthMap::DepthRenderingEnd()
+{
+	// •`‰ææ‚ðƒXƒNƒŠ[ƒ“‚É–ß‚·
+	glViewport(0, 0, RENDERER->GetScreenWidth(), RENDERER->GetScreenHeight());
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	glEnable(GL_DEPTH_TEST);
 }
 
 void DepthMap::CreateShadowMap()

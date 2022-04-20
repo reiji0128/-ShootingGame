@@ -13,6 +13,7 @@
 #include "PhysicsWorld.h"
 #include "Effekseer.h"
 #include "EffekseerEffect.h"
+#include "DepthMap.h"
 
 Renderer::Renderer()
 	:mWindow(nullptr)
@@ -32,9 +33,10 @@ bool Renderer::Initialize(int screenWidth, int screenHeight, bool fullScreen)
 	mScreenWidth = screenWidth;
 	mScreenHeight = screenHeight;
 
-	// OpenGL アトリビュートのセット
+//	OpenGLの各属性を設定する //
+	// コアOpenGLプロファイルを使う
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	// GL version 3.1
+	// GL version 3.4
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
@@ -45,10 +47,10 @@ bool Renderer::Initialize(int screenWidth, int screenHeight, bool fullScreen)
 	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-	// ダブルバッファリング
+	// ダブルバッファを有効
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-	// ハードウェアアクセラレーションを強制
+	// ハードウェアアクセラレーションを使う
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
 	// Windowの作成
@@ -96,20 +98,24 @@ bool Renderer::Initialize(int screenWidth, int screenHeight, bool fullScreen)
 	// 幾つかのプラットホームでは、GLEWが無害なエラーコードを吐くのでクリアしておく
 	glGetError();
 
-	// シェーダープログラムの初期化
+	// シェーダーのロード
 	if (!LoadShaders())
 	{
-		printf("シェーダーの初期化に失敗");
+		printf("シェーダーのロードに失敗");
 		return false;
 	}
+
+	// デプスレンダラーの初期化
+	mDepthMapRenderer = new DepthMap;
+	mDepthMapRenderer->CreateShadowMap();
 
 	// カリング
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
 
-	// 2D テクスチャ用頂点初期化
+	// スプライト用の頂点配列を作成
 	CreateSpriteVerts();
-	//
+	// 体力ゲージ用の頂点配列を作成
 	CreateHealthGaugeVerts();
 
 	// Effekseer初期化
@@ -183,8 +189,35 @@ void Renderer::Shutdown()
 
 void Renderer::Draw()
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER);
+
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
+
+	// デプスレンダリングパス開始
+	Matrix4 lightSpaceMat = mDepthMapRenderer->GetLightSpaceMatrix();
+	mDepthMapRenderer->DepthRenderingBegin();
+	// スタティックメッシュを描画
+	for (auto mc : mMeshComponents)
+	{
+		if (mc->GetVisible())
+		{
+			mc->Draw(mDepthMapRenderer->GetDepthMapShader());
+		}
+	}
+
+	//// スキンメッシュを描画
+	//mSkinnedDepthShader->SetActive();
+	//mSkinnedDepthShader->SetMatrixUniform("lightSpaceMatrix", lightSpaceMat);
+	//for (auto sk : mSkeletalMeshes)
+	//{
+	//	if (sk->GetVisible())
+	//	{
+	//		sk->Draw(mSkinnedDepthShader);
+	//	}
+	//}
+	// デプスレンダリングの終了
+	mDepthMapRenderer->DepthRenderingEnd();
 
 	//メッシュシェーダーで描画する対象の変数をセット
 	mMeshShader->SetActive();
@@ -245,6 +278,11 @@ void Renderer::SetProjMatrix(const Matrix4& proj)
 	Effekseer::Matrix44 eProj;
 	eProj = tmp;
 	RENDERER->GetEffekseerRenderer()->SetProjectionMatrix(eProj);
+}
+
+void Renderer::SetDepthSetting(const Vector3& centerPos, const Vector3& lightDir, const Vector3& upVec, const float lightDistance)
+{
+	mDepthMapRenderer->CalcLightSpaceMatrix(centerPos, lightDir, upVec, lightDistance);
 }
 
 Texture* Renderer::GetTexture(const std::string& fileName)
@@ -544,14 +582,6 @@ bool Renderer::LoadShaders()
 	}
 	mSkinnedShader->SetActive();
 	mSkinnedShader->SetMatrixUniform("uViewProj", mView * mProjection);
-
-	// シャドウマップのロード
-	/*mDepthMapShader = new Shader();
-	if (!mDepthMapShader->Load("shader/depthmap.vert", "shader/depthmap.frag"))
-	{
-		return false;
-	}*/
-
 
 	return true;
 }

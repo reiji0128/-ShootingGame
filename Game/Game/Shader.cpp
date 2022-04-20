@@ -101,7 +101,7 @@ void Shader::SetIntUniform(const char* name, int value)
 	glUniform1i(loc, value);
 }
 
-bool Shader::CompileShader(const std::string& fileName, GLenum shaderType, GLenum& outShader)
+bool Shader::CompileShader(const std::string& fileName, GLenum shaderType, GLuint& outShader)
 {
 	//オープンファイル
 	std::ifstream shaderFile(fileName);

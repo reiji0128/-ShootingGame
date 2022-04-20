@@ -598,5 +598,17 @@
     <None Include="Shaders\Skinned.vert">
       <Filter>Shader</Filter>
     </None>
+    <None Include="Shaders\DepthMap.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\DepthMap.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\Shadowmap.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\Shadowmap.vert">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

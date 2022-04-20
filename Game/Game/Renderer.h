@@ -41,6 +41,7 @@ public:
 	{
 		mAmbientLight = ambientColor;
 	}
+	void SetDepthSetting(const Vector3& centerPos, const Vector3& lightDir, const Vector3& upVec, const float lightDistance);
 	// ゲッター系
 	SDL_Renderer* GetSDLRenderer() { return mSDLRenderer; }                           // SDL系の描画に必要なSDLrendererを得る
 	class Texture* GetTexture(const std::string& fileName);                            // テクスチャをファイル名から返す
@@ -103,10 +104,11 @@ private:
 	std::vector<SpriteComponent*>                     mSprites;
 	std::unordered_map<const char16_t*, class EffekseerEffect*> mEffects; // エフェクト
 
-	//シェーダー関連
+// シェーダー関連 //
 	class Shader* mMeshShader;       // メッシュシェーダー
 	class Shader* mSkinnedShader;    // スキンメッシュシェーダー
-	class Shader* mDepthMapShader;
+	class Shader* mSkinnedDepthShader; // スキンメッシュのデプスシェーダー
+	class DepthMap* mDepthMapRenderer;
 
 	// 基本行列関連
 	Matrix4                                           mView;             // ビュー行列

@@ -28,7 +28,11 @@ public:
 	void	   Draw();
 
 private:
+	float mLightDistance;
+
 	float mHealthScaleX;
+
+	class PlayerActor* player;
 
 	/// ビットマップテキストのポインタ
 	class BitmapText* mFont;
