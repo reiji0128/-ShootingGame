@@ -66,13 +66,13 @@ GameScene::GameScene()
 		               "LeftHandIndex4");                             // アタッチ先のボーン名
 
 	// 敵の生成
-	new EnemyActor(Vector3(960.0, 740.0, 30.0), Vector3(0, 1, 0));
-	new EnemyActor(Vector3(1095.0, -452.0, 30.0), Vector3(1, 1, 0));
-	new EnemyActor(Vector3(13.0, -13.0, 30.0), Vector3(1, -1, 0));
-	new EnemyActor(Vector3(99.0, 1468.0, 30.0), Vector3(1, 0, 0));
-	new EnemyActor(Vector3(1110.0, 1644.0, 30.0), Vector3(-1, 1, 0));
-	new EnemyActor(Vector3(2011.0, 1735.0, 30.0), Vector3(1, 0, 0));
-	new EnemyActor(Vector3(2002.0, 415.0, 30.0), Vector3(1, 1, 0));
+	new EnemyActor(Vector3(960.0, 740.0, -30.0), Vector3(0, 1, 0));
+	new EnemyActor(Vector3(1095.0, -452.0, -30.0), Vector3(1, 1, 0));
+	new EnemyActor(Vector3(13.0, -13.0, -30.0), Vector3(1, -1, 0));
+	new EnemyActor(Vector3(99.0, 1468.0, -30.0), Vector3(1, 0, 0));
+	new EnemyActor(Vector3(1110.0, 1644.0, -30.0), Vector3(-1, 1, 0));
+	new EnemyActor(Vector3(2011.0, 1735.0, -30.0), Vector3(1, 0, 0));
+	new EnemyActor(Vector3(2002.0, 415.0, -30.0), Vector3(1, 1, 0));
 
     // カメラの生成
 	ThirdPersonCameraActor* camera = new ThirdPersonCameraActor(player);

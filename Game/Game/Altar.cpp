@@ -19,7 +19,7 @@ Altar::Altar(const Vector3& pos, const char* gpmeshFileName)
 
 	// “–‚½‚è”»’è‚ÌƒZƒbƒg
 	AABB box = mesh->GetCollisionBox();
-	box.Scaling(2.0f,2.0f,2.0f);
+	box.Scaling(1.0f);
 	mBoxCollider = new BoxCollider(this);
 	mBoxCollider->SetObjectBox(box);
 

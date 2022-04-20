@@ -174,7 +174,9 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DebugGrid.cpp" />
-    <ClCompile Include="DepthMap.cpp" />
+    <ClCompile Include="DepthMap.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="EffectComponent.cpp" />
     <ClCompile Include="EffekseerEffect.cpp" />
     <ClCompile Include="EnemyActor.cpp" />
@@ -234,7 +236,9 @@
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="DebugGrid.h" />
-    <ClInclude Include="DepthMap.h" />
+    <ClInclude Include="DepthMap.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="EffectComponent.h" />
     <ClInclude Include="EffekseerEffect.h" />
     <ClInclude Include="EnemyActor.h" />
