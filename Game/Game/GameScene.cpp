@@ -111,6 +111,11 @@ SceneBase* GameScene::Update()
 	{
 		GAMEINSTANCE.GetPhysics()->ToggleDebugMode();
 	}
+
+	DirectionalLight dirLight = RENDERER->GetDirectionalLight();
+	Vector3 lightDir = dirLight.mDirection;
+	Vector3 playerPos = player->GetPosition();
+	RENDERER->SetDepthSetting(playerPos, lightDir, Vector3::UnitZ, mLightDistance);
 	RENDERER->GetEffekseerManager()->Update();
 	
 	return this;
@@ -139,11 +144,6 @@ void GameScene::Draw()
 
 	// 2D描画の終了処理
 	RENDERER->SpriteDrawEnd();
-
-	DirectionalLight dirLight = RENDERER->GetDirectionalLight();
-	Vector3 lightDir = dirLight.mDirection;
-	Vector3 playerPos = player->GetPosition();
-	RENDERER->SetDepthSetting(playerPos, lightDir, Vector3::UnitZ, mLightDistance);
 
 // エフェクト関連の処理 //
 	// エフェクト描画の開始処理

@@ -17,6 +17,7 @@ void DepthMap::DepthRenderingBegin()
 	// 描画先をデプスマップに設定しシェーダーをセットする
 	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 	glBindFramebuffer(GL_FRAMEBUFFER, mDepthMapFBO);
+	glEnable(GL_DEPTH_TEST);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	mDepthShader->SetActive();
 	mDepthShader->SetMatrixUniform("lightSpaceMatrix", mLightSpaceMatrix);
@@ -26,9 +27,9 @@ void DepthMap::DepthRenderingBegin()
 void DepthMap::DepthRenderingEnd()
 {
 	// 描画先をスクリーンに戻す
-	glViewport(0, 0, RENDERER->GetScreenWidth(), RENDERER->GetScreenHeight());
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
+	glViewport(0, 0, RENDERER->GetScreenWidth(), RENDERER->GetScreenHeight());
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 }
 
@@ -61,7 +62,7 @@ void DepthMap::CreateShadowMap()
 /// <param name="centerWorldPos"></param>
 /// <param name="lightDir"></param>
 /// <param name="upVec"></param>
-/// <param name="lightDistance"></param>
+/// <param name="lightDistance">ライトの距離</param>
 void DepthMap::CalcLightSpaceMatrix(const Vector3& centerWorldPos, const Vector3& lightDir, const Vector3& upVec, const float lightDistance)
 {
 	mLightDir = lightDir;

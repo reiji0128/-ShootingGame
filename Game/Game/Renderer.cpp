@@ -197,27 +197,50 @@ void Renderer::Draw()
 	// デプスレンダリングパス開始
 	Matrix4 lightSpaceMat = mDepthMapRenderer->GetLightSpaceMatrix();
 	mDepthMapRenderer->DepthRenderingBegin();
-	// スタティックメッシュを描画
-	for (auto mc : mMeshComponents)
+
+	// スタティックメッシュをデプスへレンダリング
+	mMeshDepthShader->SetMatrixUniform("lightSpaceMatrix", lightSpaceMat);
+	for (auto sk : mMeshComponents)
 	{
-		if (mc->GetVisible())
+		if (sk->GetVisible())
 		{
-			mc->Draw(mDepthMapRenderer->GetDepthMapShader());
+			sk->Draw(mMeshDepthShader);
 		}
 	}
 
-	//// スキンメッシュを描画
-	//mSkinnedDepthShader->SetActive();
-	//mSkinnedDepthShader->SetMatrixUniform("lightSpaceMatrix", lightSpaceMat);
-	//for (auto sk : mSkeletalMeshes)
+	//// スタティックメッシュを描画
+	//mDepthMapRenderer->GetDepthMapShader()->SetMatrixUniform("lightSpaceMatrix", lightSpaceMat);
+	//for (auto mc : mMeshComponents)
 	//{
-	//	if (sk->GetVisible())
+	//	if (mc->GetVisible())
 	//	{
-	//		sk->Draw(mSkinnedDepthShader);
+	//		mc->Draw(mDepthMapRenderer->GetDepthMapShader());
 	//	}
 	//}
-	// デプスレンダリングの終了
+
+	// スキンメッシュをデプスへレンダリング
+	mSkinnedDepthShader->SetMatrixUniform("lightSpaceMatrix", lightSpaceMat);
+	for (auto sk : mSkeletalMeshes)
+	{
+		if (sk->GetVisible())
+		{
+			sk->Draw(mSkinnedDepthShader);
+		}
+	}
 	mDepthMapRenderer->DepthRenderingEnd();
+
+
+	// スキンメッシュを描画
+	mSkinnedDepthShader->SetActive();
+	mSkinnedDepthShader->SetMatrixUniform("lightSpaceMatrix", lightSpaceMat);
+	for (auto sk : mSkeletalMeshes)
+	{
+		if (sk->GetVisible())
+		{
+			sk->Draw(mSkinnedDepthShader);
+		}
+	}
+	// デプスレンダリングの終了
 
 	//メッシュシェーダーで描画する対象の変数をセット
 	mMeshShader->SetActive();
@@ -539,42 +562,56 @@ void Renderer::DrawHelthGauge(Texture* texture, const Vector2& offset, float sca
 
 bool Renderer::LoadShaders()
 {
-	// スプライトシェーダーのロード
+	// スプライトシェーダーのロード//
 	mSpriteShader = new Shader();
 	if (!mSpriteShader->Load("Shaders/Sprite.vert", "Shaders/Sprite.frag"))
 	{
+		printf("スプライトシェーダーの読み込み失敗\n");
 		return false;
 	}
-
 	mSpriteShader->SetActive();
+
 	// ビュープロジェクション行列のセット
 	Matrix4 viewProj = Matrix4::CreateSimpleViewProj(static_cast<float>(mScreenWidth), static_cast<float>(mScreenHeight));
 	mSpriteShader->SetMatrixUniform("uViewProj", viewProj);
 
+	// タイルマップシェーダーのロード //
 	mTilemapShader = new Shader();
 	if (!mTilemapShader->Load("Shaders/Sprite.vert", "Shaders/Tilemap.frag"))
 	{
+		printf("タイルマップシェーダーの読み込み失敗\n");
 		return false;
 	}
 	mTilemapShader->SetActive();
+
 	// ビュープロジェクション行列のセット
 	mTilemapShader->SetMatrixUniform("uViewProj", viewProj);
 
-	// メッシュシェーダー
-	mMeshShader = new Shader();
-	if (!mMeshShader->Load("Shaders/Phong.vert", "Shaders/Phong.frag"))
-	{
-		return false;
-	}
-
-	mMeshShader->SetActive();
+	// ビュー行列の設定
 	mView = Matrix4::CreateLookAt(Vector3::Zero, Vector3::UnitX, Vector3::UnitZ);
 	mProjection = Matrix4::CreatePerspectiveFOV(Math::ToRadians(70.0f),
 		static_cast<float>(mScreenWidth),
 		static_cast<float>(mScreenHeight),
 		1.0f, 10000.0f);
+
+	// メッシュシェーダーのロード //
+	mMeshShader = new Shader();
+	if (!mMeshShader->Load("Shaders/Phong.vert", "Shaders/Phong.frag"))
+	{
+		return false;
+	}
+	mMeshShader->SetActive();
 	mMeshShader->SetMatrixUniform("uViewProj", mView * mProjection);
 
+	// メッシュのデプスシェーダーのロード
+	mMeshDepthShader = new Shader();
+	if (!mMeshDepthShader->Load("Shaders/DepthMap.vert", "Shaders/DepthMap.frag"))
+	{
+		return false;
+	}
+	mMeshDepthShader->SetActive();
+
+	// スキンメッシュシェーダーのロード
 	mSkinnedShader = new Shader();
 	if (!mSkinnedShader->Load("Shaders/Skinned.vert", "Shaders/Phong.frag"))
 	{
@@ -582,6 +619,14 @@ bool Renderer::LoadShaders()
 	}
 	mSkinnedShader->SetActive();
 	mSkinnedShader->SetMatrixUniform("uViewProj", mView * mProjection);
+
+	// スキンメッシュのデプスシェーダーのロード
+	mSkinnedDepthShader = new Shader();
+	if (!mSkinnedDepthShader->Load("Shaders/Skinned.vert", "Shaders/Phong.frag"))
+	{
+		return false;
+	}
+	mSkinnedDepthShader->SetActive();
 
 	return true;
 }

@@ -105,8 +105,9 @@ private:
 	std::unordered_map<const char16_t*, class EffekseerEffect*> mEffects; // エフェクト
 
 // シェーダー関連 //
-	class Shader* mMeshShader;       // メッシュシェーダー
-	class Shader* mSkinnedShader;    // スキンメッシュシェーダー
+	class Shader* mMeshShader;         // メッシュシェーダー
+	class Shader* mMeshDepthShader;    // メッシュのデプスシェーダー
+	class Shader* mSkinnedShader;      // スキンメッシュシェーダー
 	class Shader* mSkinnedDepthShader; // スキンメッシュのデプスシェーダー
 	class DepthMap* mDepthMapRenderer;
 
