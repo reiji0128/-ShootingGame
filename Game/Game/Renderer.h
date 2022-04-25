@@ -89,7 +89,8 @@ private:
 	bool                                              LoadShaders();                          // シェーダーの初期化
 	void                                              SetLightUniforms(class Shader* shader); // ライト値をシェーダーにセット
 	void                                              CreateSpriteVerts();                    // スプライト頂点作成
-	void                                              CreateHealthGaugeVerts();                    // 体力ゲージ用の頂点作成
+	void                                              CreateHealthGaugeVerts();               // 体力ゲージ用の頂点作成
+	void                                              ScreenVAOSetting(unsigned int& vao);    // 画面全体を覆う頂点定義
 
 	int                                               mScreenWidth;      // スクリーン幅                                                           
 	int                                               mScreenHeight;     // スクリーン高さ
@@ -109,6 +110,7 @@ private:
 	class Shader* mMeshDepthShader;    // メッシュのデプスシェーダー
 	class Shader* mSkinnedShader;      // スキンメッシュシェーダー
 	class Shader* mSkinnedDepthShader; // スキンメッシュのデプスシェーダー
+	class Shader* mShadowMapShader;    // シャドウマップシェーダー
 	class DepthMap* mDepthMapRenderer;
 
 	// 基本行列関連

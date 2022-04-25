@@ -4,8 +4,6 @@
 
 DepthMap::DepthMap()
 {
-	mDepthShader = new Shader;
-	mDepthShader->Load("Shaders/DepthMap.vert", "Shaders/DepthMap.frag");
 }
 
 DepthMap::~DepthMap()
@@ -19,9 +17,6 @@ void DepthMap::DepthRenderingBegin()
 	glBindFramebuffer(GL_FRAMEBUFFER, mDepthMapFBO);
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	mDepthShader->SetActive();
-	mDepthShader->SetMatrixUniform("lightSpaceMatrix", mLightSpaceMatrix);
-	
 }
 
 void DepthMap::DepthRenderingEnd()
@@ -68,7 +63,7 @@ void DepthMap::CalcLightSpaceMatrix(const Vector3& centerWorldPos, const Vector3
 	mLightDir = lightDir;
 	mLightPos = (-lightDistance) * mLightDir + centerWorldPos;
 
-	Matrix4 lightProjection = Matrix4::CreateOrtho(7500, 7500, 1.0f, 10000.0f);
+	Matrix4 lightProjection = Matrix4::CreateOrtho(2500, 2500, 1.0f, 10000.0f);
 	Matrix4 lightView       = Matrix4::CreateLookAt(mLightPos,centerWorldPos,upVec);
 
 	mLightSpaceMatrix = lightView * lightProjection;

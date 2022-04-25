@@ -23,8 +23,6 @@ public:
 	Vector3& GetLightPod() { return mLightPos; }
 
 	Matrix4& GetLightSpaceMatrix() { return mLightSpaceMatrix; }
-
-	Shader* GetDepthMapShader() { return mDepthShader; }
 private:
 	// デプスマップフレームバッファオブジェクト
 	unsigned int mDepthMapFBO;
@@ -43,8 +41,4 @@ private:
 
 	// ライト空間
 	Matrix4 mLightSpaceMatrix;
-
-	// デプスマップ用シェーダー
-	Shader* mDepthShader;
-
 };

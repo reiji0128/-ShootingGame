@@ -1,4 +1,4 @@
-#versoin 330 core
+#version 330 core
 layout (location = 0) in vec3 aPos;       // 頂点位置
 layout (location = 1) in vec3 aNormal;    // 法線
 layout (location = 2) in vec2 aTexCoords; // テクスチャ座標

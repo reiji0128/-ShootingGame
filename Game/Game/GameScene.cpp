@@ -23,7 +23,7 @@ GameScene::GameScene()
 	,mTex (nullptr)
 	,mGrid(nullptr)
 	,mHealthScaleX(0.3f)
-	,mLightDistance(100.0f)
+	,mLightDistance(4000.0f)
 {
 	printf("-----------------GameScene-----------------\n");
 	// フォント初期化
@@ -46,17 +46,22 @@ GameScene::GameScene()
 	dir.mDirection = Vector3(0.7f, 0.7f, -0.7f);
 	dir.mDiffuseColor = Vector3(0.78f, 0.88f, 1.0f);
 	dir.mSpecColor = Vector3(0.8f, 0.8f, 0.8f);
+	Vector3 lightDir = dir.mDirection;
+	RENDERER->SetDepthSetting(Vector3(890, -130, 20), lightDir, Vector3::UnitZ, mLightDistance);
 
 	mTex = new Texture;
 	mTex = RENDERER->GetTexture("Assets/Player/Health.png");
-	//mUI = new Texture;
-	//mUI = RENDERER->GetTexture("Assets/UI/UI.png");
 
 	// プレイヤーの生成
-	player = new PlayerActor(Vector3(1040.0, 740.0, 30.0),          // 座標
-		                     1.0f,                                  // スケール
-		                     "Assets/Player/SpecialForces.gpmesh",  // gpMeshのファイルパス
-		                     "Assets/Player/SpecialForces.gpskel"); // gpSkelのファイルパス
+	player = new PlayerActor(Vector3(890, -130, 20),          // 座標
+	                         1.0f,                                  // スケール
+	                         "Assets/Player/SpecialForces.gpmesh",  // gpMeshのファイルパス
+	                         "Assets/Player/SpecialForces.gpskel"); // gpSkelのファイルパス
+	    
+	//player = new PlayerActor(Vector3(1040.0, 740.0, 30.0),          // 座標
+	//	                     1.0f,                                  // スケール
+	//	                     "Assets/Player/SpecialForces.gpmesh",  // gpMeshのファイルパス
+	//	                     "Assets/Player/SpecialForces.gpskel"); // gpSkelのファイルパス
 	
 	// 銃の生成
 	Gun* gun = new Gun(Vector3(90, -40, 140),                         // オフセット位置
@@ -79,9 +84,10 @@ GameScene::GameScene()
 	camera->SetCameraLength(800.0f);
 
 	// バックグラウンドの生成
-	new StaticBGActor(Vector3(1040.0, 740.0, 30.0), "Assets/BackGround/StaticMesh.gpmesh");
+	new StaticBGActor(Vector3(890, -130, 20), "Assets/BackGround/testMap.gpmesh");
+	//new StaticBGActor(Vector3(1040.0, 740.0, 30.0), "Assets/BackGround/StaticMesh.gpmesh");
 	
-	mAltar = new Altar(Vector3(1000.0, 740.0, 30.0), "Assets/BackGround/Altar.gpmesh");
+	//mAltar = new Altar(Vector3(1000.0, 740.0, 30.0), "Assets/BackGround/Altar.gpmesh");
 
 	// バックグラウンドの当たり判定の生成
 	new BGCollisionSetter("Assets/BackGround/CollisionBox.json");
@@ -115,7 +121,8 @@ SceneBase* GameScene::Update()
 	DirectionalLight dirLight = RENDERER->GetDirectionalLight();
 	Vector3 lightDir = dirLight.mDirection;
 	Vector3 playerPos = player->GetPosition();
-	RENDERER->SetDepthSetting(playerPos, lightDir, Vector3::UnitZ, mLightDistance);
+	RENDERER->SetDepthSetting(Vector3(890, -130, 20), lightDir, Vector3::UnitZ, mLightDistance);
+
 	RENDERER->GetEffekseerManager()->Update();
 	
 	return this;

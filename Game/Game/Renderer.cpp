@@ -117,6 +117,9 @@ bool Renderer::Initialize(int screenWidth, int screenHeight, bool fullScreen)
 	CreateSpriteVerts();
 	// 体力ゲージ用の頂点配列を作成
 	CreateHealthGaugeVerts();
+	// スクリーン全体を覆う頂点バッファオブジェクトを作成
+	unsigned int screenVAO;
+	ScreenVAOSetting(screenVAO);
 
 	// Effekseer初期化
 	mEffekseerRenderer = ::EffekseerRendererGL::Renderer::Create(8000, EffekseerRendererGL::OpenGLDeviceType::OpenGL3);
@@ -194,11 +197,14 @@ void Renderer::Draw()
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 
-	// デプスレンダリングパス開始
+	// ライト空間行列を取得
 	Matrix4 lightSpaceMat = mDepthMapRenderer->GetLightSpaceMatrix();
+
+	// デプスレンダリングパス開始
 	mDepthMapRenderer->DepthRenderingBegin();
 
 	// スタティックメッシュをデプスへレンダリング
+	mMeshDepthShader->SetActive();
 	mMeshDepthShader->SetMatrixUniform("lightSpaceMatrix", lightSpaceMat);
 	for (auto sk : mMeshComponents)
 	{
@@ -208,30 +214,8 @@ void Renderer::Draw()
 		}
 	}
 
-	//// スタティックメッシュを描画
-	//mDepthMapRenderer->GetDepthMapShader()->SetMatrixUniform("lightSpaceMatrix", lightSpaceMat);
-	//for (auto mc : mMeshComponents)
-	//{
-	//	if (mc->GetVisible())
-	//	{
-	//		mc->Draw(mDepthMapRenderer->GetDepthMapShader());
-	//	}
-	//}
-
 	// スキンメッシュをデプスへレンダリング
-	mSkinnedDepthShader->SetMatrixUniform("lightSpaceMatrix", lightSpaceMat);
-	for (auto sk : mSkeletalMeshes)
-	{
-		if (sk->GetVisible())
-		{
-			sk->Draw(mSkinnedDepthShader);
-		}
-	}
-	mDepthMapRenderer->DepthRenderingEnd();
-
-
-	// スキンメッシュを描画
-	mSkinnedDepthShader->SetActive();
+	mMeshDepthShader->SetActive();
 	mSkinnedDepthShader->SetMatrixUniform("lightSpaceMatrix", lightSpaceMat);
 	for (auto sk : mSkeletalMeshes)
 	{
@@ -241,6 +225,23 @@ void Renderer::Draw()
 		}
 	}
 	// デプスレンダリングの終了
+	mDepthMapRenderer->DepthRenderingEnd();
+
+	// 通常レンダリング(シャドウつける)
+	mShadowMapShader->SetActive();
+	mShadowMapShader->SetVectorUniform("light.direction", mDirectionalLight.mDirection);
+	mShadowMapShader->SetVectorUniform("light.ambient", mAmbientLight);
+	mShadowMapShader->SetVectorUniform("light.diffuse", mDirectionalLight.mDiffuseColor);
+	mShadowMapShader->SetVectorUniform("light.specular", mDirectionalLight.mSpecColor);
+	mShadowMapShader->SetVectorUniform("viewPos", GAMEINSTANCE.GetViewPos());
+	mShadowMapShader->SetIntUniform("diffuseMap", 0);
+	mShadowMapShader->SetIntUniform("specularMap", 1);
+	mShadowMapShader->SetMatrixUniform("view", mView);
+	mShadowMapShader->SetMatrixUniform("projection", mProjection);
+
+	// 追加パラメーター
+	mShadowMapShader->SetIntUniform("depthMap", 2);
+	mShadowMapShader->SetMatrixUniform("lightSpaceMatrix", lightSpaceMat);
 
 	//メッシュシェーダーで描画する対象の変数をセット
 	mMeshShader->SetActive();
@@ -457,6 +458,29 @@ void Renderer::CreateHealthGaugeVerts()
 	mHealthVerts = new VertexArray(vertices, 4, VertexArray::PosNormTex, indices, 6);
 }
 
+void Renderer::ScreenVAOSetting(unsigned int& vao)
+{
+	unsigned int vbo;
+	float quadVertices[] =
+	{
+		//      位置       | テクスチャ座標
+		-1.0f,  1.0f, 0.0f,  0.0f, 0.0f,
+		-1.0f, -1.0f, 0.0f,  0.0f, 0.0f,
+		 1.0f,  1.0f, 0.0f,  1.0f, 1.0f,
+		 1.0f, -1.0f, 0.0f,  1.0f, 0.0f
+	};
+
+	glGenVertexArrays(1, &vao);
+	glGenBuffers(1, &vbo);
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+}
+
 
 void Renderer::ShowResource()
 {
@@ -627,6 +651,13 @@ bool Renderer::LoadShaders()
 		return false;
 	}
 	mSkinnedDepthShader->SetActive();
+
+	mShadowMapShader = new Shader();
+	if (!mShadowMapShader->Load("Shaders/Shadowmap.vert", "Shaders/Shadowmap.frag"))
+	{
+		printf("シャドウマップシェーダーの読み込み失敗\n");
+		return false;
+	}
 
 	return true;
 }
