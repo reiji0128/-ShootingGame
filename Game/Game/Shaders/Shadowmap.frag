@@ -1,25 +1,40 @@
 #version 330 core
 
-// ライト
-struct Light
+// ディレクショナルライト構造体
+struct DirectionalLight
 {
-	vec3 direction; // ライトの方向(ディレクショナルライト)
-	vec3 ambient;   // ライトアンビエント
-	vec3 diffuse;   // ライトディフューズ
-	vec3 specular;  // ライトスペキュラー
+	// ライトの方向
+	vec3 mDirection;
+	// ディフーズ色
+	vec3 mDiffuseColor;
+	// スペキュラー色
+	vec3 mSpecColor;
 };
 
-uniform Light     light;
-uniform vec3      viewPos;     // 視点
-uniform sampler2D diffuseMap;  // ディフューズテクスチャ
-uniform sampler2D specularMap; // スペキュラーテクスチャ
-uniform samler2D  depthMap;    // シャドウマップ
+// テクスチャ座標
+in  vec2 TexCoords;
+// 法線
+in vec3 Normal;
+// 頂点位置
+in vec3 FragPos;
+// ライト空間でのフラグメント座標
+in vec4 FragPosLightSpace; 
 
-in  vec3 Normal;            // フラグメント位置の法線ベクトル
-in  vec3 FragPos;           // フラグメント位置のワールド座標
-in  vec2 TexCoords;         // テクスチャ座標
-in  vec4 FragPosLightSpace; // ライト空間でのフラグメント座標
-out vec4 FragColor;         // このフラグメントの出力
+// ライティング用変数 //
+// カメラ位置
+uniform vec3 uCameraPos;
+// ポリゴン表面のスペキュラー強度
+uniform float uSpecPower;
+// ディレクショナルライト
+uniform DirectionalLight uDirLight;
+// アンビエントライト色
+uniform vec3 uAmbientLight;
+
+uniform sampler2D uTexture;
+uniform sampler2D depthMap;
+
+// 出力カラー
+out vec4 outColor;
 
 float ShadowCaluculation(vec4 fragPosLightSpace)
 {
@@ -32,29 +47,36 @@ float ShadowCaluculation(vec4 fragPosLightSpace)
 	// 現在描画しようとしているフラグメントの深度値
 	float currentDepth = projCoords.z;
 	// シャドウ判定(1.0:シャドウ  0.0:シャドウ外)
-	float bias = max(0.0005 * (1.0 - dot(normalize(Normal),light.direction)),0.00005);
+	float bias = max(0.0005 * (1.0 - dot(normalize(Normal),uDirLight.mDirection)),0.00005);
 	float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
 	return shadow;
 }
 
 void main()
 {
-	// アンビエント
-	vec3 ambient = light.ambient * vec3(texture(diffuseMap,TexCoords));
+	// ポリゴン表面の法線（フラグメントシェーダー上で補間されている）
+	vec3 N = normalize(Normal);
+	// ポリゴン表面からライト方向へのベクトル
+	vec3 L = normalize(-uDirLight.mDirection);
+	// ポリゴン表面からカメラ方向
+	vec3 V = normalize(uCameraPos - FragPos);
+	// -L ベクトルを 法線 N に対して反射したベクトルRを求める
+	vec3 R = normalize(reflect(-L, N));
 
-	// ディフューズ
-	vec3  norm    = normalize(Normal);
-	float diff    = max(dot(norm,-light.direction),0.0);
-	vec3  diffuse = light.diffuse * diff * vec3(texture(diffuseMap,TexCoords));
+	// フォン反射計算
+	vec3 Phong = uAmbientLight;
+	float NdotL = dot(N, L);
 
-	//スペキュラー
-	vec3  viewDir    = normalize(viewPos - FragPos);
-	vec3  reflectDir = reflect(light.direction,norm);
-	float spec       = pow(max(dot(viewDir,reflectDir),0.0)32);
-	vec3  specular   = light.specular * spec * vec3(texture(dpecularMap,TexCoords));
+	vec3 Diffuse;
+	vec3 Specular;
+
+	Diffuse = uDirLight.mDiffuseColor * max(NdotL,0.0f);
+	Specular = uDirLight.mSpecColor * pow(max(0.0, dot(R, V)), uSpecPower);
 
 	float shadow = ShadowCaluculation(FragPosLightSpace);
-	vec3  result = ambient * (1.0 - shadow) * (diffuse + specular);
+	vec3  result = uAmbientLight + (1.0 - shadow) * (Diffuse + Specular);
 
-	FragColor   = vec4(result,1.0);
+	// 最終的な色はテクスチャの色xフォンの光 (alpha = 1)
+	//outColor = texture(uTexture, TexCoords) * vec4((Diffuse + uAmbientLight),1.0f) + vec4(Specular,1.0f);
+	outColor = texture(uTexture, TexCoords) * vec4(result,1.0);
 }

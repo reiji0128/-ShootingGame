@@ -112,7 +112,7 @@ bool Renderer::Initialize(int screenWidth, int screenHeight, bool fullScreen)
 	// カリング
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
-
+	
 	// スプライト用の頂点配列を作成
 	CreateSpriteVerts();
 	// 体力ゲージ用の頂点配列を作成
@@ -227,33 +227,27 @@ void Renderer::Draw()
 	// デプスレンダリングの終了
 	mDepthMapRenderer->DepthRenderingEnd();
 
-	// 通常レンダリング(シャドウつける)
 	mShadowMapShader->SetActive();
-	mShadowMapShader->SetVectorUniform("light.direction", mDirectionalLight.mDirection);
-	mShadowMapShader->SetVectorUniform("light.ambient", mAmbientLight);
-	mShadowMapShader->SetVectorUniform("light.diffuse", mDirectionalLight.mDiffuseColor);
-	mShadowMapShader->SetVectorUniform("light.specular", mDirectionalLight.mSpecColor);
-	mShadowMapShader->SetVectorUniform("viewPos", GAMEINSTANCE.GetViewPos());
-	mShadowMapShader->SetIntUniform("diffuseMap", 0);
-	mShadowMapShader->SetIntUniform("specularMap", 1);
+	// 通常レンダリング(シャドウつける)
 	mShadowMapShader->SetMatrixUniform("view", mView);
 	mShadowMapShader->SetMatrixUniform("projection", mProjection);
-
 	// 追加パラメーター
 	mShadowMapShader->SetIntUniform("depthMap", 2);
 	mShadowMapShader->SetMatrixUniform("lightSpaceMatrix", lightSpaceMat);
+	// ライティング変数をセット
+	SetLightUniforms(mShadowMapShader);
 
 	//メッシュシェーダーで描画する対象の変数をセット
-	mMeshShader->SetActive();
-	mMeshShader->SetMatrixUniform("uViewProj", mView * mProjection);
+	//mMeshShader->SetActive();
+	//mMeshShader->SetMatrixUniform("uViewProj", mView * mProjection);
 	// ライティング変数をセット
-	SetLightUniforms(mMeshShader);
+	//SetLightUniforms(mMeshShader);
 	// 全てのメッシュコンポーネントを描画
 	for (auto mc : mMeshComponents)
 	{
 		if (mc->GetVisible())
 		{
-			mc->Draw(mMeshShader);
+			mc->Draw(mShadowMapShader);
 		}
 	}
 
@@ -622,6 +616,7 @@ bool Renderer::LoadShaders()
 	mMeshShader = new Shader();
 	if (!mMeshShader->Load("Shaders/Phong.vert", "Shaders/Phong.frag"))
 	{
+		printf("メッシュシェーダー読み込み失敗\n");
 		return false;
 	}
 	mMeshShader->SetActive();
@@ -631,6 +626,7 @@ bool Renderer::LoadShaders()
 	mMeshDepthShader = new Shader();
 	if (!mMeshDepthShader->Load("Shaders/DepthMap.vert", "Shaders/DepthMap.frag"))
 	{
+		printf("メッシュのデプスシェーダーの読み込み失敗\n");
 		return false;
 	}
 	mMeshDepthShader->SetActive();
@@ -639,6 +635,7 @@ bool Renderer::LoadShaders()
 	mSkinnedShader = new Shader();
 	if (!mSkinnedShader->Load("Shaders/Skinned.vert", "Shaders/Phong.frag"))
 	{
+		printf("スキンメッシュシェーダの読み込み失敗\n");
 		return false;
 	}
 	mSkinnedShader->SetActive();
@@ -648,6 +645,7 @@ bool Renderer::LoadShaders()
 	mSkinnedDepthShader = new Shader();
 	if (!mSkinnedDepthShader->Load("Shaders/Skinned.vert", "Shaders/Phong.frag"))
 	{
+		printf("スキンメッシュのデプスシェーダーの読み込み失敗\n");
 		return false;
 	}
 	mSkinnedDepthShader->SetActive();
