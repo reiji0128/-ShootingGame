@@ -32,7 +32,6 @@ uniform vec3 uAmbientLight;
 
 uniform sampler2D uTexture;
 uniform sampler2D depthMap;
-uniform sampler2D uDiffuseMap;
 
 // 出力カラー
 out vec4 outColor;
@@ -41,8 +40,8 @@ float ShadowCaluculation(vec4 fragPosLightSpace)
 {
 	// パースペクティブ除算
 	vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+	// [0,1]の範囲に変換
 	projCoords      = projCoords * 0.5 + 0.5;
-
 	// シャドウマップよりライトに最も近いフラグメントの深度値を得る
 	float closestDepth = texture(depthMap,projCoords.xy).r;
 	// 現在描画しようとしているフラグメントの深度値
@@ -80,7 +79,6 @@ void main()
 	vec3 diffuseColor = Diffuse * texColor;
 	vec3 ambientColor = uAmbientLight* texColor;
 
-	vec3  result = (1.0 - shadow) * (diffuseColor + Specular) * ambientColor;
-
-	outColor = vec4(result,1.0);
+	vec3 result = ambientColor + (1.0 - shadow) * (diffuseColor + Specular);
+	outColor = vec4(result,1.0f);
 }

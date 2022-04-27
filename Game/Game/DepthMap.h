@@ -30,8 +30,8 @@ private:
 	// デプステクスチャ
 	unsigned int mDepthMap;
 
-	const unsigned int SHADOW_WIDTH  = 1024;
-	const unsigned int SHADOW_HEIGHT = 1024;
+	const unsigned int SHADOW_WIDTH  = 4096;
+	const unsigned int SHADOW_HEIGHT = 4096;
 
 	//デプスマップレンダリングの撮影原点
 	Vector3 mLightPos;

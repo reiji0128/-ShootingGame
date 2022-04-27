@@ -6,6 +6,8 @@ uniform mat4 uWorldTransform;
 uniform mat4 uViewProj;
 // 行列パレット用のUniform変数
 uniform mat4 uMatrixPalette[196];
+// ライト空間行列
+uniform mat4 uLightSpaceMatrix;
 
 // Attribute 0 位置 , Attribute 1 法線 , Attribute 2 ボーンのインデックス
 // Attribute 3 重み , Attribute 4 UV座標
@@ -21,6 +23,8 @@ out vec2 fragTexCoord;
 out vec3 fragNormal;
 // 位置(in world space)
 out vec3 fragWorldPos;
+// ライト空間でのフラグメント座標
+out vec4 fragPosLightSpace;
 
 void main()
 {
@@ -50,4 +54,6 @@ void main()
 	fragNormal = (skinnedNormal * uWorldTransform).xyz;
 	// テクスチャ座標をフラグメントシェーダーに渡す
 	fragTexCoord = inTexCoord;
+
+	fragPosLightSpace = vec4(fragWorldPos,1.0) * uLightSpaceMatrix;
 }

@@ -53,7 +53,7 @@ GameScene::GameScene()
 	mTex = RENDERER->GetTexture("Assets/Player/Health.png");
 
 	// プレイヤーの生成
-	player = new PlayerActor(Vector3(890, -130, 20),          // 座標
+	player = new PlayerActor(Vector3(890, -50, -55),                 // 座標
 	                         1.0f,                                  // スケール
 	                         "Assets/Player/SpecialForces.gpmesh",  // gpMeshのファイルパス
 	                         "Assets/Player/SpecialForces.gpskel"); // gpSkelのファイルパス

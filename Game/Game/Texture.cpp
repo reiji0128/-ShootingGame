@@ -137,5 +137,6 @@ void Texture::CreateForRendering(int width, int height, unsigned int format)
 /// </summary>
 void Texture::SetActive()
 {
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, mTextureID);
 }

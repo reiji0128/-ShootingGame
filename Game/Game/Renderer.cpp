@@ -215,8 +215,8 @@ void Renderer::Draw()
 	}
 
 	// スキンメッシュをデプスへレンダリング
-	mMeshDepthShader->SetActive();
-	mSkinnedDepthShader->SetMatrixUniform("lightSpaceMatrix", lightSpaceMat);
+	mSkinnedDepthShader->SetActive();
+	mSkinnedDepthShader->SetMatrixUniform("uLightSpaceMat", lightSpaceMat);
 	for (auto sk : mSkeletalMeshes)
 	{
 		if (sk->GetVisible())
@@ -227,8 +227,8 @@ void Renderer::Draw()
 	// デプスレンダリングの終了
 	mDepthMapRenderer->DepthRenderingEnd();
 
-	mShadowMapShader->SetActive();
 // 通常レンダリング(シャドウつける)//
+	mShadowMapShader->SetActive();
 	// カメラの位置
 	mShadowMapShader->SetVectorUniform("uCameraPos", GAMEINSTANCE.GetViewPos());
 	//アンビエントライト
@@ -237,23 +237,16 @@ void Renderer::Draw()
 	mShadowMapShader->SetVectorUniform("uDirLight.mDirection", mDirectionalLight.mDirection);
 	mShadowMapShader->SetVectorUniform("uDirLight.mDiffuseColor", mDirectionalLight.mDiffuseColor);
 	mShadowMapShader->SetVectorUniform("uDirLight.mSpecColor", mDirectionalLight.mSpecColor);
-	mShadowMapShader->SetIntUniform("uDiffuseMap", 0);
 	mShadowMapShader->SetMatrixUniform("view", mView);
 	mShadowMapShader->SetMatrixUniform("projection", mProjection);
 
 	// デプスマップをセット（メッシュ用）
-	glActiveTexture(GL_TEXTURE4);
+	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, mDepthMapRenderer->GetDepthTexID());
 	// 追加パラメーター
-	mShadowMapShader->SetIntUniform("depthMap", 2);
+	mShadowMapShader->SetIntUniform("depthMap", 1);
 	mShadowMapShader->SetMatrixUniform("lightSpaceMatrix", lightSpaceMat);
-
-
-	//メッシュシェーダーで描画する対象の変数をセット
-	//mMeshShader->SetActive();
-	//mMeshShader->SetMatrixUniform("uViewProj", mView * mProjection);
-	// ライティング変数をセット
-	//SetLightUniforms(mMeshShader);
+	
 	// 全てのメッシュコンポーネントを描画
 	for (auto mc : mMeshComponents)
 	{
@@ -263,11 +256,11 @@ void Renderer::Draw()
 		}
 	}
 
-	// Draw any skinned meshes now
+	// mSkinnedShaderをアクティブ
 	mSkinnedShader->SetActive();
-	// Update view-projection matrix
+	// ビュー射影行列のセット
 	mSkinnedShader->SetMatrixUniform("uViewProj", mView * mProjection);
-	// Update lighting uniforms
+	// Uniform変数にライトをセット
 	SetLightUniforms(mSkinnedShader);
 	for (auto sk : mSkeletalMeshes)
 	{
@@ -655,7 +648,7 @@ bool Renderer::LoadShaders()
 
 	// スキンメッシュのデプスシェーダーのロード
 	mSkinnedDepthShader = new Shader();
-	if (!mSkinnedDepthShader->Load("Shaders/Skinned.vert", "Shaders/Phong.frag"))
+	if (!mSkinnedDepthShader->Load("Shaders/SkinnedDepthMap.vert", "Shaders/DepthMap.frag"))
 	{
 		printf("スキンメッシュのデプスシェーダーの読み込み失敗\n");
 		return false;
