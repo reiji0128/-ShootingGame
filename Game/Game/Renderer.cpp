@@ -228,14 +228,26 @@ void Renderer::Draw()
 	mDepthMapRenderer->DepthRenderingEnd();
 
 	mShadowMapShader->SetActive();
-	// 通常レンダリング(シャドウつける)
+// 通常レンダリング(シャドウつける)//
+	// カメラの位置
+	mShadowMapShader->SetVectorUniform("uCameraPos", GAMEINSTANCE.GetViewPos());
+	//アンビエントライト
+	mShadowMapShader->SetVectorUniform("uAmbientLight", mAmbientLight);
+	//ディレクショナルライト
+	mShadowMapShader->SetVectorUniform("uDirLight.mDirection", mDirectionalLight.mDirection);
+	mShadowMapShader->SetVectorUniform("uDirLight.mDiffuseColor", mDirectionalLight.mDiffuseColor);
+	mShadowMapShader->SetVectorUniform("uDirLight.mSpecColor", mDirectionalLight.mSpecColor);
+	mShadowMapShader->SetIntUniform("uDiffuseMap", 0);
 	mShadowMapShader->SetMatrixUniform("view", mView);
 	mShadowMapShader->SetMatrixUniform("projection", mProjection);
+
+	// デプスマップをセット（メッシュ用）
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, mDepthMapRenderer->GetDepthTexID());
 	// 追加パラメーター
 	mShadowMapShader->SetIntUniform("depthMap", 2);
 	mShadowMapShader->SetMatrixUniform("lightSpaceMatrix", lightSpaceMat);
-	// ライティング変数をセット
-	SetLightUniforms(mShadowMapShader);
+
 
 	//メッシュシェーダーで描画する対象の変数をセット
 	//mMeshShader->SetActive();

@@ -54,8 +54,8 @@ void DepthMap::CreateShadowMap()
 /// <summary>
 /// ライト空間の計算
 /// </summary>
-/// <param name="centerWorldPos"></param>
-/// <param name="lightDir"></param>
+/// <param name="centerWorldPos">マップの中心座標</param>
+/// <param name="lightDir">ライトの向き</param>
 /// <param name="upVec"></param>
 /// <param name="lightDistance">ライトの距離</param>
 void DepthMap::CalcLightSpaceMatrix(const Vector3& centerWorldPos, const Vector3& lightDir, const Vector3& upVec, const float lightDistance)

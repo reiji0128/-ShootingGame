@@ -32,6 +32,7 @@ uniform vec3 uAmbientLight;
 
 uniform sampler2D uTexture;
 uniform sampler2D depthMap;
+uniform sampler2D uDiffuseMap;
 
 // 出力カラー
 out vec4 outColor;
@@ -74,9 +75,12 @@ void main()
 	Specular = uDirLight.mSpecColor * pow(max(0.0, dot(R, V)), uSpecPower);
 
 	float shadow = ShadowCaluculation(FragPosLightSpace);
-	vec3  result = uAmbientLight + (1.0 - shadow) * (Diffuse + Specular);
 
-	// 最終的な色はテクスチャの色xフォンの光 (alpha = 1)
-	//outColor = texture(uTexture, TexCoords) * vec4((Diffuse + uAmbientLight),1.0f) + vec4(Specular,1.0f);
-	outColor = texture(uTexture, TexCoords) * vec4(result,1.0);
+	vec3 texColor = texture(uTexture,TexCoords).rgb;
+	vec3 diffuseColor = Diffuse * texColor;
+	vec3 ambientColor = uAmbientLight* texColor;
+
+	vec3  result = (1.0 - shadow) * (diffuseColor + Specular) * ambientColor;
+
+	outColor = vec4(result,1.0);
 }
