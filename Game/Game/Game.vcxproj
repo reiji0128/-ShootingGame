@@ -192,6 +192,7 @@
     <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="HDR.cpp" />
     <ClCompile Include="Health.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="InputController.cpp" />
@@ -255,6 +256,7 @@
     <ClInclude Include="GameOverScene.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Gun.h" />
+    <ClInclude Include="HDR.h" />
     <ClInclude Include="Health.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="InputController.h" />
