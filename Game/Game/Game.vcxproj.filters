@@ -613,5 +613,8 @@
     <None Include="Shaders\SkinnedDepthMap.vert">
       <Filter>Shader</Filter>
     </None>
+    <None Include="Shaders\SkinnedShadowmap.vert">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

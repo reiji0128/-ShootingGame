@@ -299,6 +299,7 @@
     <None Include="Shaders\Shadowmap.vert" />
     <None Include="Shaders\Skinned.vert" />
     <None Include="Shaders\SkinnedDepthMap.vert" />
+    <None Include="Shaders\SkinnedShadowmap.vert" />
     <None Include="Shaders\Sprite.frag" />
     <None Include="Shaders\Sprite.vert" />
     <None Include="Shaders\tilemap.frag" />

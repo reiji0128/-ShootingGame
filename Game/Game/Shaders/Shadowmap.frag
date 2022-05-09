@@ -12,13 +12,13 @@ struct DirectionalLight
 };
 
 // テクスチャ座標
-in  vec2 TexCoords;
+in  vec2 fragTexCoord;
 // 法線
-in vec3 Normal;
+in vec3 fragNormal;
 // 頂点位置
-in vec3 FragPos;
+in vec3 fragWorldPos;
 // ライト空間でのフラグメント座標
-in vec4 FragPosLightSpace; 
+in vec4 fragPosLightSpace; 
 
 // ライティング用変数 //
 // カメラ位置
@@ -47,7 +47,7 @@ float ShadowCaluculation(vec4 fragPosLightSpace)
 	// 現在描画しようとしているフラグメントの深度値
 	float currentDepth = projCoords.z;
 	// シャドウ判定(1.0:シャドウ  0.0:シャドウ外)
-	float bias = max(0.0005 * (1.0 - dot(normalize(Normal),uDirLight.mDirection)),0.00005);
+	float bias = max(0.0005 * (1.0 - dot(normalize(fragNormal),uDirLight.mDirection)),0.00005);
 	float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
 	return shadow;
 }
@@ -55,11 +55,11 @@ float ShadowCaluculation(vec4 fragPosLightSpace)
 void main()
 {
 	// ポリゴン表面の法線（フラグメントシェーダー上で補間されている）
-	vec3 N = normalize(Normal);
+	vec3 N = normalize(fragNormal);
 	// ポリゴン表面からライト方向へのベクトル
 	vec3 L = normalize(-uDirLight.mDirection);
 	// ポリゴン表面からカメラ方向
-	vec3 V = normalize(uCameraPos - FragPos);
+	vec3 V = normalize(uCameraPos - fragWorldPos);
 	// -L ベクトルを 法線 N に対して反射したベクトルRを求める
 	vec3 R = normalize(reflect(-L, N));
 
@@ -73,9 +73,9 @@ void main()
 	Diffuse = uDirLight.mDiffuseColor * max(NdotL,0.0f);
 	Specular = uDirLight.mSpecColor * pow(max(0.0, dot(R, V)), uSpecPower);
 
-	float shadow = ShadowCaluculation(FragPosLightSpace);
+	float shadow = ShadowCaluculation(fragPosLightSpace);
 
-	vec3 texColor = texture(uTexture,TexCoords).rgb;
+	vec3 texColor = texture(uTexture,fragTexCoord).rgb;
 	vec3 diffuseColor = Diffuse * texColor;
 	vec3 ambientColor = uAmbientLight* texColor;
 
