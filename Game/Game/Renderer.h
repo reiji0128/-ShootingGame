@@ -111,7 +111,9 @@ private:
 	class Shader* mSkinnedShader;      // スキンメッシュシェーダー
 	class Shader* mSkinnedDepthShader; // スキンメッシュのデプスシェーダー
 	class Shader* mShadowMapShader;    // シャドウマップシェーダー
+	class Shader* mHDRShader;          // HDRシェーダー
 	class DepthMap* mDepthMapRenderer;
+	class HDR* mHDR;
 
 	// 基本行列関連
 	Matrix4                                           mView;             // ビュー行列

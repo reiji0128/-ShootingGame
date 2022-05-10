@@ -14,6 +14,7 @@
 #include "Effekseer.h"
 #include "EffekseerEffect.h"
 #include "DepthMap.h"
+#include "HDR.h"
 
 Renderer::Renderer()
 	:mWindow(nullptr)
@@ -108,6 +109,10 @@ bool Renderer::Initialize(int screenWidth, int screenHeight, bool fullScreen)
 	// デプスレンダラーの初期化
 	mDepthMapRenderer = new DepthMap;
 	mDepthMapRenderer->CreateShadowMap();
+
+	// HDRの初期化
+	mHDR = new HDR;
+	mHDR->CreateHDRBuffer();
 
 	// カリング
 	glFrontFace(GL_CCW);
@@ -286,6 +291,15 @@ void Renderer::Draw()
 			sk->Draw(mSkinnedShader);
 		}
 	}
+
+	//mHDR->HDRRenderingBegin();
+	//mHDR->HDRRenderingEnd();
+	//// hdrカラーバッファを2Dスクリーンを埋め尽くす四角形ポリゴンに描画
+	//// この時トーンマッピングを行ってHDR画像をLDRにする
+	//mHDRShader->SetActive();
+	//glActiveTexture(GL_TEXTURE0);
+	//glBindTexture(GL_TEXTURE_2D,mHDR->)
+
 	GAMEINSTANCE.GetPhysics()->DebugShowBox();
 }
 
@@ -679,6 +693,9 @@ bool Renderer::LoadShaders()
 		printf("シャドウマップシェーダーの読み込み失敗\n");
 		return false;
 	}
+
+	// HDRシェーダーのロード
+	mHDRShader = new Shader();
 
 	return true;
 }

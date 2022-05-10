@@ -14,6 +14,7 @@ public:
 	/// 浮動小数点フレームバッファの作成
 	/// </summary>
 	void CreateHDRBuffer();
+	
 private:
 	unsigned int mHdrFBO;
 	unsigned int mRbo;
