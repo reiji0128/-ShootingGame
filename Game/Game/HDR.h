@@ -6,15 +6,33 @@
 class HDR
 {
 public:
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	HDR();
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~HDR();
+	
+	/// <summary>
+	/// HDRレンダリングの開始処理
+	/// </summary>
 	void HDRRenderingBegin();
+
+	/// <summary>
+	/// HDRレンダリングの終了処理
+	/// </summary>
 	void HDRRenderingEnd();
+
 	/// <summary>
 	/// 浮動小数点フレームバッファの作成
 	/// </summary>
 	void CreateHDRBuffer();
-	
+
+// ゲッター //
+	unsigned int GetHDRFrameBuffer() { return mFloatColorTexture; }
 private:
 	unsigned int mHdrFBO;
 	unsigned int mRbo;

@@ -106,37 +106,37 @@ private:
 	std::unordered_map<const char16_t*, class EffekseerEffect*> mEffects; // エフェクト
 
 // シェーダー関連 //
+	class Shader* mSpriteShader;       // スプライトシェーダー
+	class Shader* mTilemapShader;      // タイルマップシェーダー
 	class Shader* mMeshShader;         // メッシュシェーダー
 	class Shader* mMeshDepthShader;    // メッシュのデプスシェーダー
 	class Shader* mSkinnedShader;      // スキンメッシュシェーダー
 	class Shader* mSkinnedDepthShader; // スキンメッシュのデプスシェーダー
 	class Shader* mShadowMapShader;    // シャドウマップシェーダー
 	class Shader* mHDRShader;          // HDRシェーダー
-	class DepthMap* mDepthMapRenderer;
-	class HDR* mHDR;
+	class DepthMap* mDepthMapRenderer; // デプスレンダラー
+	class HDR* mHDRRenderer;           // HDRレンダラー
 
-	// 基本行列関連
+// 基本行列関連 //
 	Matrix4                                           mView;             // ビュー行列
 	Matrix4                                           mProjection;       // プロジェクション行列
 
-	class Shader* mSpriteShader;
-	class Shader* mTilemapShader;
-	// スプライト頂点配列
+// スプライト頂点配列 //
 	class VertexArray* mSpriteVerts;
 	class VertexArray* mHealthVerts;
 
-	// ライティング関連
+// ライティング関連 //
 	Vector3                                           mAmbientLight;     // アンビエントライト
 	DirectionalLight                                  mDirectionalLight; // ディレクショナルライト
 
-	// レンダリングベース情報関連
-	SDL_Window* mWindow;           // SDLウィンドウハンドル 
-	SDL_GLContext                                     mContext;          // OpenGLコンテキスト
+// レンダリングベース情報関連 //
+	SDL_Window* mWindow;             // SDLウィンドウハンドル 
+	SDL_GLContext mContext;          // OpenGLコンテキスト
 	SDL_Renderer* mSDLRenderer;      // SDLレンダリングハンドル
 
 	const char* mGlslVersion;      // GLSLのバージョン
 
-	// Effekseer関連
+// Effekseer関連 //
 	Effekseer::RefPtr<EffekseerRendererGL::Renderer> mEffekseerRenderer; // Effekseerレンダラ
 	Effekseer::RefPtr<Effekseer::Manager>            mEffekseerManager; // Effekseerマネージャ  
 };

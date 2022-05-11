@@ -111,8 +111,8 @@ bool Renderer::Initialize(int screenWidth, int screenHeight, bool fullScreen)
 	mDepthMapRenderer->CreateShadowMap();
 
 	// HDRの初期化
-	mHDR = new HDR;
-	mHDR->CreateHDRBuffer();
+	mHDRRenderer = new HDR;
+	mHDRRenderer->CreateHDRBuffer();
 
 	// カリング
 	glFrontFace(GL_CCW);
@@ -232,6 +232,7 @@ void Renderer::Draw()
 	// デプスレンダリングの終了
 	mDepthMapRenderer->DepthRenderingEnd();
 
+	mHDRRenderer->HDRRenderingBegin();
 // 通常レンダリング(シャドウ付き)//
 	mShadowMapShader->SetActive();
 	// カメラの位置
@@ -292,13 +293,12 @@ void Renderer::Draw()
 		}
 	}
 
-	//mHDR->HDRRenderingBegin();
-	//mHDR->HDRRenderingEnd();
-	//// hdrカラーバッファを2Dスクリーンを埋め尽くす四角形ポリゴンに描画
-	//// この時トーンマッピングを行ってHDR画像をLDRにする
-	//mHDRShader->SetActive();
-	//glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_2D,mHDR->)
+	mHDRRenderer->HDRRenderingEnd();
+	// hdrカラーバッファを2Dスクリーンを埋め尽くす四角形ポリゴンに描画
+	// この時トーンマッピングを行ってHDR画像をLDRにする
+	mHDRShader->SetActive();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, mHDRRenderer->GetHDRFrameBuffer());
 
 	GAMEINSTANCE.GetPhysics()->DebugShowBox();
 }
@@ -454,11 +454,13 @@ void Renderer::RemoveSprite(SpriteComponent* sprite)
 
 void Renderer::CreateSpriteVerts()
 {
-	float vertices[] = {
-		-0.5f, 0.5f, 0.f, 0.f, 0.f, 0.0f, 0.f, 0.f, // top left
-		 0.5f, 0.5f, 0.f, 0.f, 0.f, 0.0f, 1.f, 0.f, // top right
-		 0.5f,-0.5f, 0.f, 0.f, 0.f, 0.0f, 1.f, 1.f, // bottom right
-		-0.5f,-0.5f, 0.f, 0.f, 0.f, 0.0f, 0.f, 1.f  // bottom left
+	float vertices[] = 
+	{
+	    //    位置　　　 |　   法線       |  uv座標
+		-0.5f, 0.5f, 0.f,  0.f, 0.f, 0.0f,  0.f, 0.f, // 左上
+		 0.5f, 0.5f, 0.f,  0.f, 0.f, 0.0f,  1.f, 0.f, // 右上
+		 0.5f,-0.5f, 0.f,  0.f, 0.f, 0.0f,  1.f, 1.f, // 右下
+		-0.5f,-0.5f, 0.f,  0.f, 0.f, 0.0f,  0.f, 1.f  // 左下
 	};
 
 	unsigned int indices[] = {
@@ -473,10 +475,11 @@ void Renderer::CreateHealthGaugeVerts()
 {
 	float vertices[] =
 	{
-		0.0f, 1.0f, 0.0f, 0.f, 0.f, 0.0f, 0.f, 0.f,	//左上  0
-		1.0f, 1.0f, 0.0f, 0.f, 0.f, 0.0f, 1.f, 0.f,	//右上  1
-		0.0f, 0.0f, 0.0f, 0.f, 0.f, 0.0f, 1.f, 1.f,	//左下  2
-		1.0f, 0.0f, 0.0f, 0.f, 0.f, 0.0f, 0.f, 1.f,	//右下  3
+	    //    位置　　　 |　   法線       |  uv座標
+		0.0f, 1.0f, 0.0f,  0.f, 0.f, 0.0f,  0.f, 0.f,	//左上  0
+		1.0f, 1.0f, 0.0f,  0.f, 0.f, 0.0f,  1.f, 0.f,	//右上  1
+		0.0f, 0.0f, 0.0f,  0.f, 0.f, 0.0f,  1.f, 1.f,	//左下  2
+		1.0f, 0.0f, 0.0f,  0.f, 0.f, 0.0f,  0.f, 1.f,	//右下  3
 	};
 
 	unsigned int indices[] =
@@ -493,11 +496,11 @@ void Renderer::ScreenVAOSetting(unsigned int& vao)
 	unsigned int vbo;
 	float quadVertices[] =
 	{
-		//      位置       | テクスチャ座標
-		-1.0f,  1.0f, 0.0f,  0.0f, 0.0f,
-		-1.0f, -1.0f, 0.0f,  0.0f, 0.0f,
-		 1.0f,  1.0f, 0.0f,  1.0f, 1.0f,
-		 1.0f, -1.0f, 0.0f,  1.0f, 0.0f
+		//      位置       |   uv座標
+		-1.0f,  1.0f, 0.0f,  0.0f, 0.0f,   // 左上
+		-1.0f, -1.0f, 0.0f,  0.0f, 0.0f,   // 左下
+		 1.0f,  1.0f, 0.0f,  1.0f, 1.0f,   // 右上
+		 1.0f, -1.0f, 0.0f,  1.0f, 0.0f    // 右下
 	};
 
 	glGenVertexArrays(1, &vao);
