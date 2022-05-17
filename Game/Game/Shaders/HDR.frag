@@ -1,20 +1,24 @@
 #version 330 core
 
-in vec2 TexCoords;
+// uv座標
+in vec2 fragTexCoord;
 
-out vec4 FragColor;
+// 出力カラー
+out vec4 outColor;
 
 uniform sampler2D uHDRBuffer;
+// 露出
+uniform float exposure;
 
 void main()
 {
-	const float gammma = 2.2;
-	vec3 hdrColor = texture(uDHRBuffer,TexCoords).rgb;
+	const float gamma = 2.2;
+	vec3 hdrColor = texture(uHDRBuffer,fragTexCoord).rgb;
 
-	// reinhardトーンマッピング
-	vec3 mapped = hdrColor / (hdrColor + vec3(1.0));
+	// 露出トーンマッピング
+	vec3 mapped = vec3(1.0) -exp(-hdrColor + exposure);
 	// ガンマコレクション
 	mapped = pow(mapped,vec3(1.0 / gamma));
 
-	FragColor = vec4(mapped,1.0);
+	outColor = vec4(mapped,1.0);
 }

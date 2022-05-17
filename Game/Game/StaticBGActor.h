@@ -2,6 +2,7 @@
 
 #include "Actor.h"
 #include "Math.h"
+#include "ShaderTag.h"
 
 class StaticBGActor : public Actor
 {
@@ -17,4 +18,7 @@ public:
 	/// デストラクタ
 	/// </summary>
 	~StaticBGActor();
+
+private:
+	ShaderTag mShaderTag;
 };

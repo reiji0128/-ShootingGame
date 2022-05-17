@@ -3,6 +3,7 @@
 
 HDR::HDR()
 {
+	CreateHDRBuffer();
 }
 
 HDR::~HDR()
@@ -12,12 +13,15 @@ HDR::~HDR()
 void HDR::HDRRenderingBegin()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, mHdrFBO);
+	glEnable(GL_DEPTH_TEST);
 	// カラーバッファのクリア
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void HDR::HDRRenderingEnd()
 {
+	// 描画対象をスクリーンへ戻す
 	glBindFramebuffer(GL_FRAMEBUFFER,0);
 }
 
@@ -26,6 +30,9 @@ void HDR::HDRRenderingEnd()
 /// </summary>
 void HDR::CreateHDRBuffer()
 {
+	glGenFramebuffers(1, &mHdrFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, mHdrFBO);
+
 	// FBOに割り当てるための空のテクスチャを作成
 	glGenTextures(1, &mFloatColorTexture);
 	glBindTexture(GL_TEXTURE_2D, mFloatColorTexture);

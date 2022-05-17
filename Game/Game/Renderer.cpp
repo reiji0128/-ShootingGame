@@ -207,98 +207,119 @@ void Renderer::Draw()
 
 	// デプスレンダリングパス開始
 	mDepthMapRenderer->DepthRenderingBegin();
-
-	// スタティックメッシュをデプスへレンダリング
-	mMeshDepthShader->SetActive();
-	mMeshDepthShader->SetMatrixUniform("lightSpaceMatrix", lightSpaceMat);
-	for (auto sk : mMeshComponents)
 	{
-		if (sk->GetVisible())
+
+		// スタティックメッシュをデプスへレンダリング
+		mMeshDepthShader->SetActive();
+		mMeshDepthShader->SetMatrixUniform("lightSpaceMatrix", lightSpaceMat);
+		for (auto mc : mMeshComponents)
 		{
-			sk->Draw(mMeshDepthShader);
+			if (mc->GetVisible())
+			{
+				mc->Draw(mMeshDepthShader);
+			}
 		}
-	}
 
-	// スキンメッシュをデプスへレンダリング
-	mSkinnedDepthShader->SetActive();
-	mSkinnedDepthShader->SetMatrixUniform("uLightSpaceMat", lightSpaceMat);
-	for (auto sk : mSkeletalMeshes)
-	{
-		if (sk->GetVisible())
+		// スキンメッシュをデプスへレンダリング
+		mSkinnedDepthShader->SetActive();
+		mSkinnedDepthShader->SetMatrixUniform("uLightSpaceMat", lightSpaceMat);
+		for (auto sk : mSkeletalMeshes)
 		{
-			sk->Draw(mSkinnedDepthShader);
+			if (sk->GetVisible())
+			{
+				sk->Draw(mSkinnedDepthShader);
+			}
 		}
 	}
 	// デプスレンダリングの終了
 	mDepthMapRenderer->DepthRenderingEnd();
 
 	mHDRRenderer->HDRRenderingBegin();
-// 通常レンダリング(シャドウ付き)//
-	mShadowMapShader->SetActive();
-	// カメラの位置
-	mShadowMapShader->SetVectorUniform("uCameraPos", GAMEINSTANCE.GetViewPos());
-	//アンビエントライト
-	mShadowMapShader->SetVectorUniform("uAmbientLight", mAmbientLight);
-	//ディレクショナルライト
-	mShadowMapShader->SetVectorUniform("uDirLight.mDirection", mDirectionalLight.mDirection);
-	mShadowMapShader->SetVectorUniform("uDirLight.mDiffuseColor", mDirectionalLight.mDiffuseColor);
-	mShadowMapShader->SetVectorUniform("uDirLight.mSpecColor", mDirectionalLight.mSpecColor);
-	mShadowMapShader->SetMatrixUniform("uView", mView);
-	mShadowMapShader->SetMatrixUniform("uProjection", mProjection);
-
-	// デプスマップをセット（メッシュ用）
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, mDepthMapRenderer->GetDepthTexID());
-	// 追加パラメーター
-	mShadowMapShader->SetIntUniform("depthMap", 1);
-	mShadowMapShader->SetMatrixUniform("uLightSpaceMatrix", lightSpaceMat);
-	
-	// 全てのメッシュコンポーネントを描画
-	for (auto mc : mMeshComponents)
 	{
-		if (mc->GetVisible())
+		// 通常レンダリング(シャドウ付き)
+		mShadowMapShader->SetActive();
+		// カメラの位置
+		mShadowMapShader->SetVectorUniform("uCameraPos", GAMEINSTANCE.GetViewPos());
+		//アンビエントライト
+		mShadowMapShader->SetVectorUniform("uAmbientLight", mAmbientLight);
+		//ディレクショナルライト
+		mShadowMapShader->SetVectorUniform("uDirLight.mDirection", mDirectionalLight.mDirection);
+		mShadowMapShader->SetVectorUniform("uDirLight.mDiffuseColor", mDirectionalLight.mDiffuseColor);
+		mShadowMapShader->SetVectorUniform("uDirLight.mSpecColor", mDirectionalLight.mSpecColor);
+		mShadowMapShader->SetMatrixUniform("uView", mView);
+		mShadowMapShader->SetMatrixUniform("uProjection", mProjection);
+
+		// デプスマップをセット（メッシュ用）
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, mDepthMapRenderer->GetDepthTexID());
+		// 追加パラメーター
+		mShadowMapShader->SetIntUniform("depthMap", 1);
+		mShadowMapShader->SetMatrixUniform("uLightSpaceMatrix", lightSpaceMat);
+
+		// 全てのメッシュコンポーネントを描画
+		for (auto mc : mMeshComponents)
 		{
-			mc->Draw(mShadowMapShader);
+			if (mc->GetVisible())
+			{
+				mc->Draw(mShadowMapShader);
+			}
+		}
+
+		// mSkinnedShaderをアクティブ
+		mSkinnedShader->SetActive();
+		// カメラの位置
+		mSkinnedShader->SetVectorUniform("uCameraPos", GAMEINSTANCE.GetViewPos());
+		//アンビエントライト
+		mSkinnedShader->SetVectorUniform("uAmbientLight", mAmbientLight);
+		//ディレクショナルライト
+		mSkinnedShader->SetVectorUniform("uDirLight.mDirection", mDirectionalLight.mDirection);
+		mSkinnedShader->SetVectorUniform("uDirLight.mDiffuseColor", mDirectionalLight.mDiffuseColor);
+		mSkinnedShader->SetVectorUniform("uDirLight.mSpecColor", mDirectionalLight.mSpecColor);
+		mSkinnedShader->SetMatrixUniform("uView", mView);
+		mSkinnedShader->SetMatrixUniform("uProjection", mProjection);
+
+		// デプスマップをセット（メッシュ用）
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, mDepthMapRenderer->GetDepthTexID());
+		// 追加パラメーター
+		mSkinnedShader->SetIntUniform("depthMap", 1);
+		mSkinnedShader->SetMatrixUniform("uLightSpaceMatrix", lightSpaceMat);
+		// ビュー射影行列のセット
+		mSkinnedShader->SetMatrixUniform("uViewProj", mView * mProjection);
+		// Uniform変数にライトをセット
+		SetLightUniforms(mSkinnedShader);
+		for (auto sk : mSkeletalMeshes)
+		{
+			if (sk->GetVisible())
+			{
+				sk->Draw(mSkinnedShader);
+			}
+		}
+
+		//メッシュシェーダーで描画する対象の変数をセット
+		mHDRShader->SetActive();
+		mHDRShader->SetMatrixUniform("uViewProj", mView * mProjection);
+		// ライティング変数をセット
+		SetLightUniforms(mHDRShader);
+		// 全てのメッシュコンポーネントを描画
+		for (auto mc : mHighLightMeshes)
+		{
+			if (mc->GetVisible())
+			{
+				mc->Draw(mHDRShader);
+			}
 		}
 	}
-	
-	// mSkinnedShaderをアクティブ
-	mSkinnedShader->SetActive();
-	// カメラの位置
-	mSkinnedShader->SetVectorUniform("uCameraPos", GAMEINSTANCE.GetViewPos());
-	//アンビエントライト
-	mSkinnedShader->SetVectorUniform("uAmbientLight", mAmbientLight);
-	//ディレクショナルライト
-	mSkinnedShader->SetVectorUniform("uDirLight.mDirection", mDirectionalLight.mDirection);
-	mSkinnedShader->SetVectorUniform("uDirLight.mDiffuseColor", mDirectionalLight.mDiffuseColor);
-	mSkinnedShader->SetVectorUniform("uDirLight.mSpecColor", mDirectionalLight.mSpecColor);
-	mSkinnedShader->SetMatrixUniform("uView", mView);
-	mSkinnedShader->SetMatrixUniform("uProjection", mProjection);
-
-	// デプスマップをセット（メッシュ用）
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, mDepthMapRenderer->GetDepthTexID());
-	// 追加パラメーター
-	mSkinnedShader->SetIntUniform("depthMap", 1);
-	mSkinnedShader->SetMatrixUniform("uLightSpaceMatrix", lightSpaceMat);
-	// ビュー射影行列のセット
-	mSkinnedShader->SetMatrixUniform("uViewProj", mView * mProjection);
-	// Uniform変数にライトをセット
-	SetLightUniforms(mSkinnedShader);
-	for (auto sk : mSkeletalMeshes)
-	{
-		if (sk->GetVisible())
-		{
-			sk->Draw(mSkinnedShader);
-		}
-	}
-
 	mHDRRenderer->HDRRenderingEnd();
 	// hdrカラーバッファを2Dスクリーンを埋め尽くす四角形ポリゴンに描画
 	// この時トーンマッピングを行ってHDR画像をLDRにする
 	mHDRShader->SetActive();
-	glActiveTexture(GL_TEXTURE0);
+	mHDRShader->SetFloatUniform("exposure", 1);
+	mHDRShader->SetIntUniform("uHDRBuffer", 2);
+	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_2D, mHDRRenderer->GetHDRFrameBuffer());
+	unsigned int screenVAO;
+	ScreenVAOSetting(screenVAO);
 
 	GAMEINSTANCE.GetPhysics()->DebugShowBox();
 }
@@ -390,31 +411,42 @@ Mesh* Renderer::GetMesh(const std::string& fileName)
 	return m;
 }
 
-void Renderer::AddMeshComponent(MeshComponent* mesh)
+void Renderer::AddMeshComponent(MeshComponent* mesh, ShaderTag shaderTag)
 {
-	if (mesh->GetIsSkeletal())
+
+	if(shaderTag == ShaderTag::SkinnedDepthmapAndSkinnedShadowMap)
 	{
 		SkeletalMeshComponent* sk = static_cast<SkeletalMeshComponent*>(mesh);
 		mSkeletalMeshes.emplace_back(sk);
 	}
-	else
+	else if(shaderTag == ShaderTag::DepthmapAndShadowMap)
 	{
 		mMeshComponents.emplace_back(mesh);
 	}
+	else if (shaderTag == ShaderTag::HDR)
+	{
+		mHighLightMeshes.emplace_back(mesh);
+	}
 }
 
-void Renderer::RemoveMeshComponent(MeshComponent* mesh)
+void Renderer::RemoveMeshComponent(MeshComponent* mesh,ShaderTag shaderTag)
 {
-	if (mesh->GetIsSkeletal())
+	if (shaderTag == ShaderTag::SkinnedDepthmapAndSkinnedShadowMap)
+
 	{
 		SkeletalMeshComponent* sk = static_cast<SkeletalMeshComponent*>(mesh);
 		auto iter = std::find(mSkeletalMeshes.begin(), mSkeletalMeshes.end(), sk);
 		mSkeletalMeshes.erase(iter);
 	}
-	else
+	else if (shaderTag == ShaderTag::DepthmapAndShadowMap)
 	{
 		auto iter = std::find(mMeshComponents.begin(), mMeshComponents.end(), mesh);
 		mMeshComponents.erase(iter);
+	}
+	else if (shaderTag == ShaderTag::HDR)
+	{
+		auto iter = std::find(mHighLightMeshes.begin(), mHighLightMeshes.end(), mesh);
+		mHighLightMeshes.erase(iter);
 	}
 
 }
@@ -699,6 +731,10 @@ bool Renderer::LoadShaders()
 
 	// HDRシェーダーのロード
 	mHDRShader = new Shader();
+	if (!mHDRShader->Load("Shaders/Phong.vert", "Shaders/Phong.frag"))
+	{
+		return false;
+	}
 
 	return true;
 }

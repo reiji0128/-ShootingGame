@@ -10,6 +10,7 @@
 
 #include "Math.h"
 #include "VertexArray.h"
+#include "ShaderTag.h"
 
 // ディレクショナルライト構造体
 typedef struct DirectionalLight
@@ -52,12 +53,12 @@ public:
 
 	float                  GetScreenWidth() { return static_cast<float>(mScreenWidth); }       // スクリーン幅
 	float                  GetScreenHeight() { return static_cast<float>(mScreenHeight); }     // スクリーン高さ
-	DirectionalLight& GetDirectionalLight() { return mDirectionalLight; }                 // ディレクショナルライト
+	DirectionalLight& GetDirectionalLight() { return mDirectionalLight; }                      // ディレクショナルライト
 	const Matrix4& GetViewMatrix() { return mView; }
 	const Matrix4& GetProjectionMatrix() { return mProjection; }
 
-	void                   AddMeshComponent(class MeshComponent* mesh);                        // メッシュコンポーネントの追加
-	void                   RemoveMeshComponent(class MeshComponent* mesh);                     // メッシュコンポーネントの削除
+	void                   AddMeshComponent(class MeshComponent* mesh, ShaderTag shaderTag);    // メッシュコンポーネントの追加
+	void                   RemoveMeshComponent(class MeshComponent* mesh,ShaderTag shaderTag);  // メッシュコンポーネントの削除
 	void                   AddSprite(SpriteComponent* Sprite);
 	void                   RemoveSprite(SpriteComponent* sprite);
 	void                   ShowResource();                                                     // 登録されている テクスチャ・メッシュリソースの表示（デバッグ用）
@@ -92,17 +93,16 @@ private:
 	void                                              CreateHealthGaugeVerts();               // 体力ゲージ用の頂点作成
 	void                                              ScreenVAOSetting(unsigned int& vao);    // 画面全体を覆う頂点定義
 
-	int                                               mScreenWidth;      // スクリーン幅                                                           
-	int                                               mScreenHeight;     // スクリーン高さ
-	std::unordered_map<std::string, class Texture*>   mTextures;         // テクスチャ登録配列
-	std::unordered_map<std::string, class Mesh*>      mMeshs;            // メッシュ登録配列
-	std::vector<class MeshComponent*>                 mMeshComponents;   // メッシュコンポーネント登録配列
-	std::vector<class SkeletalMeshComponent*>         mSkeletalMeshes;   // スケルタルメッシュの描画に使われる
-	std::unordered_map<std::string, class Skeleton*>  mSkeletons;        // スケルタルデータ
-	std::unordered_map<std::string, class Animation*> mAnims;            // アニメーションデータ
-	
-	// スプライトの描画に使われるスプライトコンポーネントのポインタの可変長コンテナ
-	std::vector<SpriteComponent*>                     mSprites;
+	int                                               mScreenWidth;       // スクリーン幅                                                           
+	int                                               mScreenHeight;      // スクリーン高さ
+	std::unordered_map<std::string, class Texture*>   mTextures;          // テクスチャ登録配列
+	std::unordered_map<std::string, class Mesh*>      mMeshs;             // メッシュ登録配列
+	std::vector<class MeshComponent*>                 mMeshComponents;    // メッシュコンポーネント登録配列
+	std::vector<class MeshComponent*>                 mHighLightMeshes;   // HDRメッシュ
+	std::vector<class SkeletalMeshComponent*>         mSkeletalMeshes;    // スケルタルメッシュの描画に使われる
+	std::unordered_map<std::string, class Skeleton*>  mSkeletons;         // スケルタルデータ
+	std::unordered_map<std::string, class Animation*> mAnims;             // アニメーションデータ
+	std::vector<SpriteComponent*>                     mSprites;           // スプライトの描画に使われるスプライトコンポーネントのポインタの可変長コンテナ
 	std::unordered_map<const char16_t*, class EffekseerEffect*> mEffects; // エフェクト
 
 // シェーダー関連 //

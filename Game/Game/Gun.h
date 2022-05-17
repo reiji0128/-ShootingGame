@@ -1,6 +1,7 @@
 #pragma once
 #include "Actor.h"
 #include "SkeletalMeshComponent.h"
+#include "ShaderTag.h"
 
 class Gun : public Actor
 {
@@ -38,4 +39,7 @@ private:
 
 	// AttachMeshComponentクラスのポインタ(武器のアタッチメント用)
 	class AttachMeshComponent* mAttachComp;
+
+	// 適用するシェーダーのタグ
+	ShaderTag mShaderTag;
 };

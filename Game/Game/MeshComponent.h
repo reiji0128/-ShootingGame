@@ -2,6 +2,7 @@
 
 #include "Component.h"
 #include <cstddef>
+#include "ShaderTag.h"
 
 class MeshComponent :public Component
 {
@@ -10,8 +11,9 @@ public:
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="owner">Actorのポインタ</param>
+	/// <param name="shaderTag">適用するシェーダーのタグ</param>
 	/// <param name="isSkeletal">スケルタルモデルかどうか?</param>
-	MeshComponent(class Actor* owner, bool isSkeletal = false);
+	MeshComponent(class Actor* owner, ShaderTag shaderTag, bool isSkeletal = false);
 
 	/// <summary>
 	/// デストラクタ
@@ -68,4 +70,6 @@ protected:
 
 	// スケルタルモデルかどうかのフラグ
 	bool mIsSkeletal;
+
+	ShaderTag mShaderTag;
 };

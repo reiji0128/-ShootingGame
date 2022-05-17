@@ -363,9 +363,6 @@
     <ClCompile Include="EnemyStateRun.cpp">
       <Filter>ソース ファイル\Enemy\State</Filter>
     </ClCompile>
-    <ClCompile Include="Altar.cpp">
-      <Filter>ソース ファイル\BackGround</Filter>
-    </ClCompile>
     <ClCompile Include="Health.cpp">
       <Filter>ソース ファイル\Health</Filter>
     </ClCompile>
@@ -379,6 +376,12 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="HDR.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderTag.cpp">
+      <Filter>ソース ファイル\System\Tag</Filter>
+    </ClCompile>
+    <ClCompile Include="SphereObj.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -527,9 +530,6 @@
     <ClInclude Include="Bullet.h">
       <Filter>ヘッダー ファイル\Gun\Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="Altar.h">
-      <Filter>ヘッダー ファイル\BackGround</Filter>
-    </ClInclude>
     <ClInclude Include="EnemyActor.h">
       <Filter>ヘッダー ファイル\Enemy</Filter>
     </ClInclude>
@@ -568,6 +568,12 @@
     </ClInclude>
     <ClInclude Include="HDR.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderTag.h">
+      <Filter>ヘッダー ファイル\System\Tag</Filter>
+    </ClInclude>
+    <ClInclude Include="SphereObj.h">
+      <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -620,6 +626,9 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="Shaders\SkinnedShadowmap.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\HDR.frag">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

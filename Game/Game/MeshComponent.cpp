@@ -13,15 +13,17 @@
 /// コンストラクタ
 /// </summary>
 /// <param name="owner">Actorのポインタ</param>
+/// <param name="shaderTag">適用するシェーダーのタグ</param>
 /// <param name="isSkeletal">スケルタルモデルかどうか?</param>
-MeshComponent::MeshComponent(class Actor* owner, bool isSkeletal)
+MeshComponent::MeshComponent(class Actor* owner, ShaderTag shaderTag, bool isSkeletal)
 	:Component(owner)
 	,mMesh(nullptr)
 	,mTextureIndex(0)
 	,mVisible(true)
 	,mIsSkeletal(isSkeletal)
+	,mShaderTag(shaderTag)
 {
-	GAMEINSTANCE.GetRenderer()->AddMeshComponent(this);
+	GAMEINSTANCE.GetRenderer()->AddMeshComponent(this,mShaderTag);
 	printf("new MeshComponent : [%5d] owner->( 0x%p )\n", GetID(), owner);
 }
 
@@ -31,7 +33,7 @@ MeshComponent::MeshComponent(class Actor* owner, bool isSkeletal)
 MeshComponent::~MeshComponent()
 {
 	printf("remove MeshComponent : [%5d] owner->( 0x%p )\n", GetID(), mOwner);
-	GAMEINSTANCE.GetRenderer()->RemoveMeshComponent(this);
+	GAMEINSTANCE.GetRenderer()->RemoveMeshComponent(this,mShaderTag);
 }
 
 /// <summary>

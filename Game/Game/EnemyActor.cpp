@@ -28,13 +28,14 @@ EnemyActor::EnemyActor(const Vector3& pos, const Vector3& dir)
 	, mVelocity(0.0f, 0.0f, 0.0f)
 	, mStateTimer(0.0f)
 	, mEnemyHealth(nullptr)
+	, mShaderTag(ShaderTag::SkinnedDepthmapAndSkinnedShadowMap)
 {
 	mPosition = pos;
 	mDirection = dir;
 
 	// メッシュの読み込み
 	Mesh* mesh = RENDERER->GetMesh("Assets/Enemy/BeholderSK.gpmesh");
-	mSkelComp = new SkeletalMeshComponent(this);
+	mSkelComp = new SkeletalMeshComponent(this,mShaderTag);
 	mSkelComp->SetMesh(mesh);
 
 	// スケルトンの読み込み

@@ -16,14 +16,14 @@
 /// <param name="owner">オーナーへのポインタ</param>
 /// <param name="skelMeshComp">アタッチ先のアクターのスケルタルメッシュのポインタ</param>
 /// <param name="boneName">アタッチ先のボーンの名前</param>
-AttachMeshComponent::AttachMeshComponent(class Actor* owner, class SkeletalMeshComponent* skelMeshComp, const char* boneName)
-	:MeshComponent(owner,false)
+/// <param name="shaderTag">適用するシェーダーのタグ</param>
+AttachMeshComponent::AttachMeshComponent(class Actor* owner, class SkeletalMeshComponent* skelMeshComp,
+	                                     const char* boneName, ShaderTag shaderTag)
+	:MeshComponent(owner,shaderTag,false)
 	,mBoneIndex(0)
 	,mBoneName(boneName)
 	,mSkelMesh(skelMeshComp)
 {
-	GAMEINSTANCE.GetRenderer()->AddMeshComponent(this);
-	printf("new AttachMeshComponent : [%5d] owner->( 0x%p )\n", GetID(), owner);
 }
 
 /// <summary>
@@ -31,8 +31,6 @@ AttachMeshComponent::AttachMeshComponent(class Actor* owner, class SkeletalMeshC
 /// </summary>
 AttachMeshComponent::~AttachMeshComponent()
 {
-	printf("remove AttachMeshComponent : [%5d] owner-> ( 0x%p )\n ", GetID(), mOwner);
-	GAMEINSTANCE.GetRenderer()->RemoveMeshComponent(this);
 }
 
 /// <summary>

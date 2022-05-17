@@ -2,6 +2,7 @@
 #include "MeshComponent.h"
 #include "Math.h"
 #include <string>
+#include "ShaderTag.h"
 
 class AttachMeshComponent : public MeshComponent
 {
@@ -12,7 +13,8 @@ public:
 	/// <param name="owner">オーナーへのポインタ</param>
 	/// <param name="skelMeshComp">アタッチ先のアクターのスケルタルメッシュのポインタ</param>
 	/// <param name="boneName">アタッチ先のボーンの名前</param>
-	AttachMeshComponent(class Actor* owner,class SkeletalMeshComponent* skelMeshComp,const char* boneName);
+	/// <param name="shaderTag">適用するシェーダーのタグ</param>
+	AttachMeshComponent(class Actor* owner,class SkeletalMeshComponent* skelMeshComp,const char* boneName,ShaderTag shaderTag);
 	
 	/// <summary>
 	/// デストラクタ

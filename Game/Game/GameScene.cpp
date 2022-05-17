@@ -15,7 +15,7 @@
 #include "EnemyActor.h"
 #include "ThirdPersonCameraActor.h";
 #include "Gun.h"
-#include "Altar.h"
+#include "SphereObj.h"
 
 
 GameScene::GameScene()
@@ -57,11 +57,6 @@ GameScene::GameScene()
 	                         1.0f,                                  // スケール
 	                         "Assets/Player/SpecialForces.gpmesh",  // gpMeshのファイルパス
 	                         "Assets/Player/SpecialForces.gpskel"); // gpSkelのファイルパス
-	    
-	//player = new PlayerActor(Vector3(1040.0, 740.0, 30.0),          // 座標
-	//	                     1.0f,                                  // スケール
-	//	                     "Assets/Player/SpecialForces.gpmesh",  // gpMeshのファイルパス
-	//	                     "Assets/Player/SpecialForces.gpskel"); // gpSkelのファイルパス
 	
 	// 銃の生成
 	Gun* gun = new Gun(Vector3(90, -40, 140),                         // オフセット位置
@@ -70,24 +65,14 @@ GameScene::GameScene()
 		                player->GetSkeltalMeshComp(),                 // アタッチ先のSkeltalMeshCompクラスのポインタ
 		               "LeftHandIndex4");                             // アタッチ先のボーン名
 
-	// 敵の生成
-	/*new EnemyActor(Vector3(960.0, 740.0, -30.0), Vector3(0, 1, 0));
-	new EnemyActor(Vector3(1095.0, -452.0, -30.0), Vector3(1, 1, 0));
-	new EnemyActor(Vector3(13.0, -13.0, -30.0), Vector3(1, -1, 0));
-	new EnemyActor(Vector3(99.0, 1468.0, -30.0), Vector3(1, 0, 0));
-	new EnemyActor(Vector3(1110.0, 1644.0, -30.0), Vector3(-1, 1, 0));
-	new EnemyActor(Vector3(2011.0, 1735.0, -30.0), Vector3(1, 0, 0));
-	new EnemyActor(Vector3(2002.0, 415.0, -30.0), Vector3(1, 1, 0));*/
-
     // カメラの生成
 	ThirdPersonCameraActor* camera = new ThirdPersonCameraActor(player);
 	camera->SetCameraLength(800.0f);
 
 	// バックグラウンドの生成
 	new StaticBGActor(Vector3(890, -130, 20), "Assets/BackGround/testMap.gpmesh");
-	//new StaticBGActor(Vector3(1040.0, 740.0, 30.0), "Assets/BackGround/StaticMesh.gpmesh");
 	
-	//mAltar = new Altar(Vector3(1000.0, 740.0, 30.0), "Assets/BackGround/Altar.gpmesh");
+	new SphereObj(Vector3(890, -50, 70));
 
 	// バックグラウンドの当たり判定の生成
 	new BGCollisionSetter("Assets/BackGround/CollisionBox.json");

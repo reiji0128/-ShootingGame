@@ -27,6 +27,7 @@ PlayerActor::PlayerActor(const Vector3& pos, const float& scale, const char* gpm
 	, mBoneIndex(0)
 	, mNowState()
 	, mNextState()
+	, mShaderTag(ShaderTag::SkinnedDepthmapAndSkinnedShadowMap)
 {
 	// 座標のセット
 	SetPosition(pos);
@@ -38,7 +39,7 @@ PlayerActor::PlayerActor(const Vector3& pos, const float& scale, const char* gpm
 
 	// メッシュの読み込み・セット
 	Mesh* mesh = RENDERER->GetMesh(gpmeshFileName);
-	mSkeltalMeshComp = new SkeletalMeshComponent(this);
+	mSkeltalMeshComp = new SkeletalMeshComponent(this,mShaderTag);
 	mSkeltalMeshComp->SetMesh(mesh);
 
 	// スケルトンの読み込み

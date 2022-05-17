@@ -3,6 +3,7 @@
 #include<string>
 #include "MeshComponent.h"
 #include "MatrixPalette.h"
+#include "ShaderTag.h"
 
 class SkeletalMeshComponent : public MeshComponent
 {
@@ -11,7 +12,8 @@ public:
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="owner">コンポーネントを所有するActorのポインタ</param>
-	SkeletalMeshComponent(class Actor* owner);
+    /// <param name="shaderTag">適用するシェーダーのタグ</param>
+	SkeletalMeshComponent(class Actor* owner, ShaderTag shaderTag);
 
 	/// <summary>
 	/// スケルタルメッシュコンポーネントの描画処理

@@ -14,8 +14,9 @@
 /// コンストラクタ
 /// </summary>
 /// <param name="owner">コンポーネントを所有するActorのポインタ</param>
-SkeletalMeshComponent::SkeletalMeshComponent(Actor* owner)
-	:MeshComponent(owner, true)
+/// <param name="shaderTag">適用するシェーダーのタグ</param>
+SkeletalMeshComponent::SkeletalMeshComponent(Actor* owner, ShaderTag shaderTag)
+	:MeshComponent(owner,shaderTag,true)
 	, mSkeleton(nullptr)
 {
 }

@@ -11,10 +11,11 @@
 /// <param name="gpmeshFileName">メッシュのファイルパス</param>
 StaticBGActor::StaticBGActor(const Vector3& position, const char* gpmeshFileName)
 	: Actor(Tag::BackGround)
+	, mShaderTag(ShaderTag::DepthmapAndShadowMap)
 {
 	mPosition = position;
 	Mesh* mesh = RENDERER->GetMesh(gpmeshFileName);
-	MeshComponent* mc = new MeshComponent(this);
+	MeshComponent* mc = new MeshComponent(this,mShaderTag);
 	mc->SetMesh(mesh);
 }
 

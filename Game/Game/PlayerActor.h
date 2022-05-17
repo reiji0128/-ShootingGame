@@ -3,6 +3,7 @@
 #include <vector>
 #include "SkeletalMeshComponent.h"
 #include "Math.h"
+#include "ShaderTag.h"
 
 // プレイヤーの状態
 enum class PlayerState
@@ -109,5 +110,8 @@ private:
 
 	// ラインコライダーのポインタ
 	class LineCollider* mLineCollider;
+
+	// 適用するシェーダーのタグ
+	ShaderTag mShaderTag;
 
 };

@@ -2,6 +2,7 @@
 #include "Actor.h"
 #include <vector>
 #include "SkeletalMeshComponent.h"
+#include "ShaderTag.h"
 
 enum class EnemyState
 {
@@ -65,4 +66,6 @@ private:
 	float                               mStateTimer; // ステート内の経過時刻を測る雑用タイマー  
 
 	std::vector<class EnemyStateBase*>     mStatePools;    // ステートクラスプール
+
+	ShaderTag mShaderTag;
 };

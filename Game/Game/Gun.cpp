@@ -12,13 +12,14 @@ Gun::Gun(const Vector3& pos, const Vector3& rot,
 	,mBoneName(nullptr)
 	,mSkelComp(nullptr)
 	,mAttachComp(nullptr)
+	,mShaderTag(ShaderTag::DepthmapAndShadowMap)
 {
 	mBoneName = boneName;
 	mSkelComp = skelComp;
 
 	//メッシュのセット
 	Mesh* mesh = RENDERER->GetMesh(gpmeshFileName);
-	mAttachComp = new AttachMeshComponent(this, mSkelComp, mBoneName);
+	mAttachComp = new AttachMeshComponent(this, mSkelComp, mBoneName,mShaderTag);
 	mAttachComp->SetMesh(mesh);
 	mAttachComp->SetOffsetPosition(pos);
 	mAttachComp->SetOffsetRotation(rot);
