@@ -31,13 +31,30 @@ public:
 	/// </summary>
 	void CreateHDRBuffer();
 
-// ゲッター //
-	unsigned int GetHDRFrameBuffer() { return mFloatColorTexture; }
+	/// <summary>
+	/// 四角形ポリゴンの作成
+	/// </summary>
+	void CreateQuadVAO();
+
+	/// <summary>
+	/// 四角形ポリゴンの描画
+	/// </summary>
+	void RenderQuad();
+
 private:
 	unsigned int mHdrFBO;
 	unsigned int mRbo;
 	unsigned int mFloatColorTexture;
-	const unsigned int mBufferWidth = 1024;
-	const unsigned int mBufferHeght = 1024;
+	const unsigned int mBufferWidth = 1280;
+	const unsigned int mBufferHeght = 768;
 
+	// 頂点配列オブジェクトID
+	unsigned int mVertexArray;
+	// 頂点バッファID
+	unsigned int mVertexBuffer;
+	// インデックスID
+	unsigned int mIndexBuffer;
+
+	// 四角形ポリゴンを表示するシェーダー
+	class Shader* mScreenBufferShader;
 };

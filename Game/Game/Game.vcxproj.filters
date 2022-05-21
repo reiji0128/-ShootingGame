@@ -631,5 +631,17 @@
     <None Include="Shaders\HDR.frag">
       <Filter>Shader</Filter>
     </None>
+    <None Include="Shaders\ScreenBuffer.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\ScreenBuffer.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\Sphere.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\Sphere.frag">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

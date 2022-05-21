@@ -299,8 +299,7 @@ void Renderer::Draw()
 		//メッシュシェーダーで描画する対象の変数をセット
 		mHDRShader->SetActive();
 		mHDRShader->SetMatrixUniform("uViewProj", mView * mProjection);
-		// ライティング変数をセット
-		SetLightUniforms(mHDRShader);
+		mHDRShader->SetFloatUniform("luminance", 15.0f);
 		// 全てのメッシュコンポーネントを描画
 		for (auto mc : mHighLightMeshes)
 		{
@@ -313,13 +312,7 @@ void Renderer::Draw()
 	mHDRRenderer->HDRRenderingEnd();
 	// hdrカラーバッファを2Dスクリーンを埋め尽くす四角形ポリゴンに描画
 	// この時トーンマッピングを行ってHDR画像をLDRにする
-	mHDRShader->SetActive();
-	mHDRShader->SetFloatUniform("exposure", 1);
-	mHDRShader->SetIntUniform("uHDRBuffer", 2);
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, mHDRRenderer->GetHDRFrameBuffer());
-	unsigned int screenVAO;
-	ScreenVAOSetting(screenVAO);
+	mHDRRenderer->RenderQuad();
 
 	GAMEINSTANCE.GetPhysics()->DebugShowBox();
 }
@@ -729,9 +722,9 @@ bool Renderer::LoadShaders()
 		return false;
 	}
 
-	// HDRシェーダーのロード
+	// スフィアシェーダーのロード
 	mHDRShader = new Shader();
-	if (!mHDRShader->Load("Shaders/Phong.vert", "Shaders/Phong.frag"))
+	if (!mHDRShader->Load("Shaders/Sphere.vert", "Shaders/Sphere.frag"))
 	{
 		return false;
 	}

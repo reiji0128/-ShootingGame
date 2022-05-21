@@ -300,11 +300,15 @@
     <None Include="Shaders\LineWorld.vert" />
     <None Include="Shaders\Phong.frag" />
     <None Include="Shaders\Phong.vert" />
+    <None Include="Shaders\ScreenBuffer.frag" />
+    <None Include="Shaders\ScreenBuffer.vert" />
     <None Include="Shaders\Shadowmap.frag" />
     <None Include="Shaders\Shadowmap.vert" />
     <None Include="Shaders\Skinned.vert" />
     <None Include="Shaders\SkinnedDepthMap.vert" />
     <None Include="Shaders\SkinnedShadowmap.vert" />
+    <None Include="Shaders\Sphere.frag" />
+    <None Include="Shaders\Sphere.vert" />
     <None Include="Shaders\Sprite.frag" />
     <None Include="Shaders\Sprite.vert" />
     <None Include="Shaders\tilemap.frag" />

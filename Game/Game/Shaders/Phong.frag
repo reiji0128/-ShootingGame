@@ -36,11 +36,6 @@ uniform vec3 uAmbientLight;
 // ディレクショナルライト
 uniform DirectionalLight uDirLight;
 
-// 追加
-uniform sampler2D uHDRBuffer;
-// 露出
-uniform float exposure;
-
 void main()
 {
 	// ポリゴン表面の法線（フラグメントシェーダー上で補間されている）
@@ -62,18 +57,6 @@ void main()
 	Diffuse = uDirLight.mDiffuseColor * max(NdotL,0.0f);
 	Specular = uDirLight.mSpecColor * pow(max(0.0, dot(R, V)), uSpecPower);
 
-	// 最終的な色はテクスチャの色xフォンの光 (alpha = 1)
-	//outColor = texture(uTexture, fragTexCoord) * vec4((Diffuse + uAmbientLight),1.0f) + vec4(Specular,1.0f);
-
-	// 追加
-	const float gamma = 2.2;
-	vec3 hdrColor = texture(uHDRBuffer,fragTexCoord).rgb;
-
-	// 露出トーンマッピング
-	vec3 mapped = vec3(1.0) -exp(-hdrColor + exposure);
-	// ガンマコレクション
-	mapped = pow(mapped,vec3(1.0 / gamma));
-
-	vec4 result = vec4(1,1,0,0) * vec4((Diffuse + uAmbientLight),1.0f) + vec4(Specular,1.0f);
-	outColor = vec4(result) * vec4(mapped,1.0);
+	// Final color is texture color times phong light (alpha = 1)
+	outColor = texture(uTexture, fragTexCoord) * vec4((Diffuse + uAmbientLight),1.0f) + vec4(Specular,1.0f);
 }
