@@ -296,9 +296,11 @@ void Renderer::Draw()
 			}
 		}
 
-		//メッシュシェーダーで描画する対象の変数をセット
+		//球体の描画
+		Vector3 lightColor(0.8, 0.5, 0.2);
 		mHDRShader->SetActive();
 		mHDRShader->SetMatrixUniform("uViewProj", mView * mProjection);
+		mHDRShader->SetVectorUniform("color", lightColor);
 		mHDRShader->SetFloatUniform("luminance", 15.0f);
 		// 全てのメッシュコンポーネントを描画
 		for (auto mc : mHighLightMeshes)
@@ -310,10 +312,11 @@ void Renderer::Draw()
 		}
 	}
 	mHDRRenderer->HDRRenderingEnd();
+
 	// hdrカラーバッファを2Dスクリーンを埋め尽くす四角形ポリゴンに描画
 	// この時トーンマッピングを行ってHDR画像をLDRにする
-	mHDRRenderer->RenderQuad();
-
+	//mHDRRenderer->RenderQuad();
+	mHDRRenderer->ScaleDownBufferPath();
 	GAMEINSTANCE.GetPhysics()->DebugShowBox();
 }
 

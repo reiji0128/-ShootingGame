@@ -643,5 +643,11 @@
     <None Include="Shaders\Sphere.frag">
       <Filter>Shader</Filter>
     </None>
+    <None Include="Shaders\DownSampling.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\GaussBlur.frag">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

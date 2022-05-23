@@ -294,6 +294,8 @@
     <None Include="Shaders\BasicMesh.vert" />
     <None Include="Shaders\DepthMap.frag" />
     <None Include="Shaders\DepthMap.vert" />
+    <None Include="Shaders\DownSampling.frag" />
+    <None Include="Shaders\GaussBlur.frag" />
     <None Include="Shaders\HDR.frag" />
     <None Include="Shaders\Line.frag" />
     <None Include="Shaders\Line.vert" />
