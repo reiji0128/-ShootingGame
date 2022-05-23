@@ -16,7 +16,7 @@ void main()
 	vec3 hdrColor = texture(uHDRBuffer,fragTexCoord).rgb;
 
 	// 露出トーンマッピング
-	vec3 mapped = vec3(1.0) -exp(-hdrColor + exposure);
+	vec3 mapped = vec3(1.0) -exp(-hdrColor * exposure);
 	// ガンマコレクション
 	mapped = pow(mapped,vec3(1.0 / gamma));
 

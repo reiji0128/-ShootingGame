@@ -20,15 +20,12 @@ uniform sampler2D uBlursource;
 
 void main()
 {
-	//vec4 result = vec4(0.0f);
-	//for(int i = 0; i < uParam.SampleCount;i++)
-	//{
+	vec4 result = vec4(0.0f);
+	for(int i = 0; i < uParam.SampleCount;i++)
+	{
 	   // ガウスの重み(uParam.Offset[i])に基づいてテクスチャカラーを合成		
-     //  result += uParam.Offset[i].z * texture(uBlursource,fragTexCoord + uParam.Offset[i].xy);
-	   
-	//}
-	//result.w = 1.0f;
-	//FragColor = result;
-
-	FragColor = vec4(1.0f,0.0f,0.0f,1.0f);
+       result += uParam.Offset[i].z * texture(uBlursource,fragTexCoord + uParam.Offset[i].xy);  
+	}
+	result.w = 1.0f;
+	FragColor = result;
 }

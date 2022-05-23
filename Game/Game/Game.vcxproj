@@ -297,6 +297,7 @@
     <None Include="Shaders\DownSampling.frag" />
     <None Include="Shaders\GaussBlur.frag" />
     <None Include="Shaders\HDR.frag" />
+    <None Include="Shaders\HDRBloomBlend.frag" />
     <None Include="Shaders\Line.frag" />
     <None Include="Shaders\Line.vert" />
     <None Include="Shaders\LineWorld.vert" />

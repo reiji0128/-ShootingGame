@@ -34,6 +34,13 @@ HDR::HDR()
 	{
 		printf("ガウスシェーダーの読み込み失敗\n");
 	}
+
+	// HDRBloomブレンドシェーダーのロード
+	mHDRBloomBlendShader = new Shader();
+	if (!mHDRBloomBlendShader->Load("Shaders/ScreenBuffer.vert", "Shaders/HDRBloomBlend.frag"))
+	{
+		printf("HDRBloomブレンドシェーダーの読み込み失敗\n");
+	}
 }
 
 /// <summary>
@@ -41,6 +48,10 @@ HDR::HDR()
 /// </summary>
 HDR::~HDR()
 {
+	delete mScreenBufferShader;
+	delete mDownSamplingShader;
+	delete mGaussShader;
+	delete mHDRBloomBlendShader;
 }
 
 /// <summary>
@@ -240,7 +251,7 @@ void HDR::ScaleDownBufferPath()
 				// ガウスシェーダーにOffsetをセット
 				for (int i = 0; i < sampleCount; i++)
 				{
-					std::string s = "uParam.Offst[" + std::to_string(i) + "]";
+					std::string s = "uParam.Offset[" + std::to_string(i) + "]";
 					mGaussShader->SetVectorUniform(s.c_str(), offset[i]);
 				}
 
@@ -361,13 +372,51 @@ void HDR::RenderQuad()
 
 	mScreenBufferShader->SetActive();
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, mColorBuffers[1]);
+	glBindTexture(GL_TEXTURE_2D, mColorBuffers[0]);
 	mScreenBufferShader->SetIntUniform("uHDRBuffer", 0);
-	mScreenBufferShader->SetFloatUniform("exposure", 0.01);
+	mScreenBufferShader->SetFloatUniform("exposure", 0.1);
 	glBindVertexArray(mVertexArray);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glDisable(GL_BLEND);
+}
+
+/// <summary>
+/// HDRテクスチャとBloomテクスチャのブレンド
+/// </summary>
+void HDR::HDRBloomBlend()
+{
+	// レンダーターゲットをもとに戻す
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glDrawBuffer(GL_FRONT);
+
+	glViewport(0, 0, mBufferWidth, mBufferHeght);
+
+	// TEXTURE0にHDRテクスチャをバインド
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, mColorBuffers[0]);
+
+	// TEXTURE1,2,3,4,5にBloomテクスチャをバインド
+	for (int i = 0; i < mMaxLevelNum; i++)
+	{
+		glActiveTexture(GL_TEXTURE1 + i);
+		glBindTexture(GL_TEXTURE_2D, mBlurBufferTex[i * 2 + 1]);
+	}
+
+	mHDRBloomBlendShader->SetActive();
+	mHDRBloomBlendShader->SetIntUniform("uScene", 0);
+	mHDRBloomBlendShader->SetIntUniform("uBloom1", 1);
+	mHDRBloomBlendShader->SetIntUniform("uBloom2", 2);
+	mHDRBloomBlendShader->SetIntUniform("uBloom3", 3);
+	mHDRBloomBlendShader->SetIntUniform("uBloom4", 4);
+	mHDRBloomBlendShader->SetIntUniform("uBloom5", 5);
+
+	const float exposure = 0.1;
+
+	mHDRBloomBlendShader->SetFloatUniform("uExposure", exposure);
+
+	glBindVertexArray(mVertexArray);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }

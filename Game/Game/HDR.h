@@ -66,6 +66,11 @@ public:
 	/// </summary>
 	void RenderQuad();
 
+	/// <summary>
+	/// HDRテクスチャとBloomテクスチャのブレンド
+	/// </summary>
+	void HDRBloomBlend();
+
 private:
 	unsigned int mHdrFBO;
 	unsigned int mRbo;
@@ -86,8 +91,9 @@ private:
 	// インデックスID
 	unsigned int mIndexBuffer;
 
-	// FBOとテクスチャID確保用
+	// ブラー用のFBO
 	std::vector<unsigned int> mBlurFBO;
+	// ブラー結果のテクスチャID
 	std::vector<unsigned int> mBlurBufferTex;
 
 	// 四角形ポリゴンを表示するシェーダー
@@ -98,4 +104,7 @@ private:
 
 	// ガウスシェーダー
 	class Shader* mGaussShader;
+
+	// HDRテクスチャとBloomテクスチャのブレンドシェーダー
+	class Shader* mHDRBloomBlendShader;
 };

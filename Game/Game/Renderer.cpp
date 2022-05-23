@@ -317,6 +317,8 @@ void Renderer::Draw()
 	// この時トーンマッピングを行ってHDR画像をLDRにする
 	//mHDRRenderer->RenderQuad();
 	mHDRRenderer->ScaleDownBufferPath();
+	mHDRRenderer->HDRBloomBlend();
+
 	GAMEINSTANCE.GetPhysics()->DebugShowBox();
 }
 

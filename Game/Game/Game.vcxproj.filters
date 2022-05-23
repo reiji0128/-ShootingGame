@@ -649,5 +649,8 @@
     <None Include="Shaders\GaussBlur.frag">
       <Filter>Shader</Filter>
     </None>
+    <None Include="Shaders\HDRBloomBlend.frag">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>
