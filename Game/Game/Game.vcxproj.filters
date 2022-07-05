@@ -384,6 +384,9 @@
     <ClCompile Include="SphereObj.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="CubeMap.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h">
@@ -573,6 +576,9 @@
       <Filter>ヘッダー ファイル\System\Tag</Filter>
     </ClInclude>
     <ClInclude Include="SphereObj.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeMap.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>

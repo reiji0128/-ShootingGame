@@ -10,6 +10,7 @@ SphereObj::SphereObj(const Vector3& pos)
 	, mShaderTag(ShaderTag::HDR)
 {
 	mPosition = pos;
+	SetScale(0.5);
 	Mesh* mesh = RENDERER->GetMesh("Assets/Sphere/Sphere.gpmesh");
 	MeshComponent* mc = new MeshComponent(this, mShaderTag);
 	mc->SetMesh(mesh);

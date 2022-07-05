@@ -301,7 +301,7 @@ void Renderer::Draw()
 		mHDRShader->SetActive();
 		mHDRShader->SetMatrixUniform("uViewProj", mView * mProjection);
 		mHDRShader->SetVectorUniform("color", lightColor);
-		mHDRShader->SetFloatUniform("luminance", 15.0f);
+		mHDRShader->SetFloatUniform("luminance", 10.0f);
 		// 全てのメッシュコンポーネントを描画
 		for (auto mc : mHighLightMeshes)
 		{

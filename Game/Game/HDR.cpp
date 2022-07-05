@@ -375,7 +375,7 @@ void HDR::RenderQuad()
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, mColorBuffers[0]);
 	mScreenBufferShader->SetIntUniform("uHDRBuffer", 0);
-	mScreenBufferShader->SetFloatUniform("exposure", 0.9);
+	mScreenBufferShader->SetFloatUniform("exposure", 0.3);
 	glBindVertexArray(mVertexArray);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
@@ -414,7 +414,7 @@ void HDR::HDRBloomBlend()
 	mHDRBloomBlendShader->SetIntUniform("uBloom4", 4);
 	mHDRBloomBlendShader->SetIntUniform("uBloom5", 5);
 
-	const float exposure = 0.1;
+	const float exposure = 0.4;
 
 	mHDRBloomBlendShader->SetFloatUniform("uExposure", exposure);
 

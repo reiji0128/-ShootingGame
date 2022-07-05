@@ -41,7 +41,7 @@ GameScene::GameScene()
 	mGrid = new DebugGrid(2000, 20, color);
 
 	// ライティング設定
-	GAMEINSTANCE.GetRenderer()->SetAmbientLight(Vector3(0.2f, 0.2f, 0.2f));
+	GAMEINSTANCE.GetRenderer()->SetAmbientLight(Vector3(0.1f, 0.1f, 0.1f));
 	DirectionalLight& dir = GAMEINSTANCE.GetRenderer()->GetDirectionalLight();
 	dir.mDirection = Vector3(0.7f, 0.7f, -0.7f);
 	dir.mDiffuseColor = Vector3(0.78f, 0.88f, 1.0f);
@@ -72,7 +72,7 @@ GameScene::GameScene()
 	// バックグラウンドの生成
 	new StaticBGActor(Vector3(890, -130, 20), "Assets/BackGround/testMap.gpmesh");
 	
-	new SphereObj(Vector3(890, -50, 70));
+	new SphereObj(Vector3(890, -50, 20));
 
 	// バックグラウンドの当たり判定の生成
 	new BGCollisionSetter("Assets/BackGround/CollisionBox.json");
@@ -84,7 +84,6 @@ GameScene::GameScene()
 	GAMEINSTANCE.GetPhysics()->SetOneSideReactionCollisionPair(Tag::BackGround, Tag::Enemy);
 	GAMEINSTANCE.GetPhysics()->SetOneSideReactionCollisionPair(Tag::PlayerBullet, Tag::Enemy);
 	GAMEINSTANCE.GetPhysics()->SetOneSideReactionCollisionPair(Tag::EnemyBullet, Tag::Player);
-	GAMEINSTANCE.GetPhysics()->SetOneSideReactionCollisionPair(Tag::EnemyBullet, Tag::Altar);
 }
 
 GameScene::~GameScene()
