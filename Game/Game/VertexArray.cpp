@@ -9,7 +9,12 @@
 // PosNormSkinTex = (8 * sizeof(float)) + (8 * sizeof(char)) = 40 bytes
 // |   位置    |   法線     |  Bones  | weight  |Texture|
 // | x | y | z | x | y | z  | char[4] | char[4] | u | v |
-//
+// 
+// PosNormTangentTex
+// PosNormTangentTex = 11 * sizeof(float) = 44bytes
+// |    位置    |   法線    |   従法線   | テクスチャUV
+// | x | y | z | x | y | z | x | y | z | u  |  v  |
+// 
 // ※weightの確保はcharだが、精度が必要ないので8bit固定小数として使用する
 ////////////////////////////////////////////////////////////////////////////
 #include "VertexArray.h"
@@ -26,9 +31,14 @@ VertexArray::VertexArray(const void* verts, unsigned int numVerts, Layout layout
 
 	// 頂点レイアウトが スケルタルモデルなら　ボーンID、影響度分をサイズ増やす
 	unsigned vertexSize = 8 * sizeof(float);
+	
 	if (layout == PosNormSkinTex)
 	{
 		vertexSize = 8 * sizeof(float) + 8 * sizeof(char);
+	}
+	if (layout == PosNormTangentTex)
+	{
+		vertexSize = 11 * sizeof(float);
 	}
 
 	// 頂点バッファの作成
@@ -78,6 +88,24 @@ VertexArray::VertexArray(const void* verts, unsigned int numVerts, Layout layout
 		glVertexAttribPointer(4, 2, GL_FLOAT, GL_FALSE, vertexSize,
 			reinterpret_cast<void*>(sizeof(float) * 6 + sizeof(char) * 8));
 	}
+	else if (PosNormTangentTex)
+	{
+		// float 3個分　→　位置 x,y,z　位置属性をセット
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexSize, 0);
+		// 次のfloat 3個分 → 法線 nx, ny, nz　法線属性をセット
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, vertexSize,
+			reinterpret_cast<void*>(sizeof(float) * 3));
+		// 次のfloat 3個分 → 従法線 nx, ny, nz　従法線属性をセット
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, vertexSize,
+			reinterpret_cast<void*>(sizeof(float) * 6));
+		// 次のfloat 2個分 u, v  テクスチャ座標属性をセット
+		glEnableVertexAttribArray(3);
+		glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, vertexSize,
+			reinterpret_cast<void*>(sizeof(float) * 9));
+	}
 }
 
 VertexArray::~VertexArray()
@@ -87,7 +115,71 @@ VertexArray::~VertexArray()
 	glDeleteVertexArrays(1, &mVertexArray);
 }
 
+void VertexArray::CreateCubeMapVAO()
+{
+	float cubeMapVertices[] =
+	{
+		-1.0f, -1.0f,  1.0f, // 0         7-------6
+		 1.0f, -1.0f,  1.0f, // 1        /       /|
+		 1.0f, -1.0f, -1.0f, // 2       4-------5 |
+		-1.0f, -1.0f, -1.0f, // 3       |       | |
+		-1.0f,  1.0f,  1.0f, // 4       | 3 - - | 2
+		 1.0f,  1.0f,  1.0f, // 5       |/      |/
+		 1.0f,  1.0f, -1.0f, // 6       0-------1
+		-1.0f,  1.0f, -1.0f  // 7
+	};
+
+	unsigned int cubeMapIndices[] =
+	{
+		// right
+		1,2,6,
+		6,5,1,
+		// left
+		0,4,7,
+		7,3,0,
+		// top
+		4,5,6,
+		6,7,4,
+		// bottom
+		0,3,2,
+		2,1,0,
+		//back
+		0,1,5,
+		5,4,0,
+		// front
+		3,7,6,
+		6,2,3
+	};
+
+	unsigned int cubeMapVBO, cubeMapEBO;
+
+	// 頂点配列の作成
+	glGenVertexArrays(1, &mCubeMapVertexArray);
+	glBindVertexArray(mCubeMapVertexArray);
+
+	// 頂点バッファの作成
+	glGenBuffers(1, &cubeMapVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, cubeMapVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeMapVertices), &cubeMapVertices, GL_STATIC_DRAW);
+
+	// インデックスバッファの作成
+	glGenBuffers(1, &cubeMapEBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cubeMapEBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeMapIndices), &cubeMapIndices, GL_STATIC_DRAW);
+
+	// Attribute 0
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
 void VertexArray::SetActive()
 {
 	glBindVertexArray(mVertexArray);
+}
+
+void VertexArray::SetActiveCubeMap()
+{
+	glBindVertexArray(mCubeMapVertexArray);
 }

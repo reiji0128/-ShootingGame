@@ -42,6 +42,8 @@ public:
 	/// <param name="format">フォーマット</param>
 	void CreateForRendering(int width, int height, unsigned int format);
 
+	bool CreateCubeMap(const std::string& fileName);
+
 // セッター //
 	/// <summary>
 	/// テクスチャをアクティブ(ポリゴン描画で使用）にする

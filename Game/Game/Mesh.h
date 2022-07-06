@@ -11,6 +11,21 @@ public:
 	//メッシュのロード・アンロード
 	bool Load(const std::string& fileName, class Renderer* renderer);
 	void Unload();
+
+	/// <summary>
+	/// タンジェントベクトルを計算
+	/// </summary>
+	/// <param name="destTangent">tangentを格納する変数</param>
+	/// <param name="pos1">三角形面の頂点</param>
+	/// <param name="pos2">三角形面の頂点</param>
+	/// <param name="pos3">三角形面の頂点</param>
+	/// <param name="uv1">三角形面の頂点に対応するUV座標</param>
+	/// <param name="uv2">三角形面の頂点に対応するUV座標</param>
+	/// <param name="uv3">三角形面の頂点に対応するUV座標</param>
+	void CalcTangent(Vector3& destTangent, const Vector3& pos1, const Vector3& pos2, const Vector3& pos3,
+		             const Vector2& uv1, const Vector2& uv2, const Vector2& uv3);
+
+// ゲッター //
 	//このメッシュに関連付けられている頂点配列を取得
 	class VertexArray* GetVertexArray() { return mVertexArray; }
 	//指定されたインデックスからテクスチャを取得
@@ -22,8 +37,9 @@ public:
 
 	//オブジェクト空間での境界球の半径を取得
 	float GetRadius() const { return mRadius; }
-	//
+	// スペキュラーの取得
 	float GetSpecPower() const{ return mSpecPower; }
+
 private:
 	//このメッシュに関連付けられているテクスチャ
 	std::vector<class Texture*> mTextures;

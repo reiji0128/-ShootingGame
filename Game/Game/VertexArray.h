@@ -10,14 +10,21 @@ public:
 		PosNormTex, 
 
 		// 位置&法線& "スキン用の影響ボーン＆重み情報" & テクスチャUV 
-		PosNormSkinTex  
+		PosNormSkinTex,  
+
+		// 位置 & 法線 & 従法線 & テクスチャUV
+		PosNormTangentTex,
 	};
 
 	VertexArray(const void* verts, unsigned int numVerts, Layout layout,
 		const unsigned int* indices, unsigned int numIndices);
 	~VertexArray();
 
+	void CreateCubeMapVAO();
+
 	void SetActive();                                                     // この頂点配列をアクティブにして描画で使用する
+	void SetActiveCubeMap();
+
 	unsigned int GetNumIndices() const { return mNumIndices; }            // インデックス数を取得する
 	unsigned int GetNumVerts() const { return mNumVerts; }                // 頂点数を取得する
 private:
@@ -35,4 +42,7 @@ private:
 
 	// 頂点配列オブジェクトID
 	unsigned int mVertexArray;
+
+	// キューブマップ用頂点配列オブジェクトID
+	unsigned int mCubeMapVertexArray;
 };

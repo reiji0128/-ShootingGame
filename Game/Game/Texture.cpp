@@ -132,6 +132,49 @@ void Texture::CreateForRendering(int width, int height, unsigned int format)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
+bool Texture::CreateCubeMap(const std::string& fileName)
+{
+	unsigned int textureID;
+	// テクスチャの生成
+	glGenTextures(1, &textureID);
+	// テクスチャーターゲットにバインド
+	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+
+	int textureWidth, textureHeight;
+	for (int i = 0; i < 6; i++)
+	{
+		SDL_Surface* surface = IMG_Load(fileName.c_str());
+		if (!surface)
+		{
+			printf("テクスチャ読み込みに失敗 %s", fileName.c_str());
+			SDL_FreeSurface(surface);
+			return false;
+		}
+		textureWidth = surface->w;
+		textureHeight = surface->h;
+
+		if (surface)
+		{
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, 
+				         textureWidth, textureHeight, 0, 
+				         GL_RGB, GL_UNSIGNED_BYTE, surface);
+		}
+		else
+		{
+			printf("キューブマップのファイル読み込みに失敗 %s", fileName.c_str());
+			SDL_FreeSurface(surface);
+			return false;
+		}
+	}
+
+	// テクスチャパラメーターの設定
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+}
+
 /// <summary>
 /// テクスチャをアクティブ(ポリゴン描画で使用）にする
 /// </summary>

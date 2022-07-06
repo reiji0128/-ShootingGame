@@ -220,6 +220,25 @@ void Mesh::Unload()
 	mVertexArray = nullptr;
 }
 
+void Mesh::CalcTangent(Vector3& destTangent, const Vector3& pos1, const Vector3& pos2, const Vector3& pos3, 
+	                   const Vector2& uv1, const Vector2& uv2, const Vector2& uv3)
+{
+	Vector3 edge1, edge2;
+	edge1 = pos2 - pos1;
+	edge2 = pos3 - pos1;
+
+	Vector2 deltaUV1 = uv2 - uv1;
+	Vector2 deltaUV2 = uv3 - uv1;
+
+	float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+	destTangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+	destTangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+	destTangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+	destTangent.Normalize();
+}
+
 Texture* Mesh::GetTexture(size_t index)
 {
 	if (index < mTextures.size())

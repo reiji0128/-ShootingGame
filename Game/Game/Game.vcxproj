@@ -160,7 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
-    <ClCompile Include="CubeMap.cpp" />
+    <ClCompile Include="CubeMapComponent.cpp" />
     <ClCompile Include="SphereObj.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AttachMeshComponent.cpp" />
@@ -225,7 +225,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
-    <ClInclude Include="CubeMap.h" />
+    <ClInclude Include="CubeMapComponent.h" />
     <ClInclude Include="SphereObj.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AttachMeshComponent.h" />

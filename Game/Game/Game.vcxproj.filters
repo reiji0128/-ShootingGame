@@ -384,7 +384,7 @@
     <ClCompile Include="SphereObj.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="CubeMap.cpp">
+    <ClCompile Include="CubeMapComponent.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -578,7 +578,7 @@
     <ClInclude Include="SphereObj.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="CubeMap.h">
+    <ClInclude Include="CubeMapComponent.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
