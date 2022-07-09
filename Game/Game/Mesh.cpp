@@ -117,6 +117,7 @@ bool Mesh::Load(const std::string& fileName, Renderer* renderer)
 	std::vector<Vertex> vertices;
 	vertices.reserve(vertsJson.Size() * vertSize);
 	mRadius = 0.0f;
+
 	for (rapidjson::SizeType i = 0; i < vertsJson.Size(); i++)
 	{
 		// 現時点で、８つの要素(位置xyz 法線xyz テクスチャuvの要素）が入っている
@@ -140,7 +141,7 @@ bool Mesh::Load(const std::string& fileName, Renderer* renderer)
 		}
 		mBox.UpdateMinMax(pos);
 
-		// 頂点レイアウトが PosNormTexなら（ボーンが無い）
+		// 頂点レイアウトが PosNormTexなら（ボーンデータ無し）
 		if (layout == VertexArray::PosNormTex)
 		{
 			Vertex v;
@@ -151,7 +152,8 @@ bool Mesh::Load(const std::string& fileName, Renderer* renderer)
 				vertices.emplace_back(v);
 			}
 		}
-		else // ボーンデータ入りなら　PosNormSkinTexなら
+		//頂点レイアウトが PosNormSkinTexなら (ボーンデータ有り)
+		else if(layout == VertexArray::PosNormSkinTex)
 		{
 			Vertex v;
 			// Add pos/normal　頂点と法線を追加　6個分
@@ -173,6 +175,20 @@ bool Mesh::Load(const std::string& fileName, Renderer* renderer)
 
 			// Add tex coords　テクスチャ座標
 			for (rapidjson::SizeType j = 14; j < vert.Size(); j++)
+			{
+				v.f = static_cast<float>(vert[j].GetDouble());
+				vertices.emplace_back(v);
+			}
+		}
+		// 頂点レイアウトがPosNormTangentTexなら
+		else
+		{
+			Vertex v;
+			std::vector<Vector3> destPos;
+			std::vector<Vector3> destUV;
+
+			// Add the floats　float値を追加
+			for (rapidjson::SizeType j = 0; j < vert.Size(); j++)
 			{
 				v.f = static_cast<float>(vert[j].GetDouble());
 				vertices.emplace_back(v);
@@ -210,7 +226,10 @@ bool Mesh::Load(const std::string& fileName, Renderer* renderer)
 
 	// 頂点配列を作成する　
 	mVertexArray = new VertexArray(vertices.data(), static_cast<unsigned>(vertices.size()) / static_cast<unsigned>(vertSize),
-		layout,indices.data(), static_cast<unsigned>(indices.size()));
+		                           layout,indices.data(), static_cast<unsigned>(indices.size()));
+
+
+
 	return true;
 }
 
@@ -218,25 +237,6 @@ void Mesh::Unload()
 {
 	delete mVertexArray;
 	mVertexArray = nullptr;
-}
-
-void Mesh::CalcTangent(Vector3& destTangent, const Vector3& pos1, const Vector3& pos2, const Vector3& pos3, 
-	                   const Vector2& uv1, const Vector2& uv2, const Vector2& uv3)
-{
-	Vector3 edge1, edge2;
-	edge1 = pos2 - pos1;
-	edge2 = pos3 - pos1;
-
-	Vector2 deltaUV1 = uv2 - uv1;
-	Vector2 deltaUV2 = uv3 - uv1;
-
-	float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
-
-	destTangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
-	destTangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
-	destTangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
-
-	destTangent.Normalize();
 }
 
 Texture* Mesh::GetTexture(size_t index)

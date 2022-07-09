@@ -12,18 +12,6 @@ public:
 	bool Load(const std::string& fileName, class Renderer* renderer);
 	void Unload();
 
-	/// <summary>
-	/// タンジェントベクトルを計算
-	/// </summary>
-	/// <param name="destTangent">tangentを格納する変数</param>
-	/// <param name="pos1">三角形面の頂点</param>
-	/// <param name="pos2">三角形面の頂点</param>
-	/// <param name="pos3">三角形面の頂点</param>
-	/// <param name="uv1">三角形面の頂点に対応するUV座標</param>
-	/// <param name="uv2">三角形面の頂点に対応するUV座標</param>
-	/// <param name="uv3">三角形面の頂点に対応するUV座標</param>
-	void CalcTangent(Vector3& destTangent, const Vector3& pos1, const Vector3& pos2, const Vector3& pos3,
-		             const Vector2& uv1, const Vector2& uv2, const Vector2& uv3);
 
 // ゲッター //
 	//このメッシュに関連付けられている頂点配列を取得

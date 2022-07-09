@@ -12,8 +12,8 @@
 // 
 // PosNormTangentTex
 // PosNormTangentTex = 11 * sizeof(float) = 44bytes
-// |    位置    |   法線    |   従法線   | テクスチャUV
-// | x | y | z | x | y | z | x | y | z | u  |  v  |
+// |    位置   |   法線    |   uv   |   従法線  |
+// | x | y | z | x | y | z | u | v  | x | y | z |
 // 
 // ※weightの確保はcharだが、精度が必要ないので8bit固定小数として使用する
 ////////////////////////////////////////////////////////////////////////////
@@ -93,18 +93,21 @@ VertexArray::VertexArray(const void* verts, unsigned int numVerts, Layout layout
 		// float 3個分　→　位置 x,y,z　位置属性をセット
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexSize, 0);
+
 		// 次のfloat 3個分 → 法線 nx, ny, nz　法線属性をセット
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, vertexSize,
 			reinterpret_cast<void*>(sizeof(float) * 3));
+
+		// 次のfloat 2個分 u, v  テクスチャ座標属性をセット
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vertexSize,
+			reinterpret_cast<void*>(sizeof(float) * 6));
+
 		// 次のfloat 3個分 → 従法線 nx, ny, nz　従法線属性をセット
 		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, vertexSize,
-			reinterpret_cast<void*>(sizeof(float) * 6));
-		// 次のfloat 2個分 u, v  テクスチャ座標属性をセット
-		glEnableVertexAttribArray(3);
-		glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, vertexSize,
-			reinterpret_cast<void*>(sizeof(float) * 9));
+		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, vertexSize,
+			reinterpret_cast<void*>(sizeof(float) * 8));
 	}
 }
 
@@ -174,6 +177,25 @@ void VertexArray::CreateCubeMapVAO()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+void VertexArray::CalcTangent(Vector3& destTangent, const Vector3& pos1, const Vector3& pos2, const Vector3& pos3,
+	const Vector2& uv1, const Vector2& uv2, const Vector2& uv3)
+{
+	Vector3 edge1, edge2;
+	edge1 = pos2 - pos1;
+	edge2 = pos3 - pos1;
+
+	Vector2 deltaUV1 = uv2 - uv1;
+	Vector2 deltaUV2 = uv3 - uv1;
+
+	float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+	destTangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+	destTangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+	destTangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+	destTangent.Normalize();
+}
+
 void VertexArray::SetActive()
 {
 	glBindVertexArray(mVertexArray);
@@ -182,4 +204,24 @@ void VertexArray::SetActive()
 void VertexArray::SetActiveCubeMap()
 {
 	glBindVertexArray(mCubeMapVertexArray);
+}
+
+void VertexArray::SetTangent(float* destfv, int index, const Vector3& tangent)
+{
+	destfv[index * 11 + 8 + 0] = tangent.x;
+	destfv[index * 11 + 8 + 1] = tangent.y;
+	destfv[index * 11 + 8 + 2] = tangent.z;
+}
+
+void VertexArray::GetPosVec(Vector3& destPos, const float* fv, int index)
+{
+	destPos.x = fv[index * 11 + 0];
+	destPos.y = fv[index * 11 + 1];
+	destPos.z = fv[index * 11 + 2];
+}
+
+void VertexArray::GetUVVec(Vector2& destUV, const float* fv, int index)
+{
+	destUV.x = fv[index * 11 + 6 + 0];
+	destUV.y = fv[index * 11 + 6 + 1];
 }
