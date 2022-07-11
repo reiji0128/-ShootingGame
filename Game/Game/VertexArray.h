@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Math.h"
+#include <vector>
 
 class VertexArray
 {
@@ -17,8 +18,20 @@ public:
 		PosNormTangentTex,
 	};
 
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="verts">頂点バッファの配列の先頭へのポインタ</param>
+	/// <param name="numVerts">頂点数</param>
+	/// <param name="layout">適用する頂点レイアウト</param>
+	/// <param name="indices">インデックスバッファの配列の先頭へのポインタ</param>
+	/// <param name="numIndices">インデックス数</param>
 	VertexArray(const void* verts, unsigned int numVerts, Layout layout,
 		const unsigned int* indices, unsigned int numIndices);
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~VertexArray();
 
 	void CreateCubeMapVAO();
@@ -74,8 +87,8 @@ public:
 	/// 頂点配列から頂点座標ベクトルだけを取り出す
 	/// </summary>
 	/// <param name="destPos">頂点の座標を格納する変数</param>
-	/// <param name="fv">頂点 & UVデータ配列の先頭アドレスが格納されたポインタ</param>
-	/// <param name="index">頂点 & UVデータ配列のインデックス値</param>
+	/// <param name="fv">頂点&UVデータ配列の先頭アドレスが格納されたポインタ</param>
+	/// <param name="index">頂点&UVデータ配列のインデックス値</param>
 	void GetPosVec(Vector3& destPos, const float* fv, int index);
 
 	/// <summary>

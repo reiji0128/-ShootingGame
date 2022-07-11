@@ -224,11 +224,9 @@ bool Mesh::Load(const std::string& fileName, Renderer* renderer)
 		indices.emplace_back(ind[2].GetUint());
 	}
 
-	// 頂点配列を作成する　
+	// 頂点配列を作成する
 	mVertexArray = new VertexArray(vertices.data(), static_cast<unsigned>(vertices.size()) / static_cast<unsigned>(vertSize),
 		                           layout,indices.data(), static_cast<unsigned>(indices.size()));
-
-
 
 	return true;
 }

@@ -25,6 +25,20 @@ VertexArray::VertexArray(const void* verts, unsigned int numVerts, Layout layout
 	:mNumVerts(numVerts)
 	, mNumIndices(numIndices)
 {
+	Vector3 destPos;
+	Vector2 destUV;
+
+	//for (int i = 0; i < *indices; i++)
+	//{
+	//	GetPosVec(destPos, verts, i);
+	//	GetUVVec(destUV, verts, i);
+	//}
+
+	//for (int i = 0; i < *indices; i++)
+	//{
+	//	CalcTangent()
+	//}
+
 	// 頂点配列の作成
 	glGenVertexArrays(1, &mVertexArray);
 	glBindVertexArray(mVertexArray);
