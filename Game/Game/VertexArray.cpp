@@ -23,36 +23,48 @@
 VertexArray::VertexArray(const void* verts, unsigned int numVerts, Layout layout,
 	const unsigned int* indices, unsigned int numIndices)
 	:mNumVerts(numVerts)
-	, mNumIndices(numIndices)
+	,mNumIndices(numIndices)
 {
-	Vector3 destPos;
-	Vector2 destUV;
+	if (layout == PosNormTangentTex)
+	{
+		Vector3 destPos1, destPos2, destPos3;
+		Vector2 destUV1, destUV2, destUV3;
+		Vector3 destTangent;
+		
+		const float* vert = static_cast<const float*>(verts);
 
-	//for (int i = 0; i < *indices; i++)
-	//{
-	//	GetPosVec(destPos, verts, i);
-	//	GetUVVec(destUV, verts, i);
-	//}
+		for (int i = 0; i < *indices - 2; i++)
+		{
+			// 頂点配列から座標を取り出す
+			GetPosVec(destPos1, vert, i);
+			GetPosVec(destPos2, vert, i);
+			GetPosVec(destPos3, vert, i);
 
-	//for (int i = 0; i < *indices; i++)
-	//{
-	//	CalcTangent()
-	//}
+			// 頂点配列からuv座標を取り出す
+			GetUVVec(destUV1, vert, i);
+			GetUVVec(destUV2, vert, i);
+			GetUVVec(destUV3, vert, i);
+
+			// タンジェントベクトルの計算
+			CalcTangent(destTangent, destPos1, destPos2, destPos3, destUV1, destUV2, destUV3);
+		}
+	}
 
 	// 頂点配列の作成
 	glGenVertexArrays(1, &mVertexArray);
 	glBindVertexArray(mVertexArray);
 
-	// 頂点レイアウトが スケルタルモデルなら　ボーンID、影響度分をサイズ増やす
 	unsigned vertexSize = 8 * sizeof(float);
 	
+	// 頂点レイアウトがスケルタルモデルならボーンID、影響度分サイズを増やす
 	if (layout == PosNormSkinTex)
 	{
 		vertexSize = 8 * sizeof(float) + 8 * sizeof(char);
 	}
+	// 頂点レイアウトが法線マップを使うモデルなら従法線分サイズを増やす
 	if (layout == PosNormTangentTex)
 	{
-		vertexSize = 11 * sizeof(float);
+		vertexSize = 8 * sizeof(float) + 3 * sizeof(float);
 	}
 
 	// 頂点バッファの作成
@@ -64,8 +76,8 @@ VertexArray::VertexArray(const void* verts, unsigned int numVerts, Layout layout
 	glGenBuffers(1, &mIndexBuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(unsigned int), indices, GL_STATIC_DRAW);
-
-	// 頂点属性
+	
+	// 頂点属性をGLに渡す
 	if (layout == PosNormTex)
 	{
 		// float 3個分　→　位置 x,y,z　位置属性をセット
@@ -137,9 +149,9 @@ void VertexArray::CreateCubeMapVAO()
 	float cubeMapVertices[] =
 	{
 		-1.0f, -1.0f,  1.0f, // 0         7-------6
-		 1.0f, -1.0f,  1.0f, // 1        /       /|
+		 1.0f, -1.0f,  1.0f, // 1        /|      /|
 		 1.0f, -1.0f, -1.0f, // 2       4-------5 |
-		-1.0f, -1.0f, -1.0f, // 3       |       | |
+		-1.0f, -1.0f, -1.0f, // 3       | |     | |
 		-1.0f,  1.0f,  1.0f, // 4       | 3 - - | 2
 		 1.0f,  1.0f,  1.0f, // 5       |/      |/
 		 1.0f,  1.0f, -1.0f, // 6       0-------1
