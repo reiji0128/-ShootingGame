@@ -12,6 +12,21 @@ public:
 	bool Load(const std::string& fileName, class Renderer* renderer);
 	void Unload();
 
+	/// <summary>
+	/// タンジェントベクトルを計算
+	/// </summary>
+	/// <param name="destTangent">tangentを格納する変数</param>
+	/// <param name="pos1">三角形面の頂点</param>
+	/// <param name="pos2">三角形面の頂点</param>
+	/// <param name="pos3">三角形面の頂点</param>
+	/// <param name="uv1">三角形面の頂点に対応するUV座標</param>
+	/// <param name="uv2">三角形面の頂点に対応するUV座標</param>
+	/// <param name="uv3">三角形面の頂点に対応するUV座標</param>
+	void CalcTangent(Vector3& destTangent, const Vector3& pos1, const Vector3& pos2, const Vector3& pos3,
+		const Vector2& uv1, const Vector2& uv2, const Vector2& uv3);
+
+// セッター //
+	void SetUseNormalMap(bool useNormalMap) { mUseNormalMap = useNormalMap; }
 
 // ゲッター //
 	//このメッシュに関連付けられている頂点配列を取得
@@ -28,6 +43,8 @@ public:
 	// スペキュラーの取得
 	float GetSpecPower() const{ return mSpecPower; }
 
+	bool GetUseNormalMap() const { return mUseNormalMap; }
+
 private:
 	//このメッシュに関連付けられているテクスチャ
 	std::vector<class Texture*> mTextures;
@@ -39,6 +56,8 @@ private:
 	float mRadius;
 	//表面の鏡面反射力
 	float mSpecPower;
+	// 法線マップを使用するかどうかのフラグ
+	bool mUseNormalMap;
 
 	AABB mBox;
 };

@@ -19,6 +19,7 @@ MeshComponent::MeshComponent(class Actor* owner, ShaderTag shaderTag, bool isSke
 	:Component(owner)
 	,mMesh(nullptr)
 	,mTextureIndex(0)
+	,mNormalMapIndex(1)
 	,mVisible(true)
 	,mIsSkeletal(isSkeletal)
 	,mShaderTag(shaderTag)
@@ -55,6 +56,17 @@ void MeshComponent::Draw(Shader* shader)
 		{
 			t->SetActive();
 		}
+
+		// 法線マップを使うのであればテクスチャをアクティブに
+		if (mMesh->GetUseNormalMap())
+		{
+			Texture* n = mMesh->GetTexture(mNormalMapIndex);
+			if (n)
+			{
+				n->SetActiveNormalMap();
+			}
+		}
+
 		// 頂点配列をアクティブにセット
 		VertexArray* va = mMesh->GetVertexArray();
 		va->SetActive();

@@ -50,6 +50,8 @@ public:
 	/// </summary>
 	void SetActive();
 
+	void SetActiveNormalMap();
+
 // ゲッター //
 	/// <summary>
 	/// テクスチャIDの取得

@@ -25,31 +25,6 @@ VertexArray::VertexArray(const void* verts, unsigned int numVerts, Layout layout
 	:mNumVerts(numVerts)
 	,mNumIndices(numIndices)
 {
-	if (layout == PosNormTangentTex)
-	{
-		Vector3 destPos1, destPos2, destPos3;
-		Vector2 destUV1, destUV2, destUV3;
-		Vector3 destTangent;
-		
-		const float* vert = static_cast<const float*>(verts);
-
-		for (int i = 0; i < *indices - 2; i++)
-		{
-			// 頂点配列から座標を取り出す
-			GetPosVec(destPos1, vert, i);
-			GetPosVec(destPos2, vert, i);
-			GetPosVec(destPos3, vert, i);
-
-			// 頂点配列からuv座標を取り出す
-			GetUVVec(destUV1, vert, i);
-			GetUVVec(destUV2, vert, i);
-			GetUVVec(destUV3, vert, i);
-
-			// タンジェントベクトルの計算
-			CalcTangent(destTangent, destPos1, destPos2, destPos3, destUV1, destUV2, destUV3);
-		}
-	}
-
 	// 頂点配列の作成
 	glGenVertexArrays(1, &mVertexArray);
 	glBindVertexArray(mVertexArray);
@@ -62,7 +37,7 @@ VertexArray::VertexArray(const void* verts, unsigned int numVerts, Layout layout
 		vertexSize = 8 * sizeof(float) + 8 * sizeof(char);
 	}
 	// 頂点レイアウトが法線マップを使うモデルなら従法線分サイズを増やす
-	if (layout == PosNormTangentTex)
+	if (layout == PosNormTexTangent)
 	{
 		vertexSize = 8 * sizeof(float) + 3 * sizeof(float);
 	}
@@ -114,7 +89,7 @@ VertexArray::VertexArray(const void* verts, unsigned int numVerts, Layout layout
 		glVertexAttribPointer(4, 2, GL_FLOAT, GL_FALSE, vertexSize,
 			reinterpret_cast<void*>(sizeof(float) * 6 + sizeof(char) * 8));
 	}
-	else if (PosNormTangentTex)
+	else if (PosNormTexTangent)
 	{
 		// float 3個分　→　位置 x,y,z　位置属性をセット
 		glEnableVertexAttribArray(0);
@@ -131,7 +106,7 @@ VertexArray::VertexArray(const void* verts, unsigned int numVerts, Layout layout
 			reinterpret_cast<void*>(sizeof(float) * 6));
 
 		// 次のfloat 3個分 → 従法線 nx, ny, nz　従法線属性をセット
-		glEnableVertexAttribArray(2);
+		glEnableVertexAttribArray(3);
 		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, vertexSize,
 			reinterpret_cast<void*>(sizeof(float) * 8));
 	}
@@ -203,25 +178,6 @@ void VertexArray::CreateCubeMapVAO()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void VertexArray::CalcTangent(Vector3& destTangent, const Vector3& pos1, const Vector3& pos2, const Vector3& pos3,
-	const Vector2& uv1, const Vector2& uv2, const Vector2& uv3)
-{
-	Vector3 edge1, edge2;
-	edge1 = pos2 - pos1;
-	edge2 = pos3 - pos1;
-
-	Vector2 deltaUV1 = uv2 - uv1;
-	Vector2 deltaUV2 = uv3 - uv1;
-
-	float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
-
-	destTangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
-	destTangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
-	destTangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
-
-	destTangent.Normalize();
-}
-
 void VertexArray::SetActive()
 {
 	glBindVertexArray(mVertexArray);
@@ -230,24 +186,4 @@ void VertexArray::SetActive()
 void VertexArray::SetActiveCubeMap()
 {
 	glBindVertexArray(mCubeMapVertexArray);
-}
-
-void VertexArray::SetTangent(float* destfv, int index, const Vector3& tangent)
-{
-	destfv[index * 11 + 8 + 0] = tangent.x;
-	destfv[index * 11 + 8 + 1] = tangent.y;
-	destfv[index * 11 + 8 + 2] = tangent.z;
-}
-
-void VertexArray::GetPosVec(Vector3& destPos, const float* fv, int index)
-{
-	destPos.x = fv[index * 11 + 0];
-	destPos.y = fv[index * 11 + 1];
-	destPos.z = fv[index * 11 + 2];
-}
-
-void VertexArray::GetUVVec(Vector2& destUV, const float* fv, int index)
-{
-	destUV.x = fv[index * 11 + 6 + 0];
-	destUV.y = fv[index * 11 + 6 + 1];
 }

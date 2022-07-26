@@ -217,6 +217,7 @@
     <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="StaticBGActor.cpp" />
     <ClCompile Include="Tag.cpp" />
+    <ClCompile Include="Tank.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="ThirdPersonCameraActor.cpp" />
     <ClCompile Include="TitleScene.cpp" />
@@ -285,6 +286,7 @@
     <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="StaticBGActor.h" />
     <ClInclude Include="Tag.h" />
+    <ClInclude Include="Tank.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="ThirdPersonCameraActor.h" />
     <ClInclude Include="TitleScene.h" />
@@ -303,6 +305,8 @@
     <None Include="Shaders\Line.frag" />
     <None Include="Shaders\Line.vert" />
     <None Include="Shaders\LineWorld.vert" />
+    <None Include="Shaders\Normal.frag" />
+    <None Include="Shaders\Normal.vert" />
     <None Include="Shaders\Phong.frag" />
     <None Include="Shaders\Phong.vert" />
     <None Include="Shaders\ScreenBuffer.frag" />

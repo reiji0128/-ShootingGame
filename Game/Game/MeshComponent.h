@@ -65,6 +65,9 @@ protected:
 	// テクスチャのインデックス
 	size_t mTextureIndex;
 
+	// 法線マップのインデックス
+	size_t mNormalMapIndex;
+
 	// 表示フラグ
 	bool mVisible;
 

@@ -183,3 +183,9 @@ void Texture::SetActive()
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, mTextureID);
 }
+
+void Texture::SetActiveNormalMap()
+{
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, mTextureID);
+}

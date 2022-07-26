@@ -99,6 +99,7 @@ private:
 	std::unordered_map<std::string, class Mesh*>      mMeshs;             // メッシュ登録配列
 	std::vector<class MeshComponent*>                 mMeshComponents;    // メッシュコンポーネント登録配列
 	std::vector<class MeshComponent*>                 mHighLightMeshes;   // HDRメッシュ
+	std::vector<class MeshComponent*>                 mNoramlMeshes;
 	std::vector<class SkeletalMeshComponent*>         mSkeletalMeshes;    // スケルタルメッシュの描画に使われる
 	std::unordered_map<std::string, class Skeleton*>  mSkeletons;         // スケルタルデータ
 	std::unordered_map<std::string, class Animation*> mAnims;             // アニメーションデータ
@@ -114,6 +115,7 @@ private:
 	class Shader* mSkinnedDepthShader; // スキンメッシュのデプスシェーダー
 	class Shader* mShadowMapShader;    // シャドウマップシェーダー
 	class Shader* mHDRShader;          // HDRシェーダー
+	class Shader* mNormalShader;       // 法線マップシェーダー
 	class DepthMap* mDepthMapRenderer; // デプスレンダラー
 	class HDR* mHDRRenderer;           // HDRレンダラー
 

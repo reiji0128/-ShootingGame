@@ -387,6 +387,9 @@
     <ClCompile Include="CubeMapComponent.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Tank.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h">
@@ -581,6 +584,9 @@
     <ClInclude Include="CubeMapComponent.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Tank.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Sprite.frag">
@@ -656,6 +662,12 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="Shaders\HDRBloomBlend.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\Normal.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\Normal.vert">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

@@ -11,7 +11,7 @@ struct PointLight
     vec3 position;
     vec3 ambient;
     vec3 diffuse;
-    vec3 dpecular;
+    vec3 specular;
 };
 
 out VS_OUT
@@ -22,21 +22,23 @@ out VS_OUT
     vec3 TangentLightPos;
     vec3 TangentViewPos;
     vec3 TangentFragPos;
-}vx_out;
+}vs_out;
 
 uniform PointLight in_light;
 
-uniform mat4 model;      // モデル行列
-uniform mat4 view;       // ビュー行列
-uniform mat4 projection; // プロジェクション行列
-uniform vec3 viewPos;    // カメラの座標
+uniform mat4 uWorldTransform; // ワールド変換行列
+uniform mat4 view;            // ビュー行列
+uniform mat4 projection;      // プロジェクション行列
+uniform vec3 viewPos;         // カメラの座標
 
 void main()
 {
-    vs_out.FragPos = vec3(model * vec4(aPos,1.0));
+    // 位置を同時座標系に変換
+    vec4 pos = vec4(aPos,1.0);
+    // 位置をワールド空間に変換
+    vs_out.FragPos = vec3(pos * uWorldTransform);
     vs_out.TexCoords = aTexCoords;
-
-    mat3 normalMatrix = transpose(inverse(mat3(model)));
+    mat3 normalMatrix = transpose(inverse(mat3(uWorldTransform)));
 
     vec3 N = normalize(normalMatrix * aNormal);
     vec3 T = normalize(normalMatrix * aTangent);
@@ -49,7 +51,7 @@ void main()
     vs_out.Light = in_light;
     vs_out.TangentLightPos = TBN * in_light.position;
     vs_out.TangentViewPos = TBN * viewPos;
-    vs_out.TagngetFragPos = TBN * vs_out.FragPos;
+    vs_out.TangentFragPos = TBN * vs_out.FragPos;
 
-    gl_Position = projection * view * model * vec4(aPos,1.0);
+    gl_Position = pos * uWorldTransform *  view * projection;
 }

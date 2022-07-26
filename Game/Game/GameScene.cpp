@@ -16,6 +16,7 @@
 #include "ThirdPersonCameraActor.h";
 #include "Gun.h"
 #include "SphereObj.h"
+#include "Tank.h"
 
 
 GameScene::GameScene()
@@ -64,6 +65,8 @@ GameScene::GameScene()
 		               "Assets/Gun/SK_KA47.gpmesh",                   // gpMeshのファイルパス
 		                player->GetSkeltalMeshComp(),                 // アタッチ先のSkeltalMeshCompクラスのポインタ
 		               "LeftHandIndex4");                             // アタッチ先のボーン名
+
+	new Tank(Vector3(890, -50, 200), "Assets/Tank/TanksBricks_Cube.gpmesh");
 
     // カメラの生成
 	ThirdPersonCameraActor* camera = new ThirdPersonCameraActor(player);
