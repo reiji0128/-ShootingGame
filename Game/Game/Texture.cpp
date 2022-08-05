@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <vector>
 
 /// <summary>
 /// コンストラクタ
@@ -80,6 +81,63 @@ bool Texture::Load(const std::string& fileName)
 	return true;
 }
 
+bool Texture::LoadCubeMap(const std::string& fileName)
+{
+
+	// スカイボックスの各画像パス
+	std::vector<std::string> faces =
+	{
+		fileName + "right.png",
+		fileName + "left.png",
+		fileName + "top.png",
+		fileName + "bottom.png",
+		fileName + "front.png",
+		fileName + "back.png"
+	};
+
+	glGenTextures(1, &mTextureID);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, mTextureID);
+	
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	for (int i = 0; i < faces.size(); i++)
+	{
+		SDL_Surface* surf = IMG_Load(faces[i].c_str());
+		mWidth = surf->w;
+		mHeight = surf->h;
+
+		int channels = surf->format->BytesPerPixel;
+
+		// OpenGLにテクスチャ登録
+		int format = GL_RGB;
+		if (channels == 4)
+		{
+			format = GL_RGBA;
+		}
+
+		if (surf)
+		{
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, mWidth, mHeight, 0, format, GL_UNSIGNED_BYTE, surf->pixels);
+		}
+		else
+		{
+			printf("CubeMap tex failed to load at path : %s", faces[i].c_str());
+			return false;
+		}
+		// SDLサーフェスは不要なので解放
+		SDL_FreeSurface(surf);
+		printf(" Load Texture Success : %s \n", faces[i].c_str());
+	}
+
+	
+
+	return true;
+}
+
 /// <summary>
 /// テクスチャ解放処理
 /// </summary>
@@ -130,49 +188,6 @@ void Texture::CreateForRendering(int width, int height, unsigned int format)
 	//レンダリングするテクスチャに最近傍を使用
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-}
-
-bool Texture::CreateCubeMap(const std::string& fileName)
-{
-	unsigned int textureID;
-	// テクスチャの生成
-	glGenTextures(1, &textureID);
-	// テクスチャーターゲットにバインド
-	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
-
-	int textureWidth, textureHeight;
-	for (int i = 0; i < 6; i++)
-	{
-		SDL_Surface* surface = IMG_Load(fileName.c_str());
-		if (!surface)
-		{
-			printf("テクスチャ読み込みに失敗 %s", fileName.c_str());
-			SDL_FreeSurface(surface);
-			return false;
-		}
-		textureWidth = surface->w;
-		textureHeight = surface->h;
-
-		if (surface)
-		{
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, 
-				         textureWidth, textureHeight, 0, 
-				         GL_RGB, GL_UNSIGNED_BYTE, surface);
-		}
-		else
-		{
-			printf("キューブマップのファイル読み込みに失敗 %s", fileName.c_str());
-			SDL_FreeSurface(surface);
-			return false;
-		}
-	}
-
-	// テクスチャパラメーターの設定
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 }
 
 /// <summary>

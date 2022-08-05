@@ -20,6 +20,10 @@
 #include "VertexArray.h"
 #include <GL/glew.h>
 
+VertexArray::VertexArray()
+{
+}
+
 VertexArray::VertexArray(const void* verts, unsigned int numVerts, Layout layout,
 	const unsigned int* indices, unsigned int numIndices)
 	:mNumVerts(numVerts)
@@ -158,8 +162,8 @@ void VertexArray::CreateCubeMapVAO()
 	unsigned int cubeMapVBO, cubeMapEBO;
 
 	// 頂点配列の作成
-	glGenVertexArrays(1, &mCubeMapVertexArray);
-	glBindVertexArray(mCubeMapVertexArray);
+	glGenVertexArrays(1, &mVertexArray);
+	glBindVertexArray(mVertexArray);
 
 	// 頂点バッファの作成
 	glGenBuffers(1, &cubeMapVBO);
@@ -172,6 +176,7 @@ void VertexArray::CreateCubeMapVAO()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeMapIndices), &cubeMapIndices, GL_STATIC_DRAW);
 
 	// Attribute 0
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -181,9 +186,4 @@ void VertexArray::CreateCubeMapVAO()
 void VertexArray::SetActive()
 {
 	glBindVertexArray(mVertexArray);
-}
-
-void VertexArray::SetActiveCubeMap()
-{
-	glBindVertexArray(mCubeMapVertexArray);
 }

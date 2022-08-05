@@ -17,6 +17,7 @@
 #include "Gun.h"
 #include "SphereObj.h"
 #include "Tank.h"
+#include "SkyBox.h"
 
 
 GameScene::GameScene()
@@ -80,7 +81,8 @@ GameScene::GameScene()
 	// バックグラウンドの当たり判定の生成
 	new BGCollisionSetter("Assets/BackGround/CollisionBox.json");
 
-	
+	new SkyBox();
+
 	// ゲームシステムに当たり判定リストを登録する
 	GAMEINSTANCE.GetPhysics()->SetOneSideReactionCollisionPair(Tag::Enemy, Tag::Player);
 	GAMEINSTANCE.GetPhysics()->SetOneSideReactionCollisionPair(Tag::BackGround, Tag::Player);

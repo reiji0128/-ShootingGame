@@ -15,6 +15,7 @@
 #include "EffekseerEffect.h"
 #include "DepthMap.h"
 #include "HDR.h"
+#include "CubeMapComponent.h"
 
 Renderer::Renderer()
 	:mWindow(nullptr)
@@ -122,6 +123,9 @@ bool Renderer::Initialize(int screenWidth, int screenHeight, bool fullScreen)
 	CreateSpriteVerts();
 	// 体力ゲージ用の頂点配列を作成
 	CreateHealthGaugeVerts();
+	// キューブマップ用の頂点配列を作成
+	CreateCubeMapVerts();
+
 	// スクリーン全体を覆う頂点バッファオブジェクトを作成
 	unsigned int screenVAO;
 	ScreenVAOSetting(screenVAO);
@@ -205,34 +209,52 @@ void Renderer::Draw()
 	// ライト空間行列を取得
 	Matrix4 lightSpaceMat = mDepthMapRenderer->GetLightSpaceMatrix();
 
-	// デプスレンダリングパス開始
-	mDepthMapRenderer->DepthRenderingBegin();
+	//// デプスレンダリングパス開始
+	//mDepthMapRenderer->DepthRenderingBegin();
+	//{
+
+	//	// スタティックメッシュをデプスへレンダリング
+	//	mMeshDepthShader->SetActive();
+	//	mMeshDepthShader->SetMatrixUniform("lightSpaceMatrix", lightSpaceMat);
+	//	for (auto mc : mMeshComponents)
+	//	{
+	//		if (mc->GetVisible())
+	//		{
+	//			mc->Draw(mMeshDepthShader);
+	//		}
+	//	}
+
+	//	// スキンメッシュをデプスへレンダリング
+	//	mSkinnedDepthShader->SetActive();
+	//	mSkinnedDepthShader->SetMatrixUniform("uLightSpaceMat", lightSpaceMat);
+	//	for (auto sk : mSkeletalMeshes)
+	//	{
+	//		if (sk->GetVisible())
+	//		{
+	//			sk->Draw(mSkinnedDepthShader);
+	//		}
+	//	}
+	//}
+	//// デプスレンダリングの終了
+	//mDepthMapRenderer->DepthRenderingEnd();
+
+	if (mSkyBox != nullptr)
 	{
+		mSkyBoxShader->SetActive();
+		// ゲームの空間に合わせるためのオフセット行列をセット
+		Matrix4 offset = Matrix4::CreateRotationX(Math::ToRadians(90.0f));
 
-		// スタティックメッシュをデプスへレンダリング
-		mMeshDepthShader->SetActive();
-		mMeshDepthShader->SetMatrixUniform("lightSpaceMatrix", lightSpaceMat);
-		for (auto mc : mMeshComponents)
-		{
-			if (mc->GetVisible())
-			{
-				mc->Draw(mMeshDepthShader);
-			}
-		}
+		// Uniformに逆行列をセット
+		Matrix4 InvView = mView;
+		InvView.Invert();
+		InvView.Transpose();
+		mSkyBoxShader->SetMatrixUniform("uOffset", offset);
+		mSkyBoxShader->SetMatrixUniform("uProjection", mProjection);
+		mSkyBoxShader->SetMatrixUniform("uView", InvView);
+		mSkyBoxShader->SetIntUniform("uSkyBox", 0);
 
-		// スキンメッシュをデプスへレンダリング
-		mSkinnedDepthShader->SetActive();
-		mSkinnedDepthShader->SetMatrixUniform("uLightSpaceMat", lightSpaceMat);
-		for (auto sk : mSkeletalMeshes)
-		{
-			if (sk->GetVisible())
-			{
-				sk->Draw(mSkinnedDepthShader);
-			}
-		}
+		mSkyBox->Draw(mSkyBoxShader);
 	}
-	// デプスレンダリングの終了
-	mDepthMapRenderer->DepthRenderingEnd();
 
 	mNormalShader->SetActive();
 	mNormalShader->SetVectorUniform("in_light.position", mDirectionalLight.mDirection);
@@ -253,6 +275,8 @@ void Renderer::Draw()
 
 	//mHDRRenderer->HDRRenderingBegin();
 	//{
+	//	
+
 	//	// 通常レンダリング(シャドウ付き)
 	//	mShadowMapShader->SetActive();
 	//	// カメラの位置
@@ -547,6 +571,12 @@ void Renderer::CreateHealthGaugeVerts()
 	mHealthVerts = new VertexArray(vertices, 4, VertexArray::PosNormTex, indices, 6);
 }
 
+void Renderer::CreateCubeMapVerts()
+{
+	mCubeMapVerts = new VertexArray();
+	mCubeMapVerts->CreateCubeMapVAO();
+}
+
 void Renderer::ScreenVAOSetting(unsigned int& vao)
 {
 	unsigned int vbo;
@@ -764,6 +794,14 @@ bool Renderer::LoadShaders()
 	mNormalShader = new Shader();
 	if (!mNormalShader->Load("Shaders/Normal.vert", "Shaders/Normal.frag"))
 	{
+		return false;
+	}
+
+	// スカイボックスシェーダーのロード
+	mSkyBoxShader = new Shader();
+	if (!mSkyBoxShader->Load("Shaders/SkyBox.vert", "Shaders/SkyBox.frag"))
+	{
+		printf("スカイボックスシェーダーの読み込み失敗\n");
 		return false;
 	}
 

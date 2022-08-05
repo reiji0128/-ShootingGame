@@ -855,6 +855,9 @@ public:
 		return Matrix4(temp);
 	}
 	
+	// 転置行列
+	void Transpose();
+
 	static const Matrix4 Identity;
 };
 

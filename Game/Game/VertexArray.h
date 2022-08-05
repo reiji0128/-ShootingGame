@@ -18,6 +18,8 @@ public:
 		PosNormTexTangent,
 	};
 
+	VertexArray();
+
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -42,11 +44,6 @@ public:
 	/// 頂点配列をアクティイブにセット(描画で使用できるように)
 	/// </summary>
 	void SetActive();
-
-	/// <summary>
-	/// キューブマップの頂点配列をアクティブにセット(描画で使用できるように)
-	/// </summary>
-	void SetActiveCubeMap();
 
 // ゲッター //
 
@@ -77,7 +74,4 @@ private:
 
 	// 頂点配列オブジェクトID
 	unsigned int mVertexArray;
-
-	// キューブマップ用頂点配列オブジェクトID
-	unsigned int mCubeMapVertexArray;
 };

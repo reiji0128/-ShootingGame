@@ -43,6 +43,7 @@ public:
 		mAmbientLight = ambientColor;
 	}
 	void SetDepthSetting(const Vector3& centerPos, const Vector3& lightDir, const Vector3& upVec, const float lightDistance);
+	void SetActiveSkyBox(class CubeMapComponent* cubeMapComp) { mSkyBox = cubeMapComp; }
 	// ゲッター系
 	SDL_Renderer* GetSDLRenderer() { return mSDLRenderer; }                           // SDL系の描画に必要なSDLrendererを得る
 	class Texture* GetTexture(const std::string& fileName);                            // テクスチャをファイル名から返す
@@ -56,6 +57,8 @@ public:
 	DirectionalLight& GetDirectionalLight() { return mDirectionalLight; }                      // ディレクショナルライト
 	const Matrix4& GetViewMatrix() { return mView; }
 	const Matrix4& GetProjectionMatrix() { return mProjection; }
+	VertexArray* GetCubeMapVerts() { return mCubeMapVerts; }                             // キューブマップで使用するVertexArrayのポインタ
+
 
 	void                   AddMeshComponent(class MeshComponent* mesh, ShaderTag shaderTag);    // メッシュコンポーネントの追加
 	void                   RemoveMeshComponent(class MeshComponent* mesh,ShaderTag shaderTag);  // メッシュコンポーネントの削除
@@ -91,6 +94,7 @@ private:
 	void                                              SetLightUniforms(class Shader* shader); // ライト値をシェーダーにセット
 	void                                              CreateSpriteVerts();                    // スプライト頂点作成
 	void                                              CreateHealthGaugeVerts();               // 体力ゲージ用の頂点作成
+	void                                              CreateCubeMapVerts();                   // キューブマップの頂点作成
 	void                                              ScreenVAOSetting(unsigned int& vao);    // 画面全体を覆う頂点定義
 
 	int                                               mScreenWidth;       // スクリーン幅                                                           
@@ -101,6 +105,7 @@ private:
 	std::vector<class MeshComponent*>                 mHighLightMeshes;   // HDRメッシュ
 	std::vector<class MeshComponent*>                 mNoramlMeshes;
 	std::vector<class SkeletalMeshComponent*>         mSkeletalMeshes;    // スケルタルメッシュの描画に使われる
+	class CubeMapComponent* mSkyBox;
 	std::unordered_map<std::string, class Skeleton*>  mSkeletons;         // スケルタルデータ
 	std::unordered_map<std::string, class Animation*> mAnims;             // アニメーションデータ
 	std::vector<SpriteComponent*>                     mSprites;           // スプライトの描画に使われるスプライトコンポーネントのポインタの可変長コンテナ
@@ -116,6 +121,7 @@ private:
 	class Shader* mShadowMapShader;    // シャドウマップシェーダー
 	class Shader* mHDRShader;          // HDRシェーダー
 	class Shader* mNormalShader;       // 法線マップシェーダー
+	class Shader* mSkyBoxShader;       // スカイボックスシェーダー
 	class DepthMap* mDepthMapRenderer; // デプスレンダラー
 	class HDR* mHDRRenderer;           // HDRレンダラー
 
@@ -126,6 +132,7 @@ private:
 // スプライト頂点配列 //
 	class VertexArray* mSpriteVerts;
 	class VertexArray* mHealthVerts;
+	class VertexArray* mCubeMapVerts;
 
 // ライティング関連 //
 	Vector3                                           mAmbientLight;     // アンビエントライト

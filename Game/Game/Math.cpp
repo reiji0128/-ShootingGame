@@ -278,3 +278,17 @@ Vector3 zRotateToAimVec(const Vector3& nowVec, const Vector3& aimVec, float degr
 
 	return rotVec;
 }
+
+void Matrix4::Transpose()
+{
+	Matrix4 tmp;
+	tmp = *this;
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			mat[i][j] = tmp.mat[j][i];
+		}
+	}
+}

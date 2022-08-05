@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="CubeMapComponent.cpp" />
+    <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="SphereObj.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AttachMeshComponent.cpp" />
@@ -227,6 +228,7 @@
   <ItemGroup>
     <ClInclude Include="Actor.h" />
     <ClInclude Include="CubeMapComponent.h" />
+    <ClInclude Include="SkyBox.h" />
     <ClInclude Include="SphereObj.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AttachMeshComponent.h" />
@@ -316,6 +318,8 @@
     <None Include="Shaders\Skinned.vert" />
     <None Include="Shaders\SkinnedDepthMap.vert" />
     <None Include="Shaders\SkinnedShadowmap.vert" />
+    <None Include="Shaders\SkyBox.frag" />
+    <None Include="Shaders\SkyBox.vert" />
     <None Include="Shaders\Sphere.frag" />
     <None Include="Shaders\Sphere.vert" />
     <None Include="Shaders\Sprite.frag" />

@@ -1,7 +1,9 @@
 #pragma once
 #include "Component.h"
+#include <string>
 
 class Shader;
+class Texture;
 
 class CubeMapComponent : public Component
 {
@@ -9,7 +11,7 @@ public:
 	CubeMapComponent(Actor* owner);
 	~CubeMapComponent();
 
-	void CreateCubeMap();
+	void CreateTexture(const std::string& fileName);
 
 	void Draw(Shader* shader);
 
@@ -38,4 +40,6 @@ public:
 private:
 	// •\Ž¦ƒtƒ‰ƒO
 	bool mVisible;
+
+	Texture* mTexture;
 };

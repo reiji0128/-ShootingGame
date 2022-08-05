@@ -24,6 +24,16 @@ public:
 	bool Load(const std::string& fileName);
 
 	/// <summary>
+	/// キューブマップのロード
+	/// </summary>
+	/// <param name="fileName">キューブマップのファイルパス</param>
+	/// <returns>
+	/// true  : 読み込み成功
+	/// false : 読み込み失敗
+	/// </returns>
+	bool LoadCubeMap(const std::string& fileName);
+
+	/// <summary>
 	/// テクスチャ解放処理
 	/// </summary>
 	void Unload();
@@ -41,8 +51,6 @@ public:
 	/// <param name="height">テクスチャの高さ</param>
 	/// <param name="format">フォーマット</param>
 	void CreateForRendering(int width, int height, unsigned int format);
-
-	bool CreateCubeMap(const std::string& fileName);
 
 // セッター //
 	/// <summary>

@@ -19,6 +19,7 @@ enum class Tag : unsigned char
 	Camera,
 	Effect,
 	Weapon,
+	SkyBox,
 
 	End                 // Tagの終了マーカー　（Endより後に定義してはならない）
 };
