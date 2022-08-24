@@ -95,7 +95,10 @@ private:
 	void                                              CreateSpriteVerts();                    // スプライト頂点作成
 	void                                              CreateHealthGaugeVerts();               // 体力ゲージ用の頂点作成
 	void                                              CreateCubeMapVerts();                   // キューブマップの頂点作成
+	void                                              CreateQuadVAO();
 	void                                              ScreenVAOSetting(unsigned int& vao);    // 画面全体を覆う頂点定義
+	void                                              LightPass();                            // ライティングパス
+	void                                              RenderQuad();
 
 	int                                               mScreenWidth;       // スクリーン幅                                                           
 	int                                               mScreenHeight;      // スクリーン高さ
@@ -110,20 +113,27 @@ private:
 	std::unordered_map<std::string, class Animation*> mAnims;             // アニメーションデータ
 	std::vector<SpriteComponent*>                     mSprites;           // スプライトの描画に使われるスプライトコンポーネントのポインタの可変長コンテナ
 	std::unordered_map<const char16_t*, class EffekseerEffect*> mEffects; // エフェクト
+	std::vector<Vector3> mLightPos;
+	std::vector<Vector3> mLightColor;
+	const int mLightNum = 32;
 
 // シェーダー関連 //
-	class Shader* mSpriteShader;       // スプライトシェーダー
-	class Shader* mTilemapShader;      // タイルマップシェーダー
-	class Shader* mMeshShader;         // メッシュシェーダー
-	class Shader* mMeshDepthShader;    // メッシュのデプスシェーダー
-	class Shader* mSkinnedShader;      // スキンメッシュシェーダー
-	class Shader* mSkinnedDepthShader; // スキンメッシュのデプスシェーダー
-	class Shader* mShadowMapShader;    // シャドウマップシェーダー
-	class Shader* mHDRShader;          // HDRシェーダー
-	class Shader* mNormalShader;       // 法線マップシェーダー
-	class Shader* mSkyBoxShader;       // スカイボックスシェーダー
-	class DepthMap* mDepthMapRenderer; // デプスレンダラー
-	class HDR* mHDRRenderer;           // HDRレンダラー
+	class Shader* mSpriteShader;           // スプライトシェーダー
+	class Shader* mTilemapShader;          // タイルマップシェーダー
+	class Shader* mMeshShader;             // メッシュシェーダー
+	class Shader* mMeshDepthShader;        // メッシュのデプスシェーダー
+	class Shader* mSkinnedShader;          // スキンメッシュシェーダー
+	class Shader* mSkinnedDepthShader;     // スキンメッシュのデプスシェーダー
+	class Shader* mShadowMapShader;        // シャドウマップシェーダー
+	class Shader* mHDRShader;              // HDRシェーダー
+	class Shader* mNormalShader;           // 法線マップシェーダー
+	class Shader* mSkyBoxShader;           // スカイボックスシェーダー
+	class Shader* mGBufferShader;          // G-Bufferシェーダー
+	class Shader* mDeferredLightindShader; // ディファードライティングシェーダー
+
+	class DepthMap* mDepthMapRenderer;     // デプスレンダラー
+	class HDR* mHDRRenderer;               // HDRレンダラー
+	class GBuffer* mGBufferRenderer;       // GBufferレンダラー
 
 // 基本行列関連 //
 	Matrix4                                           mView;             // ビュー行列
@@ -133,6 +143,13 @@ private:
 	class VertexArray* mSpriteVerts;
 	class VertexArray* mHealthVerts;
 	class VertexArray* mCubeMapVerts;
+
+	// 頂点配列オブジェクトID
+	unsigned int mVertexArray;
+	// 頂点バッファID
+	unsigned int mVertexBuffer;
+	// インデックスID
+	unsigned int mIndexBuffer;
 
 // ライティング関連 //
 	Vector3                                           mAmbientLight;     // アンビエントライト

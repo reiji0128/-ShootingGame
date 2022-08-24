@@ -396,6 +396,9 @@
     <ClCompile Include="SkyBox.cpp">
       <Filter>ソース ファイル\SkyBox</Filter>
     </ClCompile>
+    <ClCompile Include="GBuffer.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h">
@@ -596,6 +599,9 @@
     <ClInclude Include="SkyBox.h">
       <Filter>ソース ファイル\SkyBox</Filter>
     </ClInclude>
+    <ClInclude Include="GBuffer.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Sprite.frag">
@@ -683,6 +689,15 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="Shaders\SkyBox.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\gBuffer.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\gBuffer.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\gBufferLightingPass.frag">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

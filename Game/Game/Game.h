@@ -10,7 +10,6 @@
 #include "math.h"
 #include "Tag.h"
 #include "CameraActor.h"
-
 class Game
 {
 private:

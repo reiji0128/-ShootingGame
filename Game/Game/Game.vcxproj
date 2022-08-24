@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="CubeMapComponent.cpp" />
+    <ClCompile Include="GBuffer.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="SphereObj.cpp" />
     <ClCompile Include="Animation.cpp" />
@@ -294,6 +295,7 @@
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="VertexArray.h" />
     <ClInclude Include="WallCollider.h" />
+    <ClInclude Include="GBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\BasicMesh.frag" />
@@ -302,6 +304,9 @@
     <None Include="Shaders\DepthMap.vert" />
     <None Include="Shaders\DownSampling.frag" />
     <None Include="Shaders\GaussBlur.frag" />
+    <None Include="Shaders\gBuffer.frag" />
+    <None Include="Shaders\gBuffer.vert" />
+    <None Include="Shaders\gBufferLightingPass.frag" />
     <None Include="Shaders\HDR.frag" />
     <None Include="Shaders\HDRBloomBlend.frag" />
     <None Include="Shaders\Line.frag" />

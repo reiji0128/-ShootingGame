@@ -79,7 +79,7 @@ void PlayerStateRun::MoveCalc(PlayerActor* owner, float deltaTime)
     Vector3 forwardVec = playerPos - cameraPos;
     forwardVec.z = 0.0f;
     forwardVec = Vector3::Normalize(forwardVec);
-
+	
     // 前方ベクトルとz軸から右方向ベクトルを算出
     Vector3 rightVec = Vector3::Cross(Vector3::UnitZ, forwardVec);
 

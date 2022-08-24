@@ -2,6 +2,7 @@
 #include "Game.h"
 #include <SDL.h>
 #include <SDL_image.h>
+#include <sstream>
 #include "Texture.h"
 #include "Mesh.h"
 #include "Shader.h"
@@ -16,6 +17,7 @@
 #include "DepthMap.h"
 #include "HDR.h"
 #include "CubeMapComponent.h"
+#include "GBuffer.h"
 
 Renderer::Renderer()
 	:mWindow(nullptr)
@@ -71,6 +73,8 @@ bool Renderer::Initialize(int screenWidth, int screenHeight, bool fullScreen)
 			printf("(%d, %d) サイズのフルスクリーン化に失敗\n", screenWidth, screenHeight);
 			return false;
 		}
+		mScreenWidth = 1920;
+		mScreenHeight = 1080;
 		glViewport(0, 0, mScreenWidth, mScreenHeight);
 	}
 
@@ -115,6 +119,10 @@ bool Renderer::Initialize(int screenWidth, int screenHeight, bool fullScreen)
 	mHDRRenderer = new HDR;
 	mHDRRenderer->CreateHDRBuffer();
 
+	// G-bufferレンダラーの初期化
+	mGBufferRenderer = new GBuffer;
+	mGBufferRenderer->CreateGbuffer();
+
 	// カリング
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
@@ -145,6 +153,19 @@ bool Renderer::Initialize(int screenWidth, int screenHeight, bool fullScreen)
 	mEffekseerManager->SetTextureLoader(mEffekseerRenderer->CreateTextureLoader());
 	mEffekseerManager->SetModelLoader(mEffekseerRenderer->CreateModelLoader());
 	mEffekseerManager->SetMaterialLoader(mEffekseerRenderer->CreateMaterialLoader());
+
+	for (int i = 0; i < mLightNum; i++)
+	{
+		Vector3 pos(rand() % 100 / 100.0f * 8 * 6,
+			        rand() % 100 / 100.0f * 3,
+			        rand() % 100 / 100.0f * -8 * 6);
+		mLightPos.push_back(pos);
+
+		Vector3 color(rand() % 100 / 100.0f,
+			          rand() % 100 / 100.0f,
+			          rand() % 100 / 100.0f);
+		mLightColor.push_back(color);
+	}
 
 	return true;
 }
@@ -190,6 +211,10 @@ void Renderer::Shutdown()
 		delete e.second;
 	}
 
+	delete mDepthMapRenderer;
+	delete mHDRRenderer;
+	delete mGBufferRenderer;
+
 	// Effekseer関連の破棄
 	mEffekseerManager.Reset();
 	mEffekseerRenderer.Reset();
@@ -208,6 +233,24 @@ void Renderer::Draw()
 
 	// ライト空間行列を取得
 	Matrix4 lightSpaceMat = mDepthMapRenderer->GetLightSpaceMatrix();
+
+	mGBufferRenderer->GBufferRenderingBegin();
+	{
+		mGBufferShader->SetActive();
+		mGBufferShader->SetMatrixUniform("uViewProj", mView * mProjection);
+		for (auto mc : mMeshComponents)
+		{
+			if (mc->GetVisible())
+			{
+				mc->Draw(mGBufferShader);
+			}
+		}
+	}
+	mGBufferRenderer->GBufferRenderingEnd();
+
+	LightPass();
+
+	//RenderQuad();
 
 	//// デプスレンダリングパス開始
 	//mDepthMapRenderer->DepthRenderingBegin();
@@ -238,40 +281,40 @@ void Renderer::Draw()
 	//// デプスレンダリングの終了
 	//mDepthMapRenderer->DepthRenderingEnd();
 
-	if (mSkyBox != nullptr)
-	{
-		mSkyBoxShader->SetActive();
-		// ゲームの空間に合わせるためのオフセット行列をセット
-		Matrix4 offset = Matrix4::CreateRotationX(Math::ToRadians(90.0f));
+	//if (mSkyBox != nullptr)
+	//{
+	//	mSkyBoxShader->SetActive();
+	//	// ゲームの空間に合わせるためのオフセット行列をセット
+	//	Matrix4 offset = Matrix4::CreateRotationX(Math::ToRadians(90.0f));
 
-		// Uniformに逆行列をセット
-		Matrix4 InvView = mView;
-		InvView.Invert();
-		InvView.Transpose();
-		mSkyBoxShader->SetMatrixUniform("uOffset", offset);
-		mSkyBoxShader->SetMatrixUniform("uProjection", mProjection);
-		mSkyBoxShader->SetMatrixUniform("uView", InvView);
-		mSkyBoxShader->SetIntUniform("uSkyBox", 0);
+	//	// Uniformに逆行列をセット
+	//	Matrix4 InvView = mView;
+	//	InvView.Invert();
+	//	InvView.Transpose();
+	//	mSkyBoxShader->SetMatrixUniform("uOffset", offset);
+	//	mSkyBoxShader->SetMatrixUniform("uProjection", mProjection);
+	//	mSkyBoxShader->SetMatrixUniform("uView", InvView);
+	//	mSkyBoxShader->SetIntUniform("uSkyBox", 0);
 
-		mSkyBox->Draw(mSkyBoxShader);
-	}
+	//	mSkyBox->Draw(mSkyBoxShader);
+	//}
 
-	mNormalShader->SetActive();
-	mNormalShader->SetVectorUniform("in_light.position", mDirectionalLight.mDirection);
-	mNormalShader->SetVectorUniform("in_light.diffuse", mDirectionalLight.mDiffuseColor);
-	mNormalShader->SetVectorUniform("in_light.specular", mDirectionalLight.mSpecColor);
-	mNormalShader->SetVectorUniform("in_light.ambient", mAmbientLight);
-	mNormalShader->SetMatrixUniform("view", mView);
-	mNormalShader->SetMatrixUniform("projection", mProjection);
-	mNormalShader->SetVectorUniform("viewPos", GAMEINSTANCE.GetViewPos());
-	mNormalShader->SetIntUniform("normalMap", 1);
-	for (auto sk : mNoramlMeshes)
-	{
-		if (sk->GetVisible())
-		{
-			sk->Draw(mNormalShader);
-		}
-	}
+	//mNormalShader->SetActive();
+	//mNormalShader->SetVectorUniform("in_light.position", mDirectionalLight.mDirection);
+	//mNormalShader->SetVectorUniform("in_light.diffuse", mDirectionalLight.mDiffuseColor);
+	//mNormalShader->SetVectorUniform("in_light.specular", mDirectionalLight.mSpecColor);
+	//mNormalShader->SetVectorUniform("in_light.ambient", mAmbientLight);
+	//mNormalShader->SetMatrixUniform("view", mView);
+	//mNormalShader->SetMatrixUniform("projection", mProjection);
+	//mNormalShader->SetVectorUniform("viewPos", GAMEINSTANCE.GetViewPos());
+	//mNormalShader->SetIntUniform("normalMap", 1);
+	//for (auto sk : mNoramlMeshes)
+	//{
+	//	if (sk->GetVisible())
+	//	{
+	//		sk->Draw(mNormalShader);
+	//	}
+	//}
 
 	//mHDRRenderer->HDRRenderingBegin();
 	//{
@@ -577,6 +620,46 @@ void Renderer::CreateCubeMapVerts()
 	mCubeMapVerts->CreateCubeMapVAO();
 }
 
+void Renderer::CreateQuadVAO()
+{
+	float vertices[] =
+	{
+		//   位置      |    uv座標
+		-1.0f,  1.0f,     0.0f, 1.0f,       // 左上  0
+		-1.0f, -1.0f,     0.0f, 0.0f,       // 左下  1
+		 1.0f,  1.0f,     1.0f, 1.0f,       // 右上  2
+		 1.0f, -1.0f,     1.0f, 0.0f,       // 右下  3
+	};
+
+	unsigned int indices[] =
+	{
+		0,1,2,
+		2,3,1
+	};
+
+	// 頂点配列の作成
+	glGenVertexArrays(1, &mVertexArray);
+	glBindVertexArray(mVertexArray);
+
+	// 頂点バッファの作成
+	glGenBuffers(1, &mVertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, mVertexArray);
+	glBufferData(GL_ARRAY_BUFFER, 4 * 4 * sizeof(float), vertices, GL_STATIC_DRAW);
+
+	// インデックスバッファの作成
+	glGenBuffers(1, &mIndexBuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
+
+	// Attribute 0 位置
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, 0);
+
+	// Attribute 1 uv座標
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, reinterpret_cast<void*>(sizeof(float) * 2));
+}
+
 void Renderer::ScreenVAOSetting(unsigned int& vao)
 {
 	unsigned int vbo;
@@ -598,6 +681,53 @@ void Renderer::ScreenVAOSetting(unsigned int& vao)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+}
+
+void Renderer::LightPass()
+{
+	// スクリーンをクリア
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	mGBufferRenderer->InputGBufferToShader(mDeferredLightindShader);
+
+	mDeferredLightindShader->SetActive();
+	mDeferredLightindShader->SetMatrixUniform("uViewProj", mView * mProjection);
+
+	for (int i = 0; i < mLightNum; i++)
+	{
+		std::string valiableName;
+		std::ostringstream v;
+		v << i;
+
+		valiableName = "uLights[" + v.str() + "].Position";
+		mDeferredLightindShader->SetVectorUniform(valiableName.c_str(), mLightPos[i]);
+
+		valiableName = "uLights[" + v.str() + "].Color";
+		mDeferredLightindShader->SetVectorUniform(valiableName.c_str(), mLightColor[i]);
+	}
+	mDeferredLightindShader->SetVectorUniform("uViewPos", GAMEINSTANCE.GetViewPos());
+	
+}
+
+void Renderer::RenderQuad()
+{
+	glEnable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
+	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
+
+	mDeferredLightindShader->SetActive();
+	glActiveTexture(GL_TEXTURE0);
+	glBindVertexArray(mVertexArray);
+	glBindTexture(GL_TEXTURE_2D, mGBufferRenderer->GetGBufferID());
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glDisable(GL_BLEND);
 }
 
 
@@ -802,6 +932,22 @@ bool Renderer::LoadShaders()
 	if (!mSkyBoxShader->Load("Shaders/SkyBox.vert", "Shaders/SkyBox.frag"))
 	{
 		printf("スカイボックスシェーダーの読み込み失敗\n");
+		return false;
+	}
+
+	// GBufferスシェーダーのロード
+	mGBufferShader = new Shader();
+	if (!mGBufferShader->Load("Shaders/gBuffer.vert", "Shaders/gBuffer.frag"))
+	{
+		printf("gBufferシェーダーの読み込み失敗\n");
+		return false;
+	}
+
+	// ディファードライティングシェーダーのロード
+	mDeferredLightindShader = new Shader();
+	if (!mDeferredLightindShader->Load("Shaders/ScreenBuffer.vert", "Shaders/gBufferLightingPass.frag"))
+	{
+		printf("ディファードライティングシェーダー読み込み失敗\n");
 		return false;
 	}
 
