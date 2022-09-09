@@ -1,7 +1,7 @@
 #version 330
 
 // 頂点シェーダーからテクスチャ座標を入力
-in vec2 fragTexCoord;
+in vec2 TexCoords;
 
 // カラーバッファへの出力色
 out vec4 outColor;
@@ -12,5 +12,5 @@ uniform sampler2D uTexture;
 void main()
 {
 	// テクスチャからのサンプルカラー
-    	outColor = texture(uTexture, fragTexCoord);
+    	outColor = texture(uTexture, TexCoords);
 }

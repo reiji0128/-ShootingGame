@@ -92,6 +92,12 @@ void PlayerActor::UpdateActor(float deltaTime)
 
 	// ステート実行
 	mNextState = mStatePools[static_cast<unsigned int>(mNowState)]->Update(this, deltaTime);
+	//printf("%f,%f,%f\n", mPosition.x, mPosition.y, mPosition.z);
+	if (INPUT_INSTANCE.GetInput(KEY_SPACE) == KEY_STATE_PRESSED)
+	{
+		mPosition.z += 10;
+	}
+
 	
 	// ステート内部から変更があったか
 	if (mNowState != mNextState)
@@ -108,80 +114,71 @@ void PlayerActor::UpdateActor(float deltaTime)
 /// <param name="otherCollider"></param>
 void PlayerActor::OnCollisionEnter(ColliderComponent* ownCollider, ColliderComponent* otherCollider)
 {
-	Tag colliderTag = otherCollider->GetTag();
+	//Tag colliderTag = otherCollider->GetTag();
 
-	//衝突情報
-	CollisionInfo info;
+	////衝突情報
+	//CollisionInfo info;
 
-	// 背景と衝突した?
-	if (colliderTag == Tag::BackGround)
-	{
-		// 衝突背景はBox?
-		if (otherCollider->GetColliderType() == ColliderTypeEnum::Box)
-		{
-			// 背景Boxに衝突したのはLine?
-			if (ownCollider == mLineCollider)
-			{
-				//落下しているときのみ判定
-				if (mVelocity.z < 0.0f)
-				{
-					info = ownCollider->GetCollisionInfo();
-					mPosition = info.mCollisionPoint;
-					mIsOnGround = true;
-				}
-			}
-
-			// 足元コライダー
-			if (ownCollider == mLineCollider)
-			{
-				info = ownCollider->GetCollisionInfo();
-				mPosition = info.mCollisionPoint;
-				mIsOnGround = true;
-				ComputeWorldTransform();
-			}
-
-			// 背景Boxに衝突したのもBox？
-			if (ownCollider->GetColliderType() == ColliderTypeEnum::Box)
-			{
-				//ヒットボックス？
-				if (ownCollider == mBoxCollider)
-				{
-					info = ownCollider->GetCollisionInfo();
-
-					mPosition += info.mFixVec;
-					ComputeWorldTransform();
-				}
-			}
-		}
-	}
-
-	// エネミーとぶつかったか
-	if (colliderTag == Tag::Enemy)
-	{
-		if (ownCollider == mBoxCollider)
-		{
-			info = ownCollider->GetCollisionInfo();
-			mPosition += info.mFixVec;
-			ComputeWorldTransform();
-		}
-	}
-
-	if (colliderTag == Tag::Altar)
-	{
-		if (ownCollider == mBoxCollider)
-		{
-			info = ownCollider->GetCollisionInfo();
-			mPosition += info.mFixVec;
-			ComputeWorldTransform();
-		}
-	}
-
-	//// プレイヤーの攻撃とぶつかった?
-	//if (colliderTag == Tag::EnemyBullet)
+	//// 背景と衝突した?
+	//if (colliderTag == Tag::BackGround)
 	//{
-	//	if (ownCollider == mHitBox)
+	//	// 衝突背景はBox?
+	//	if (otherCollider->GetColliderType() == ColliderTypeEnum::Box)
 	//	{
-	//		mIsHitTrig = true;
+	//		// 背景Boxに衝突したのはLine?
+	//		if (ownCollider == mLineCollider)
+	//		{
+	//			//落下しているときのみ判定
+	//			if (mVelocity.z < 0.0f)
+	//			{
+	//				info = ownCollider->GetCollisionInfo();
+	//				mPosition = info.mCollisionPoint;
+	//				mIsOnGround = true;
+	//			}
+	//		}
+
+	//		// 足元コライダー
+	//		if (ownCollider == mLineCollider)
+	//		{
+	//			info = ownCollider->GetCollisionInfo();
+	//			mPosition = info.mCollisionPoint;
+	//			mIsOnGround = true;
+	//			ComputeWorldTransform();
+	//		}
+
+	//		// 背景Boxに衝突したのもBox？
+	//		if (ownCollider->GetColliderType() == ColliderTypeEnum::Box)
+	//		{
+	//			//ヒットボックス？
+	//			if (ownCollider == mBoxCollider)
+	//			{
+	//				info = ownCollider->GetCollisionInfo();
+
+	//				mPosition += info.mFixVec;
+	//				ComputeWorldTransform();
+	//			}
+	//		}
+	//	}
+	//}
+
+	//// エネミーとぶつかったか
+	//if (colliderTag == Tag::Enemy)
+	//{
+	//	if (ownCollider == mBoxCollider)
+	//	{
+	//		info = ownCollider->GetCollisionInfo();
+	//		mPosition += info.mFixVec;
+	//		ComputeWorldTransform();
+	//	}
+	//}
+
+	//if (colliderTag == Tag::Altar)
+	//{
+	//	if (ownCollider == mBoxCollider)
+	//	{
+	//		info = ownCollider->GetCollisionInfo();
+	//		mPosition += info.mFixVec;
+	//		ComputeWorldTransform();
 	//	}
 	//}
 }

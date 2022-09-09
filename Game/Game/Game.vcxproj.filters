@@ -700,5 +700,26 @@
     <None Include="Shaders\gBufferLightingPass.frag">
       <Filter>Shader</Filter>
     </None>
+    <None Include="Shaders\gBufferLightingPass.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\PointLight.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\DirectionalLight.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\LightingSphere.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\LightingSphere.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\PointLight.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\DirectionalLight.vert">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

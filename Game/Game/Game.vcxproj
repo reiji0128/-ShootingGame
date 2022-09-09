@@ -302,13 +302,18 @@
     <None Include="Shaders\BasicMesh.vert" />
     <None Include="Shaders\DepthMap.frag" />
     <None Include="Shaders\DepthMap.vert" />
+    <None Include="Shaders\DirectionalLight.frag" />
+    <None Include="Shaders\DirectionalLight.vert" />
     <None Include="Shaders\DownSampling.frag" />
     <None Include="Shaders\GaussBlur.frag" />
     <None Include="Shaders\gBuffer.frag" />
     <None Include="Shaders\gBuffer.vert" />
     <None Include="Shaders\gBufferLightingPass.frag" />
+    <None Include="Shaders\gBufferLightingPass.vert" />
     <None Include="Shaders\HDR.frag" />
     <None Include="Shaders\HDRBloomBlend.frag" />
+    <None Include="Shaders\LightingSphere.frag" />
+    <None Include="Shaders\LightingSphere.vert" />
     <None Include="Shaders\Line.frag" />
     <None Include="Shaders\Line.vert" />
     <None Include="Shaders\LineWorld.vert" />
@@ -316,6 +321,8 @@
     <None Include="Shaders\Normal.vert" />
     <None Include="Shaders\Phong.frag" />
     <None Include="Shaders\Phong.vert" />
+    <None Include="Shaders\PointLight.frag" />
+    <None Include="Shaders\PointLight.vert" />
     <None Include="Shaders\ScreenBuffer.frag" />
     <None Include="Shaders\ScreenBuffer.vert" />
     <None Include="Shaders\Shadowmap.frag" />

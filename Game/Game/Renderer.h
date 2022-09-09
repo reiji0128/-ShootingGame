@@ -42,6 +42,7 @@ public:
 	{
 		mAmbientLight = ambientColor;
 	}
+	void SetDirectionalLight(const DirectionalLight& directionalLight) { mDirectionalLight = directionalLight; }
 	void SetDepthSetting(const Vector3& centerPos, const Vector3& lightDir, const Vector3& upVec, const float lightDistance);
 	void SetActiveSkyBox(class CubeMapComponent* cubeMapComp) { mSkyBox = cubeMapComp; }
 	// ゲッター系
@@ -95,10 +96,14 @@ private:
 	void                                              CreateSpriteVerts();                    // スプライト頂点作成
 	void                                              CreateHealthGaugeVerts();               // 体力ゲージ用の頂点作成
 	void                                              CreateCubeMapVerts();                   // キューブマップの頂点作成
-	void                                              CreateQuadVAO();
+	void                                              CreateQuadVAO();                        // 四角形の頂点配列作成
+	void                                              CreateLightFBO();                       // ライト結果書き込み用のフレームバッファの作成
 	void                                              ScreenVAOSetting(unsigned int& vao);    // 画面全体を覆う頂点定義
-	void                                              LightPass();                            // ライティングパス
-	void                                              RenderQuad();
+	void                                              PointLightPass();                       // ポイントライトパス
+	void                                              DirectionalLightPass();
+	void                                              RenderQuad();                           // 四角形の描画
+	void                                              DeferredRendering();                    // ディファードレンダリング
+	void                                              CalcAttenuationLightRadius(const float constant,const float linear,const float quadratic);           // ライトの減衰半径の計算  
 
 	int                                               mScreenWidth;       // スクリーン幅                                                           
 	int                                               mScreenHeight;      // スクリーン高さ
@@ -129,7 +134,11 @@ private:
 	class Shader* mNormalShader;           // 法線マップシェーダー
 	class Shader* mSkyBoxShader;           // スカイボックスシェーダー
 	class Shader* mGBufferShader;          // G-Bufferシェーダー
-	class Shader* mDeferredLightindShader; // ディファードライティングシェーダー
+	class Shader* mDeferredLightingShader; // ディファードライティングシェーダー
+	class Shader* mLightingShader;
+	class Shader* mPointLightShader;       // ポイントライトシェーダー
+	class Shader* mDirectionalLightShader;
+	class Shader* mDebugShader;
 
 	class DepthMap* mDepthMapRenderer;     // デプスレンダラー
 	class HDR* mHDRRenderer;               // HDRレンダラー
@@ -151,9 +160,15 @@ private:
 	// インデックスID
 	unsigned int mIndexBuffer;
 
+	// フレームバッファID
+	unsigned int mLightFBO;
+
+
 // ライティング関連 //
 	Vector3                                           mAmbientLight;     // アンビエントライト
 	DirectionalLight                                  mDirectionalLight; // ディレクショナルライト
+
+	std::vector<float> lightRadius;// ライトの減衰半径
 
 // レンダリングベース情報関連 //
 	SDL_Window* mWindow;             // SDLウィンドウハンドル 

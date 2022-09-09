@@ -197,16 +197,16 @@ void PlayerStateRun::RotateActor()
 
 void PlayerStateRun::Fire(class PlayerActor* owner, float deltaTime)
 {
-	// ’e‚ð”­ŽË
-	if (INPUT_INSTANCE.GetInput(KEY_SPACE) == KEY_STATE_PUSHDOWN)
-	{
-		//”­ŽËˆÊ’u‚ðŒvŽZ
-		Vector3 firePos;
-		firePos = owner->GetDirection() * 100.0f;
-		firePos.z = 100.0f;
+	//// ’e‚ð”­ŽË
+	//if (INPUT_INSTANCE.GetInput(KEY_SPACE) == KEY_STATE_PUSHDOWN)
+	//{
+	//	//”­ŽËˆÊ’u‚ðŒvŽZ
+	//	Vector3 firePos;
+	//	firePos = owner->GetDirection() * 100.0f;
+	//	firePos.z = 100.0f;
 
-		//ƒvƒŒƒCƒ„[’e‚ð¶¬
-		BulletActor* ba = new BulletActor(firePos + owner->GetPosition(), owner->GetDirection(),
-			Tag::PlayerBullet, 1000.0f, 10000.0f);
-	}
+	//	//ƒvƒŒƒCƒ„[’e‚ð¶¬
+	//	BulletActor* ba = new BulletActor(firePos + owner->GetPosition(), owner->GetDirection(),
+	//		Tag::PlayerBullet, 1000.0f, 10000.0f);
+	//}
 }

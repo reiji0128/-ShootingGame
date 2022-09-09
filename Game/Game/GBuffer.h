@@ -20,11 +20,10 @@ public:
 
 	void CreateGbuffer();
 
-	void InputGBufferToShader(Shader* shader);
+	void InputGBufferToShader();
 
-	unsigned int GetGBufferID() { return mGbuffer; }
-
-
+// ゲッター　//
+	unsigned int GetGBufferID() const { return mGbuffer; }
 
 private:
 	int mScreenWidth;
@@ -33,5 +32,5 @@ private:
 
 	unsigned int mGbuffer;
 
-	unsigned int mPosition, mNormal, mAlbedoSpec, mRenderBufferObject;
+	unsigned int gPosition, gNormal, gAlbedoSpec, gRenderBuffer;
 };

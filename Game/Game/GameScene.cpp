@@ -49,6 +49,7 @@ GameScene::GameScene()
 	dir.mDiffuseColor = Vector3(0.78f, 0.88f, 1.0f);
 	dir.mSpecColor = Vector3(0.8f, 0.8f, 0.8f);
 	Vector3 lightDir = dir.mDirection;
+	RENDERER->SetDirectionalLight(dir);
 	RENDERER->SetDepthSetting(Vector3(890, -130, 20), lightDir, Vector3::UnitZ, mLightDistance);
 
 	mTex = new Texture;
@@ -60,12 +61,12 @@ GameScene::GameScene()
 	                         "Assets/Player/SpecialForces.gpmesh",  // gpMeshのファイルパス
 	                         "Assets/Player/SpecialForces.gpskel"); // gpSkelのファイルパス
 	
-	// 銃の生成
-	Gun* gun = new Gun(Vector3(90, -40, 140),                         // オフセット位置
-		               Vector3(-15, 130, 0),                          // オフセット角度(radian)
-		               "Assets/Gun/SK_KA47.gpmesh",                   // gpMeshのファイルパス
-		                player->GetSkeltalMeshComp(),                 // アタッチ先のSkeltalMeshCompクラスのポインタ
-		               "LeftHandIndex4");                             // アタッチ先のボーン名
+	//// 銃の生成
+	//Gun* gun = new Gun(Vector3(90, -40, 140),                         // オフセット位置
+	//	               Vector3(-15, 130, 0),                          // オフセット角度(radian)
+	//	               "Assets/Gun/SK_KA47.gpmesh",                   // gpMeshのファイルパス
+	//	                player->GetSkeltalMeshComp(),                 // アタッチ先のSkeltalMeshCompクラスのポインタ
+	//	               "LeftHandIndex4");                             // アタッチ先のボーン名
 
 	new Tank(Vector3(890, -50, 200), "Assets/Tank/TanksBricks_Cube.gpmesh");
 
@@ -81,7 +82,7 @@ GameScene::GameScene()
 	// バックグラウンドの当たり判定の生成
 	new BGCollisionSetter("Assets/BackGround/CollisionBox.json");
 
-	new SkyBox();
+	//new SkyBox();
 
 	// ゲームシステムに当たり判定リストを登録する
 	GAMEINSTANCE.GetPhysics()->SetOneSideReactionCollisionPair(Tag::Enemy, Tag::Player);

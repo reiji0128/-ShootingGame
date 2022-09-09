@@ -21,8 +21,9 @@ ThirdPersonCameraActor::ThirdPersonCameraActor(Actor* targetActor)
 	:CameraActor(targetActor)
 	, mCameraLength(0.0f)
 	,mRotateZAngle(0.0f)
-	,mLookDownAngle()
+	,mLookDownAngle(minLookDownAngle)
 {
+	Initialize();
 }
 
 /// <summary>
@@ -30,6 +31,27 @@ ThirdPersonCameraActor::ThirdPersonCameraActor(Actor* targetActor)
 /// </summary>
 ThirdPersonCameraActor::~ThirdPersonCameraActor()
 {
+}
+
+void ThirdPersonCameraActor::Initialize()
+{
+	Vector3 playerPos = mTargetActor->GetPosition();
+
+	mCameraLength = 800.0f;
+
+	// ヨー回転・ピッチ回転
+	Vector3 rotatePos;
+	rotatePos.x = mCameraLength * cosf(mLookDownAngle) * cosf(mRotateZAngle);
+	rotatePos.y = mCameraLength * cosf(mLookDownAngle) * sinf(mRotateZAngle);
+	rotatePos.z = mCameraLength * sinf(mLookDownAngle);
+
+	// 注視点・カメラ位置をセット
+	mPosition = rotatePos + playerPos;
+	mViewTarget = playerPos;
+
+	// カメラ行列作成
+	Matrix4 camMat = Matrix4::CreateLookAt(mPosition, mViewTarget, Vector3(0, 0, 1));
+	RENDERER->SetViewMatrix(camMat);
 }
 
 /// <summary>

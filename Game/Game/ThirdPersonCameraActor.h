@@ -14,6 +14,8 @@ public:
 	/// </summary>
 	~ThirdPersonCameraActor();
 
+	void Initialize();
+
 	/// <summary>
 	/// アクターの更新処理
 	/// </summary>
