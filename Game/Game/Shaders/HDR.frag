@@ -12,13 +12,17 @@ uniform float exposure;
 
 void main()
 {
-	const float gamma = 2.2;
-	vec3 hdrColor = texture(uHDRBuffer,fragTexCoord).rgb;
+//	const float gamma = 2.2;
+//	vec3 hdrColor = texture(uHDRBuffer,fragTexCoord).rgb;
+//
+//	// 露出トーンマッピング
+//	vec3 mapped = vec3(1.0) -exp(-hdrColor * exposure);
+//	// ガンマコレクション
+//	mapped = pow(mapped,vec3(1.0 / gamma));
+//
+//	outColor = vec4(mapped,1.0);
 
-	// 露出トーンマッピング
-	vec3 mapped = vec3(1.0) -exp(-hdrColor * exposure);
-	// ガンマコレクション
-	mapped = pow(mapped,vec3(1.0 / gamma));
+	vec3 result = texture(uHDRBuffer,fragTexCoord).rgb;
 
-	outColor = vec4(mapped,1.0);
+	outColor = vec4(result,1.0);
 }

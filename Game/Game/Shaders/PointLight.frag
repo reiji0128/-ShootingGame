@@ -50,9 +50,8 @@ void main()
 
 	// ライトとの距離
 	float l_distance = length(uLight.position - Position);
-//	float attenuation = 1.0 / (uLight.constant + uLight.linear * l_distance + 
-//	                           uLight.quadratic * (l_distance * l_distance));
-	float attenuation = max(1.0f - l_distance / 500.0f, 0.0f);
+	float attenuation = max(1.0f - l_distance / 100.0f, 0.0f);
+
 	// ディフューズ
 	vec3  norm     = normalize(Normal);
 	vec3  lightDir = normalize(uLight.position - Position);

@@ -35,7 +35,7 @@ GameScene::GameScene()
 
 	// 行列初期化
 	Matrix4 proj;
-	proj = Matrix4::CreatePerspectiveFOV(Math::ToRadians(45.0f), GAMEINSTANCE.GetRenderer()->GetScreenWidth(), GAMEINSTANCE.GetRenderer()->GetScreenHeight(), 1.0, 10000.0f);
+	proj = Matrix4::CreatePerspectiveFOV(Math::ToRadians(75.0f), GAMEINSTANCE.GetRenderer()->GetScreenWidth(), GAMEINSTANCE.GetRenderer()->GetScreenHeight(), 1.0, 10000.0f);
 	GAMEINSTANCE.GetRenderer()->SetProjMatrix(proj);
 
 	//デバッググリッド
@@ -54,6 +54,11 @@ GameScene::GameScene()
 
 	mTex = new Texture;
 	mTex = RENDERER->GetTexture("Assets/Player/Health.png");
+
+	//player = new PlayerActor(Vector3(2286, 684, 1165),                 // 座標
+	//	1.0f,                                  // スケール
+	//	"Assets/Player/SpecialForces.gpmesh",  // gpMeshのファイルパス
+	//	"Assets/Player/SpecialForces.gpskel"); // gpSkelのファイルパス
 
 	// プレイヤーの生成
 	player = new PlayerActor(Vector3(890, -50, -55),                 // 座標

@@ -120,7 +120,7 @@ private:
 	std::unordered_map<const char16_t*, class EffekseerEffect*> mEffects; // エフェクト
 	std::vector<Vector3> mLightPos;
 	std::vector<Vector3> mLightColor;
-	const int mLightNum = 32;
+	int mLightNum;
 
 // シェーダー関連 //
 	class Shader* mSpriteShader;           // スプライトシェーダー
@@ -138,7 +138,7 @@ private:
 	class Shader* mLightingShader;
 	class Shader* mPointLightShader;       // ポイントライトシェーダー
 	class Shader* mDirectionalLightShader;
-	class Shader* mDebugShader;
+	class Shader* mToneMapShader;
 
 	class DepthMap* mDepthMapRenderer;     // デプスレンダラー
 	class HDR* mHDRRenderer;               // HDRレンダラー
@@ -162,7 +162,7 @@ private:
 
 	// フレームバッファID
 	unsigned int mLightFBO;
-
+	unsigned int mLightHDRTex;
 
 // ライティング関連 //
 	Vector3                                           mAmbientLight;     // アンビエントライト

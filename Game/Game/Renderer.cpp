@@ -158,6 +158,8 @@ bool Renderer::Initialize(int screenWidth, int screenHeight, bool fullScreen)
 	mEffekseerManager->SetModelLoader(mEffekseerRenderer->CreateModelLoader());
 	mEffekseerManager->SetMaterialLoader(mEffekseerRenderer->CreateMaterialLoader());
 
+	mLightNum = 3000;
+
 	for (int i = 0; i < mLightNum; i++)
 	{
 		Vector3 pos((rand() % (2309 - -474 + 1)) + -474,
@@ -237,23 +239,28 @@ void Renderer::Draw()
 
 	DeferredRendering();
 
-	
+	glEnable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
+	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
 
+	mToneMapShader->SetActive();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, mLightHDRTex);
+	mToneMapShader->SetIntUniform("uHDRBuffer", 0);
+	mToneMapShader->SetFloatUniform("exposure", 0.3);
+	glBindVertexArray(mVertexArray);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
-	/*mLightingShader->SetActive();
-	mLightingShader->SetMatrixUniform("projection", mProjection);
-	mLightingShader->SetMatrixUniform("view", mView);
-	mLightingShader->SetMatrixUniform("uViewProj", mView * mProjection);
-	for (int i = 0; i < mLightPos.size(); i++)
-	{
-		for (auto mc : mHighLightMeshes)
-		{
-			mLightingShader->SetVectorUniform("lightColor", mLightColor[i]);
-			Matrix4 trans = Matrix4::CreateTranslation(mLightPos[i]);
-			mLightingShader->SetMatrixUniform("model", trans);
-			mc->Draw(mLightingShader);
-		}
-	}*/
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glDisable(GL_BLEND);
+
+	 //加算合成を無効
+	glDisablei(GL_BLEND, 0);
 
 	//Matrix4 lightSpaceMat = mDepthMapRenderer->GetLightSpaceMatrix();
 
@@ -668,19 +675,19 @@ void Renderer::CreateQuadVAO()
 
 void Renderer::CreateLightFBO()
 {
-	unsigned int lightHDRTex, lightRBO;
+	unsigned int lightRBO;
 
 	glGenFramebuffers(1, &mLightFBO);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, mLightFBO);
 
 	// HDRテクスチャの作成
-	glGenTextures(1, &lightHDRTex);
-	glBindTexture(GL_TEXTURE_2D, lightHDRTex);
+	glGenTextures(1, &mLightHDRTex);
+	glBindTexture(GL_TEXTURE_2D, mLightHDRTex);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, mScreenWidth, mScreenHeight, 0, GL_RGBA, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,lightHDRTex,0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mLightHDRTex,0);
 
 	// OpenGLにカラーテクスチャアタッチメント0を使用することを伝える
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
@@ -726,7 +733,7 @@ void Renderer::PointLightPass()
 	MeshComponent* sphereMesh = mHighLightMeshes[0];
 
 	// ビュー行列の設定
-	mProjection = Matrix4::CreatePerspectiveFOV(Math::ToRadians(45.0f),
+	mProjection = Matrix4::CreatePerspectiveFOV(Math::ToRadians(75.0f),
 		static_cast<float>(mScreenWidth),
 		static_cast<float>(mScreenHeight),
 		1.0f, 10000.0f);
@@ -875,8 +882,6 @@ void Renderer::DeferredRendering()
 
 		DirectionalLightPass();
 
-		// 加算合成を無効
-		glDisablei(GL_BLEND, 0);
 	}
 	// ライティングパス終了
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -1141,6 +1146,13 @@ bool Renderer::LoadShaders()
 	{
 		printf("ディレクショナルライトシェーダー読み込み失敗\n");
 		return false;
+	}
+
+	// スクリーンバッファーシェーダーのロード
+	mToneMapShader= new Shader();
+	if (!mToneMapShader->Load("Shaders/ScreenBuffer.vert", "Shaders/HDR.frag"))
+	{
+		printf("トーンマップシェーダーの読み込み失敗\n");
 	}
 
 	return true;
