@@ -20,4 +20,5 @@ void main()
 	gAlbedoSpec.rgb = texture(uDiffuse,TexCoords).rgb;
 	// スペキュラ強度をアルベドのa要素に保存
 	//gAlbedoSpec.a = texture(uSpecular,TexCoords).r;
+	gAlbedoSpec.a = 0.1;
 }

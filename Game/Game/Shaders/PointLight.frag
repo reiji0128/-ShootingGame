@@ -34,6 +34,9 @@ uniform sampler2D gAlbedoSpec;
 // 視点
 uniform vec3      uViewPos;
 
+// 輝度
+uniform float luminance;
+
 // uv座標
 in vec2 TexCoords;
 // フラグメントの出力
@@ -71,8 +74,17 @@ void main()
 	diffuse       *= attenuation;
 	specular      *= attenuation;
 
-	vec3 result   = ambient + diffuse + specular;
-
-	FragColor     = vec4(result,1.0);
-
+	vec3 result   = (ambient + diffuse + specular) * luminance;
+	
+	// ピクセルの輝度を求める
+	float brightness = dot(result,vec3(0.2126, 0.7152, 0.0722));
+	if(brightness > 0.8)
+	{
+		BrightBuffer = vec4(result, 0.0f);
+	}
+	else
+	{
+		BrightBuffer = vec4(0.0f,0.0f,0.0f,0.0f);
+	}
+	FragBuffer = vec4(result,1.0);
 }

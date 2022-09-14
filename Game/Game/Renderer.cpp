@@ -158,13 +158,13 @@ bool Renderer::Initialize(int screenWidth, int screenHeight, bool fullScreen)
 	mEffekseerManager->SetModelLoader(mEffekseerRenderer->CreateModelLoader());
 	mEffekseerManager->SetMaterialLoader(mEffekseerRenderer->CreateMaterialLoader());
 
-	mLightNum = 3000;
+	mLightNum = 300;
 
 	for (int i = 0; i < mLightNum; i++)
 	{
 		Vector3 pos((rand() % (2309 - -474 + 1)) + -474,
 			        (rand() % (1069 - -1283 + 1)) + -1283,
-			        (rand() % (40 - 30 + 1)) + 30);
+			        (rand() % (150 - 30 + 1)) + 30);
 		mLightPos.push_back(pos);
 
 		Vector3 color(rand() % 100 / 100.0f,
@@ -237,80 +237,19 @@ void Renderer::Draw()
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 
-	DeferredRendering();
+	BakeDepthMap();
 
-	glEnable(GL_BLEND);
-	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_CULL_FACE);
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-	glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
-	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
+	DeferredRendering(); 
 
-	mToneMapShader->SetActive();
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, mLightHDRTex);
-	mToneMapShader->SetIntUniform("uHDRBuffer", 0);
-	mToneMapShader->SetFloatUniform("exposure", 0.3);
-	glBindVertexArray(mVertexArray);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+	mHDRRenderer->ScaleDownBufferPath();
+	mHDRRenderer->HDRBloomBlend();
 
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-	glDisable(GL_BLEND);
+	// ライト空間行列を取得
+	mLightSpaceMat = mDepthMapRenderer->GetLightSpaceMatrix();
 
-	 //加算合成を無効
-	glDisablei(GL_BLEND, 0);
+	
 
-	//Matrix4 lightSpaceMat = mDepthMapRenderer->GetLightSpaceMatrix();
-
-	//// デプスレンダリングパス開始
-	//mDepthMapRenderer->DepthRenderingBegin();
-	//{
-	//	// ライト空間行列を取得
-
-	//	// スタティックメッシュをデプスへレンダリング
-	//	mMeshDepthShader->SetActive();
-	//	mMeshDepthShader->SetMatrixUniform("lightSpaceMatrix", lightSpaceMat);
-	//	for (auto mc : mMeshComponents)
-	//	{
-	//		if (mc->GetVisible())
-	//		{
-	//			mc->Draw(mMeshDepthShader);
-	//		}
-	//	}
-
-	//	// スキンメッシュをデプスへレンダリング
-	//	mSkinnedDepthShader->SetActive();
-	//	mSkinnedDepthShader->SetMatrixUniform("uLightSpaceMat", lightSpaceMat);
-	//	for (auto sk : mSkeletalMeshes)
-	//	{
-	//		if (sk->GetVisible())
-	//		{
-	//			sk->Draw(mSkinnedDepthShader);
-	//		}
-	//	}
-	//}
-	//// デプスレンダリングの終了
-	//mDepthMapRenderer->DepthRenderingEnd();
-
-	//if (mSkyBox != nullptr)
-	//{
-	//	mSkyBoxShader->SetActive();
-	//	// ゲームの空間に合わせるためのオフセット行列をセット
-	//	Matrix4 offset = Matrix4::CreateRotationX(Math::ToRadians(90.0f));
-
-	//	// Uniformに逆行列をセット
-	//	Matrix4 InvView = mView;
-	//	InvView.Invert();
-	//	InvView.Transpose();
-	//	mSkyBoxShader->SetMatrixUniform("uOffset", offset);
-	//	mSkyBoxShader->SetMatrixUniform("uProjection", mProjection);
-	//	mSkyBoxShader->SetMatrixUniform("uView", InvView);
-	//	mSkyBoxShader->SetIntUniform("uSkyBox", 0);
-
-	//	mSkyBox->Draw(mSkyBoxShader);
-	//}
+	
 
 	//mNormalShader->SetActive();
 	//mNormalShader->SetVectorUniform("in_light.position", mDirectionalLight.mDirection);
@@ -331,7 +270,23 @@ void Renderer::Draw()
 
 	//mHDRRenderer->HDRRenderingBegin();
 	//{
-	//	
+	//	//if (mSkyBox != nullptr)
+	//	//{
+	//	//	mSkyBoxShader->SetActive();
+	//	//	// ゲームの空間に合わせるためのオフセット行列をセット
+	//	//	Matrix4 offset = Matrix4::CreateRotationX(Math::ToRadians(90.0f));
+
+	//	//	// Uniformに逆行列をセット
+	//	//	Matrix4 InvView = mView;
+	//	//	InvView.Invert();
+	//	//	InvView.Transpose();
+	//	//	mSkyBoxShader->SetMatrixUniform("uOffset", offset);
+	//	//	mSkyBoxShader->SetMatrixUniform("uProjection", mProjection);
+	//	//	mSkyBoxShader->SetMatrixUniform("uView", InvView);
+	//	//	mSkyBoxShader->SetIntUniform("uSkyBox", 0);
+
+	//	//	mSkyBox->Draw(mSkyBoxShader);
+	//	//}
 
 	//	// 通常レンダリング(シャドウ付き)
 	//	mShadowMapShader->SetActive();
@@ -728,15 +683,41 @@ void Renderer::ScreenVAOSetting(unsigned int& vao)
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 }
 
+void Renderer::BakeDepthMap()
+{
+	// デプスレンダリングパス開始
+	mDepthMapRenderer->DepthRenderingBegin();
+	{
+		// スタティックメッシュをデプスへレンダリング
+		mMeshDepthShader->SetActive();
+		mMeshDepthShader->SetMatrixUniform("lightSpaceMatrix", mLightSpaceMat);
+		for (auto mc : mMeshComponents)
+		{
+			if (mc->GetVisible())
+			{
+				mc->Draw(mMeshDepthShader);
+			}
+		}
+
+		// スキンメッシュをデプスへレンダリング
+		mSkinnedDepthShader->SetActive();
+		mSkinnedDepthShader->SetMatrixUniform("uLightSpaceMat", mLightSpaceMat);
+		for (auto sk : mSkeletalMeshes)
+		{
+			if (sk->GetVisible())
+			{
+				sk->Draw(mSkinnedDepthShader);
+			}
+		}
+	}
+	// デプスレンダリングの終了
+	mDepthMapRenderer->DepthRenderingEnd();
+
+}
+
 void Renderer::PointLightPass()
 {
 	MeshComponent* sphereMesh = mHighLightMeshes[0];
-
-	// ビュー行列の設定
-	mProjection = Matrix4::CreatePerspectiveFOV(Math::ToRadians(75.0f),
-		static_cast<float>(mScreenWidth),
-		static_cast<float>(mScreenHeight),
-		1.0f, 10000.0f);
 
 	// 深度テストを無効
 	glDisable(GL_DEPTH_TEST);
@@ -749,7 +730,7 @@ void Renderer::PointLightPass()
 
 	const float constant = 1.0f;   // 定数
 	const float linear = 0.7f;     // 線形
-	const float quadratic = 1.8f;   //2乗項
+	const float quadratic = 1.8f;  //2乗項
 
 	// ポイントライトシェーダーにパラメーターをセット
 	Vector3 lightSpecular = Vector3(1.0f, 1.0f, 1.0f);
@@ -764,6 +745,7 @@ void Renderer::PointLightPass()
 	mPointLightShader->SetIntUniform("gPosition", 0);
 	mPointLightShader->SetIntUniform("gNormal", 1);
 	mPointLightShader->SetIntUniform("gAlbedoSpec", 2);
+	mPointLightShader->SetFloatUniform("luminance", 10.0f);
 
 	CalcAttenuationLightRadius(constant, linear, quadratic);
 
@@ -804,9 +786,17 @@ void Renderer::DirectionalLightPass()
 	mDirectionalLightShader->SetVectorUniform("uLight.color"        , color);
 	mDirectionalLightShader->SetVectorUniform("uLight.specular"     , specular);
 	mDirectionalLightShader->SetFloatUniform("uLight.intensity"     , intensity);
+	mDirectionalLightShader->SetFloatUniform("luminance", 1.0f);
+	mDirectionalLightShader->SetMatrixUniform("uLightSpaceMatrix", mLightSpaceMat);
 
 	// テクスチャをシェーダーにセット
 	mGBufferRenderer->InputGBufferToShader();
+
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, mDepthMapRenderer->GetDepthTexID());
+	mDirectionalLightShader->SetIntUniform("uDepthMap", 3);
+
+
 
 	mDirectionalLightShader->SetIntUniform("gPosition"   , 0);
 	mDirectionalLightShader->SetIntUniform("gNormal"     , 1);
@@ -814,8 +804,7 @@ void Renderer::DirectionalLightPass()
 
 
 	// スクリーンいっぱいの四角形を描画
-	glBindVertexArray(mVertexArray);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+	RenderQuad();
 }
 
 void Renderer::RenderQuad()
@@ -882,9 +871,43 @@ void Renderer::DeferredRendering()
 
 		DirectionalLightPass();
 
+		//加算合成を無効
+		glDisablei(GL_BLEND, 0);
 	}
 	// ライティングパス終了
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	// HDRレンダリング開始
+	mHDRRenderer->HDRRenderingBegin();
+	{
+		if (mSkyBox != nullptr)
+		{
+			mSkyBoxShader->SetActive();
+			// ゲームの空間に合わせるためのオフセット行列をセット
+			Matrix4 offset = Matrix4::CreateRotationX(Math::ToRadians(90.0f));
+
+			// Uniformに逆行列をセット
+			Matrix4 InvView = mView;
+			InvView.Invert();
+			InvView.Transpose();
+			mSkyBoxShader->SetMatrixUniform("uOffset", offset);
+			mSkyBoxShader->SetMatrixUniform("uProjection", mProjection);
+			mSkyBoxShader->SetMatrixUniform("uView", InvView);
+			mSkyBoxShader->SetIntUniform("uSkyBox", 0);
+
+			mSkyBox->Draw(mSkyBoxShader);
+		}
+		mHighLightShader->SetActive();
+
+		// ライティングパスの結果をテクスチャとしてセット
+		mHighLightShader->SetIntUniform("uTexture", 0);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, mLightHDRTex);
+		RenderQuad();
+	}
+	// HDRレンダリング終了
+	mHDRRenderer->HDRRenderingEnd();
+
 }
 
 void Renderer::CalcAttenuationLightRadius(const float constant, const float linear, const float quadratic)
@@ -1088,7 +1111,7 @@ bool Renderer::LoadShaders()
 
 	// スフィアシェーダーのロード
 	mHDRShader = new Shader();
-	if (!mHDRShader->Load("Shaders/Sphere.vert", "Shaders/Sphere.frag"))
+	if (!mHDRShader->Load("Shaders/HighLightMesh.vert", "Shaders/HighLightMesh.frag"))
 	{
 		return false;
 	}
@@ -1108,7 +1131,7 @@ bool Renderer::LoadShaders()
 		return false;
 	}
 
-	// GBufferスシェーダーのロード
+	// GBufferシェーダーのロード
 	mGBufferShader = new Shader();
 	if (!mGBufferShader->Load("Shaders/gBuffer.vert", "Shaders/gBuffer.frag"))
 	{
@@ -1140,19 +1163,18 @@ bool Renderer::LoadShaders()
 		return false;
 	}
 
-	// ディファードライティングシェーダー
+	// ディレクショナルライトシェーダー
 	mDirectionalLightShader = new Shader();
-	if (!mDirectionalLightShader->Load("Shaders/ScreenBuffer.vert", "Shaders/DirectionalLight.frag"))
+	if (!mDirectionalLightShader->Load("Shaders/DirectionalLight.vert", "Shaders/DirectionalLight.frag"))
 	{
 		printf("ディレクショナルライトシェーダー読み込み失敗\n");
 		return false;
 	}
 
-	// スクリーンバッファーシェーダーのロード
-	mToneMapShader= new Shader();
-	if (!mToneMapShader->Load("Shaders/ScreenBuffer.vert", "Shaders/HDR.frag"))
+	mHighLightShader = new Shader();
+	if (!mHighLightShader->Load("Shaders/ScreenBuffer.vert", "Shaders/HighLight.frag"))
 	{
-		printf("トーンマップシェーダーの読み込み失敗\n");
+		printf("ハイライトシェーダーの読み込み失敗\n");
 	}
 
 	return true;

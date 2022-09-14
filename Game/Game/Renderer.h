@@ -99,6 +99,7 @@ private:
 	void                                              CreateQuadVAO();                        // 四角形の頂点配列作成
 	void                                              CreateLightFBO();                       // ライト結果書き込み用のフレームバッファの作成
 	void                                              ScreenVAOSetting(unsigned int& vao);    // 画面全体を覆う頂点定義
+	void                                              BakeDepthMap();                         // デプスマップに焼きこむ
 	void                                              PointLightPass();                       // ポイントライトパス
 	void                                              DirectionalLightPass();
 	void                                              RenderQuad();                           // 四角形の描画
@@ -138,7 +139,7 @@ private:
 	class Shader* mLightingShader;
 	class Shader* mPointLightShader;       // ポイントライトシェーダー
 	class Shader* mDirectionalLightShader;
-	class Shader* mToneMapShader;
+	class Shader* mHighLightShader;
 
 	class DepthMap* mDepthMapRenderer;     // デプスレンダラー
 	class HDR* mHDRRenderer;               // HDRレンダラー
@@ -147,6 +148,7 @@ private:
 // 基本行列関連 //
 	Matrix4                                           mView;             // ビュー行列
 	Matrix4                                           mProjection;       // プロジェクション行列
+	Matrix4                                           mLightSpaceMat;
 
 // スプライト頂点配列 //
 	class VertexArray* mSpriteVerts;

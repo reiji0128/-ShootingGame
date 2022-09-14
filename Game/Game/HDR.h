@@ -71,6 +71,8 @@ public:
 	/// </summary>
 	void HDRBloomBlend();
 
+	const unsigned int GetColorBuffer() { return mColorBuffers[0]; }
+
 private:
 	unsigned int mHdrFBO;
 	unsigned int mRbo;

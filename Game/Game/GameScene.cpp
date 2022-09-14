@@ -13,7 +13,7 @@
 #include "BGCollisionSetter.h"
 #include "PlayerActor.h"
 #include "EnemyActor.h"
-#include "ThirdPersonCameraActor.h";
+#include "ThirdPersonCameraActor.h"
 #include "Gun.h"
 #include "SphereObj.h"
 #include "Tank.h"
@@ -55,16 +55,16 @@ GameScene::GameScene()
 	mTex = new Texture;
 	mTex = RENDERER->GetTexture("Assets/Player/Health.png");
 
-	//player = new PlayerActor(Vector3(2286, 684, 1165),                 // 座標
-	//	1.0f,                                  // スケール
-	//	"Assets/Player/SpecialForces.gpmesh",  // gpMeshのファイルパス
-	//	"Assets/Player/SpecialForces.gpskel"); // gpSkelのファイルパス
+	player = new PlayerActor(Vector3(2286, 55, 465),                 // 座標
+		1.0f,                                  // スケール
+		"Assets/Player/SpecialForces.gpmesh",  // gpMeshのファイルパス
+		"Assets/Player/SpecialForces.gpskel"); // gpSkelのファイルパス
 
-	// プレイヤーの生成
-	player = new PlayerActor(Vector3(890, -50, -55),                 // 座標
-	                         1.0f,                                  // スケール
-	                         "Assets/Player/SpecialForces.gpmesh",  // gpMeshのファイルパス
-	                         "Assets/Player/SpecialForces.gpskel"); // gpSkelのファイルパス
+	////プレイヤーの生成
+	//player = new PlayerActor(Vector3(890, -50, -55),                 // 座標
+	//                         1.0f,                                  // スケール
+	//                         "Assets/Player/SpecialForces.gpmesh",  // gpMeshのファイルパス
+	//                         "Assets/Player/SpecialForces.gpskel"); // gpSkelのファイルパス
 	
 	//// 銃の生成
 	//Gun* gun = new Gun(Vector3(90, -40, 140),                         // オフセット位置
@@ -87,7 +87,7 @@ GameScene::GameScene()
 	// バックグラウンドの当たり判定の生成
 	new BGCollisionSetter("Assets/BackGround/CollisionBox.json");
 
-	//new SkyBox();
+	new SkyBox();
 
 	// ゲームシステムに当たり判定リストを登録する
 	GAMEINSTANCE.GetPhysics()->SetOneSideReactionCollisionPair(Tag::Enemy, Tag::Player);
@@ -125,7 +125,7 @@ SceneBase* GameScene::Update()
 
 void GameScene::Draw()
 {
-	glClearColor(0.2f, 0.5f, 0.9f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	// 画面クリア
 	GAMEINSTANCE.GetRenderer()->WindowClear();
 

@@ -83,9 +83,9 @@ void main()
 	vec3 ambientColor = uAmbientLight* texColor;
 
 	vec3 result = ambientColor + (1.0 - shadow) * (diffuseColor + Specular);
-	//outColor = vec4(result,1.0f);
 
 	float brightness = dot(result,vec3(0.2126,0.7152,0.0722));
+
 	if(brightness > 0.8)
 	{
 		BrightBuffer = vec4(result,0.0f);
@@ -94,5 +94,6 @@ void main()
 	{
 		BrightBuffer = vec4(0.0f,0.0f,0.0f,0.0f);
 	}
+
 	FragBuffer = vec4(result,1.0);
 }

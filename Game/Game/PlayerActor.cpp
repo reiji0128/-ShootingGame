@@ -92,13 +92,12 @@ void PlayerActor::UpdateActor(float deltaTime)
 
 	// ステート実行
 	mNextState = mStatePools[static_cast<unsigned int>(mNowState)]->Update(this, deltaTime);
-	//printf("%f,%f,%f\n", mPosition.x, mPosition.y, mPosition.z);
+	
 	if (INPUT_INSTANCE.GetInput(KEY_SPACE) == KEY_STATE_PRESSED)
 	{
 		mPosition.z += 10;
 	}
 
-	
 	// ステート内部から変更があったか
 	if (mNowState != mNextState)
 	{

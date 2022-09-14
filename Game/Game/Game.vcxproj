@@ -312,6 +312,7 @@
     <None Include="Shaders\gBufferLightingPass.vert" />
     <None Include="Shaders\HDR.frag" />
     <None Include="Shaders\HDRBloomBlend.frag" />
+    <None Include="Shaders\HighLight.frag" />
     <None Include="Shaders\LightingSphere.frag" />
     <None Include="Shaders\LightingSphere.vert" />
     <None Include="Shaders\Line.frag" />
@@ -332,8 +333,8 @@
     <None Include="Shaders\SkinnedShadowmap.vert" />
     <None Include="Shaders\SkyBox.frag" />
     <None Include="Shaders\SkyBox.vert" />
-    <None Include="Shaders\Sphere.frag" />
-    <None Include="Shaders\Sphere.vert" />
+    <None Include="Shaders\HighLightMesh.frag" />
+    <None Include="Shaders\HighLightMesh.vert" />
     <None Include="Shaders\Sprite.frag" />
     <None Include="Shaders\Sprite.vert" />
     <None Include="Shaders\tilemap.frag" />
